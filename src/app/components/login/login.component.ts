@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { LoginService } from './../../services/login/login.service';
 
 @Component({
   selector: 'app-login',
@@ -7,15 +8,35 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  public errorMsg;
   loginForm: FormGroup;
-  checked: boolean = false;
+  login: string;
+  clave: string;
+  checked = false;
+
+  /* variables que tendran */
+  loginPC = null;
+  clavePC = null;
 
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private loginService: LoginService
   ) { }
 
   ngOnInit() {
+    // localStorage.removeItem('loginPC');
+    // localStorage.removeItem('clavePC');
+
+    this.loginPC = localStorage.getItem('loginPC');
+    this.clavePC = localStorage.getItem('clavePC');
+
     this.buildForm();
+
+    if (this.loginPC) {
+      this.login = this.loginPC;
+      this.clave = this.clavePC;
+      this.callService();
+    }
   }
 
   buildForm() {
@@ -28,7 +49,35 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      alert('submit');
+      console.log('submit');
+      this.login = this.loginForm.get('txtUsuario').value;
+      this.clave = this.loginForm.get('txtClave').value;
+      this.callService();
+      // this.loginService.login();
+    }
+  }
+
+  callService() {
+    const postData = new FormData();
+    postData.append('login', this.login);
+    postData.append('clave', this.clave);
+    postData.append('action', 'login');
+
+    // this.loginService.login(postData);
+
+    this.loginService.login(postData).subscribe(
+      data => {
+        console.log(data);
+      },
+      error => {
+        this.errorMsg = error;
+      }
+    );
+
+    // si login ok y check "recordar sesion" en 'on' entonces grabar datos en pc
+    if (this.loginForm.get('chkRecordar').value) {
+      localStorage.setItem('loginPC', this.login);
+      localStorage.setItem('clavePC', this.clave);
     }
   }
 }
