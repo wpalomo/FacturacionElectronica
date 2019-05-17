@@ -26,13 +26,18 @@ export class LoginService {
   }
 
   login(postData): Observable<ILogin> {
+    // console.log(this.url);
+    // console.log(postData);
+    // console.log(res);
     return this.http.post<any>(this.url, postData)
       .pipe(
         map(res => {
-          console.log(res);
+          // console.log(this.url);
+          // console.log(postData);
+          // console.log(res);
           if (res.success) {
-            console.log(res);
-            console.log(res.data);
+            // console.log(res);
+            // console.log(res.data);
             this.loggedIn.next(true);
             this.router.navigate(['/home']);
             return res.data as ILogin;

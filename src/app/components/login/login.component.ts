@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoginService } from './../../services/login/login.service';
 
+import ILogin from '../../model/ILogin';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -13,6 +15,7 @@ export class LoginComponent implements OnInit {
   login: string;
   clave: string;
   checked = false;
+  ilogin: ILogin = {};
 
   /* variables que tendran */
   loginPC = null;
@@ -24,8 +27,8 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // localStorage.removeItem('loginPC');
-    // localStorage.removeItem('clavePC');
+    localStorage.removeItem('loginPC');
+    localStorage.removeItem('clavePC');
 
     this.loginPC = localStorage.getItem('loginPC');
     this.clavePC = localStorage.getItem('clavePC');
@@ -67,10 +70,15 @@ export class LoginComponent implements OnInit {
 
     this.loginService.login(postData).subscribe(
       data => {
+        // alert('xxx');
         console.log(data);
+        this.ilogin = data[0];
+        console.log(this.ilogin);
       },
       error => {
         this.errorMsg = error;
+        // alert('xxddx');
+        // alert(error);
       }
     );
 
