@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'http://localhost:8080/FE/',
-  base: 'xxx';
+  baseUrl: 'http://localhost:8080/FE/'
 };
 
 /*
