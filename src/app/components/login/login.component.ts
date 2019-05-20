@@ -11,6 +11,7 @@ import ILogin from '../../model/ILogin';
 })
 export class LoginComponent implements OnInit {
   public errorMsg;
+  displayError: boolean;
   loginForm: FormGroup;
   login: string;
   clave: string;
@@ -77,6 +78,8 @@ export class LoginComponent implements OnInit {
       },
       error => {
         this.errorMsg = error;
+        console.log(this.errorMsg);
+        this.displayError = true;
         // alert('xxddx');
         // alert(error);
       }

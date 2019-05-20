@@ -43,6 +43,7 @@ export class LoginService {
             return res.data as ILogin;
           } else {
             console.log('error');
+            console.log('res.mensaje');
             throw (res.mensaje);
           }
         }),

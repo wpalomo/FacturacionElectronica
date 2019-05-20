@@ -1,0 +1,13 @@
+:host>>>.my-panel .ui-dialog-titlebar {
+    background: red;
+    color: white
+}
+
+:host>>>.my-panel .ui-dialog-titlebar-close {
+    background: red;
+    color: white
+}
+
+.ui-inputtext {
+    width: 90%
+}

@@ -35,3 +35,18 @@
     </form>
   </p-panel>
 </div>
+
+<!--
+<p-dialog [(visible)]="displayError" [responsive]="true" showEffect="fade" [modal]="true" styleClass="my-panel">
+  <p-header>
+    Mensaje del Sistema
+  </p-header>
+  {{errorMsg}}
+  <p-footer>
+    <div class="ui-dialog-buttonpane ui-helper-clearfix">
+      <button pButton type="button" label="Ok" class="ui-button-danger"></button>
+    </div>
+  </p-footer>
+</p-dialog>-->
+
+<app-mensaje-generico *ngIf="displayError"></app-mensaje-generico>

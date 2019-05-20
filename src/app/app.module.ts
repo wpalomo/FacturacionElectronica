@@ -13,12 +13,14 @@ import { HomeComponent } from './components/home/home.component';
 
 import { LoginService } from './services/login/login.service';
 import { AuthGuard } from './guards/auth.guard';
+import { MensajeGenericoComponent } from './common/mensaje-generico/mensaje-generico.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    MensajeGenericoComponent
   ],
   imports: [
     BrowserModule,
