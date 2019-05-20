@@ -15,6 +15,8 @@ import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { CheckboxModule } from 'primeng/checkbox';
+import { CardModule } from 'primeng/card';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 
 @NgModule({
@@ -33,7 +35,9 @@ import { CheckboxModule } from 'primeng/checkbox';
         TableModule,
         DialogModule,
         SplitButtonModule,
-        CheckboxModule
+        CheckboxModule,
+        CardModule,
+        ProgressBarModule
     ],
     exports: [
         PanelModule,
@@ -50,7 +54,9 @@ import { CheckboxModule } from 'primeng/checkbox';
         TableModule,
         DialogModule,
         SplitButtonModule,
-        CheckboxModule
+        CheckboxModule,
+        CardModule,
+        ProgressBarModule
     ],
 })
 export class PrimeNGModule { }

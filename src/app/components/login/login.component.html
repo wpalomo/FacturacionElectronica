@@ -49,4 +49,11 @@
   </p-footer>
 </p-dialog>-->
 
-<app-mensaje-generico *ngIf="displayError"></app-mensaje-generico>
+<app-mensaje-generico *ngIf="displayError" [title]="title" [errorMsg]="errorMsg"></app-mensaje-generico>
+
+<p-dialog [(visible)]="displayWait" [modal]="true" [closable]="false">
+  <p-header>
+    Procesando, por favor espere
+  </p-header>
+  <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+</p-dialog>

@@ -12,11 +12,13 @@ import ILogin from '../../model/ILogin';
 export class LoginComponent implements OnInit {
   public errorMsg;
   displayError: boolean;
+  displayWait: boolean;
   loginForm: FormGroup;
   login: string;
   clave: string;
   checked = false;
   ilogin: ILogin = {};
+  title: string;
 
   /* variables que tendran */
   loginPC = null;
@@ -30,6 +32,9 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     localStorage.removeItem('loginPC');
     localStorage.removeItem('clavePC');
+
+    // this.displayWait = true;
+    this.title = 'Titulo del mensaje';
 
     this.loginPC = localStorage.getItem('loginPC');
     this.clavePC = localStorage.getItem('clavePC');
@@ -52,6 +57,9 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
+    this.displayError = false;
+    this.displayWait = true;
+
     if (this.loginForm.valid) {
       console.log('submit');
       this.login = this.loginForm.get('txtUsuario').value;
@@ -75,12 +83,14 @@ export class LoginComponent implements OnInit {
         console.log(data);
         this.ilogin = data[0];
         console.log(this.ilogin);
+        this.displayWait = false;
       },
       error => {
         this.errorMsg = error;
         console.log(this.errorMsg);
         this.displayError = true;
-        // alert('xxddx');
+        this.displayWait = false;
+        alert('xxddx');
         // alert(error);
       }
     );
