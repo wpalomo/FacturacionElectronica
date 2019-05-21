@@ -9,7 +9,6 @@ import { transformError } from '../../common/common';
 
 import ILogin from './../../model/ILogin';
 
-
 @Injectable()
 
 export class LoginService {
@@ -29,6 +28,9 @@ export class LoginService {
     // console.log(this.url);
     // console.log(postData);
     // console.log(res);
+    // alert(postData.get('login'));
+    // alert(postData.get('clave'));
+    // alert(postData.get('action'));
     return this.http.post<any>(this.url, postData)
       .pipe(
         map(res => {
@@ -36,11 +38,13 @@ export class LoginService {
           // console.log(postData);
           // console.log(res);
           if (res.success) {
-            // console.log(res);
-            // console.log(res.data);
-            this.loggedIn.next(true);
-            this.router.navigate(['/home']);
-            return res.data as ILogin;
+            if (res.ok === 'S') {
+              this.loggedIn.next(true);
+              this.router.navigate(['/home']);
+              return res.data as ILogin;
+            } else {
+              throw (res.mensaje);
+            }
           } else {
             console.log('error');
             console.log('res.mensaje');

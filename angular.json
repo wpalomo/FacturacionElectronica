@@ -29,7 +29,9 @@
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/crypto-js/crypto-js.js"
+            ],
             "es5BrowserSupport": true
           },
           "configurations": {
@@ -90,7 +92,9 @@
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/crypto-js/crypto-js.js"
+            ],
             "assets": [
               "src/favicon.ico",
               "src/assets"
