@@ -1,7 +1,7 @@
 interface ILogin {
-    id?: number;
+    id_usuario?: number;
     id_perfil?: number;
-    descripcion?: string;
+    descripcion_perfil?: string;
     login?: string;
     nombre?: string;
     apellido?: string;

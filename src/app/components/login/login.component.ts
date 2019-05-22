@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit {
   checked = false;
   ilogin: ILogin = {};
   title: string;
+  key = 'IntimodaFE2019$#';
 
   /* variables que tendran */
   loginPC = null;
@@ -32,26 +33,25 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    localStorage.removeItem('loginPC');
-    localStorage.removeItem('clavePC');
+    // localStorage.removeItem('loginPC');
+    // localStorage.removeItem('clavePC');
 
-    const encrypted = this.encrDecr.set('123456$#@$^@1ERF', 'password@123456');
-    const decrypted = this.encrDecr.get('123456$#@$^@1ERF', encrypted);
+    // const encrypted = this.encrDecr.set(this.key, 'password@123456');
+    // const decrypted = this.encrDecr.get(this.key, encrypted);
 
-    console.log('Encrypted :' + encrypted);
-    console.log('Encrypted :' + decrypted);
+    // console.log('Encrypted :' + encrypted);
+    // console.log('Encrypted :' + decrypted);
 
     // this.displayWait = true;
     this.title = 'Mensaje del Sistema';
 
     this.loginPC = localStorage.getItem('loginPC');
     this.clavePC = localStorage.getItem('clavePC');
-
     this.buildForm();
 
     if (this.loginPC) {
       this.login = this.loginPC;
-      this.clave = this.clavePC;
+      this.clave = this.encrDecr.get(this.key, this.clavePC);
       this.callService();
     }
   }
@@ -79,6 +79,12 @@ export class LoginComponent implements OnInit {
 
   callService() {
     const postData = new FormData();
+
+    // alert(this.encrDecr.set(this.key, this.clave));
+    // alert(this.encrDecr.get(this.key, this.encrDecr.set(this.key, this.clave)));
+
+    this.clave = this.encrDecr.set(this.key, this.clave);
+
     postData.append('login', this.login);
     postData.append('clave', this.clave);
     postData.append('action', 'login');

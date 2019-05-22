@@ -19,7 +19,9 @@ switch ($action) {
 
 function login() {
     if (isset($_POST['login']) && isset($_POST['clave'])) {
-        $objetoLogin = new ClaseLogin($_POST['login'], $_POST['clave']);
+        $clave = substr(crypt($_POST['clave'], strtoupper($_POST['login'])), 3);
+
+        $objetoLogin = new ClaseLogin($_POST['login'], $clave);
         $result = $objetoLogin->login();
 
         $data = ClaseJson::getJson($result);
