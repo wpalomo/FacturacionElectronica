@@ -4,6 +4,7 @@ import { LoginService } from './../../services/login/login.service';
 import { EncrDecrService } from './../../services/encrypt/encr-decr.service';
 
 import ILogin from '../../model/ILogin';
+import ISesion from '../../model/ISesion';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,7 @@ export class LoginComponent implements OnInit {
   clave: string;
   checked = false;
   ilogin: ILogin = {};
+  iSesion: ISesion = {};
   title: string;
   key = 'IntimodaFE2019$#';
 
@@ -95,8 +97,8 @@ export class LoginComponent implements OnInit {
       data => {
         // alert('xxx');
         console.log(data);
-        this.ilogin = data[0];
-        console.log(this.ilogin);
+        this.iSesion = data[0];
+        console.log(this.iSesion);
         this.displayWait = false;
 
         // si login ok y check "recordar sesion" en 'on' entonces grabar datos en pc

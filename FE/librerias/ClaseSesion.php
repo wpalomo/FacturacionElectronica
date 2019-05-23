@@ -21,13 +21,27 @@ class ClaseSesion {
 
         $ip = $this->getIP();
 
+        //echo $dispositivo;
+        //echo $ip;
+
         $query = "
             EXEC SP_GEN_SESION
             @in_id_usuario = '$id_usuario',                
             @in_ip = '$ip',                 
-            @in_us_ing_act = '$id_usuario',
+            @in_usuario_ing_act = '$id_usuario',
             @in_operacion = 'I'
         ";
+
+        //echo $query;
+
+        $parametros = array(
+            'query' => $query,
+            'autocommit' => true
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        return $result;
     }
 
     /**

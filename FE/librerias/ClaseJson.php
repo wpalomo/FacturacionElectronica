@@ -17,7 +17,7 @@ class ClaseJson {
         $success = false;
         if (array_key_exists('error', $datos)) {
             if ($datos['error'] == 'N') {
-                $success = 'true';
+                $success = true;
             }
         }
 

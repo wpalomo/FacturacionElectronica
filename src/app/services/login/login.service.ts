@@ -8,6 +8,7 @@ import { environment } from '../../../environments/environment';
 import { transformError } from '../../common/common';
 
 import ILogin from './../../model/ILogin';
+import ISesion from './../../model/ISesion';
 
 @Injectable()
 
@@ -24,7 +25,7 @@ export class LoginService {
     return this.loggedIn.asObservable();
   }
 
-  login(postData): Observable<ILogin> {
+  login(postData): Observable<ISesion> {
     // console.log(this.url);
     // console.log(postData);
     // console.log(res);
@@ -41,7 +42,7 @@ export class LoginService {
             if (res.ok === 'S') {
               this.loggedIn.next(true);
               this.router.navigate(['/home']);
-              return res.data as ILogin;
+              return res.data as ISesion;
             } else {
               throw (res.mensaje);
             }

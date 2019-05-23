@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { EasyUIModule } from 'ng-easyui/components/easyui/easyui.module';
 
 import { AppComponent } from './app.component';
 
@@ -15,13 +16,15 @@ import { EncrDecrService } from './services/encrypt/encr-decr.service';
 import { LoginService } from './services/login/login.service';
 import { AuthGuard } from './guards/auth.guard';
 import { MensajeGenericoComponent } from './common/mensaje-generico/mensaje-generico.component';
+import { AppLayoutComponent } from './components/app-layout/app-layout.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     HomeComponent,
-    MensajeGenericoComponent
+    MensajeGenericoComponent,
+    AppLayoutComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +33,8 @@ import { MensajeGenericoComponent } from './common/mensaje-generico/mensaje-gene
     PrimeNGModule,
     ReactiveFormsModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    EasyUIModule
   ],
   providers: [
     AuthGuard,

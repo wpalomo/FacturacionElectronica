@@ -1,3 +1,31 @@
+<!--<p-toolbar *ngIf="isLoggedIn$ | async as isLoggedIn">
+    <div class="ui-toolbar-group-left">
+        Bienvenido Usuario XXX
+    </div>
+-->
 
 
-<router-outlet></router-outlet>
+<!--<div class="ui-toolbar-group-right">
+        <p-menu #menu [model]="items" [popup]="true"></p-menu>
+        <button #btn type="button" pButton icon="pi pi-bars" label="M e n u" (click)="menu.toggle($event)"></button>
+    </div>-->
+<!--</p-toolbar>-->
+
+<div *ngIf="isLoggedIn$ | async as isLoggedIn">
+    <app-layout [menus]="menus" [title]="'Facturación Electrónica'" (itemClick)="onItemClick($event)">
+
+        <router-outlet></router-outlet>
+
+        <!--<div style="padding:20px">
+            <div *ngIf="selectedMenu">
+                <router-outlet></router-outlet>
+            </div>
+        </div>-->
+    </app-layout>
+</div>
+
+
+
+<div class="container">
+    <router-outlet></router-outlet>
+</div>

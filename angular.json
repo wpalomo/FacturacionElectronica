@@ -27,7 +27,10 @@
               "node_modules/primeicons/primeicons.css",
               "node_modules/primeng/resources/themes/nova-light/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/ng-easyui/themes/material/easyui.css",
+              "node_modules/ng-easyui/themes/angular.css",
+              "node_modules/ng-easyui/themes/icon.css"
             ],
             "scripts": [
               "node_modules/crypto-js/crypto-js.js"
@@ -90,7 +93,10 @@
               "node_modules/primeicons/primeicons.css",
               "node_modules/primeng/resources/themes/nova-light/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/ng-easyui/themes/material/easyui.css",
+              "node_modules/ng-easyui/themes/angular.css",
+              "node_modules/ng-easyui/themes/icon.css"
             ],
             "scripts": [
               "node_modules/crypto-js/crypto-js.js"
