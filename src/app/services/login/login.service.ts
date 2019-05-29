@@ -14,7 +14,9 @@ import ISesion from './../../model/ISesion';
 
 export class LoginService {
   private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private menu: BehaviorSubject<boolean> = new BehaviorSubject<any>('');
   url = environment.baseUrl + 'login.php';
+  urlMenu = environment.baseUrl + 'menu.php';
 
   constructor(
     private router: Router,
@@ -23,6 +25,10 @@ export class LoginService {
 
   get isLoggedIn() {
     return this.loggedIn.asObservable();
+  }
+
+  get getMenus() {
+    return this.menu.asObservable();
   }
 
   login(postData): Observable<ISesion> {
@@ -63,6 +69,18 @@ export class LoginService {
     */
 
 
+  }
+
+  getMenu(postData) {
+    return this.http.post<any>(this.urlMenu, postData)
+      .pipe(
+        map(res => {
+          alert(res);
+          this.menu.next(res);
+          return res;
+        }),
+        catchError(transformError)
+      );
   }
 
   logout() {

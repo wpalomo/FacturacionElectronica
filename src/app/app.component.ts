@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 export class AppComponent implements OnInit {
   title = 'FacturacionElectronica';
   isLoggedIn$: Observable<boolean>;
+  menu$: Observable<any>;
   selectedMenu = null;
 
   data = [
@@ -150,6 +151,8 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.isLoggedIn$ = this.loginService.isLoggedIn;
+    this.menu$ = this.loginService.getMenus;
+    alert(this.menu$);
   }
 
   onItemClick(item) {

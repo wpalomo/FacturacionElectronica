@@ -81,6 +81,7 @@ export class LoginComponent implements OnInit {
 
   callService() {
     const postData = new FormData();
+    const postData2 = new FormData();
 
     // alert(this.encrDecr.set(this.key, this.clave));
     // alert(this.encrDecr.get(this.key, this.encrDecr.set(this.key, this.clave)));
@@ -95,7 +96,7 @@ export class LoginComponent implements OnInit {
 
     this.loginService.login(postData).subscribe(
       data => {
-        // alert('xxx');
+        alert('1');
         console.log(data);
         this.iSesion = data[0];
         console.log(this.iSesion);
@@ -106,6 +107,27 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('loginPC', this.login);
           localStorage.setItem('clavePC', this.clave);
         }
+
+        setTimeout(() => {
+          alert('2');
+        }, 5000);
+
+        alert('3');
+
+        postData2.append('action', 'getMenuUsuario');
+
+        this.loginService.getMenu(postData2).subscribe(
+          data2 => {
+            alert('99');
+            console.log(data2);
+          }, error => {
+            this.errorMsg = error;
+            console.log(this.errorMsg);
+
+            this.displayWait = false;
+            this.displayError = true;
+          }
+        );
       },
       error => {
         this.errorMsg = error;
@@ -115,5 +137,7 @@ export class LoginComponent implements OnInit {
         this.displayError = true;
       }
     );
+
+
   }
 }
