@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoginService } from './../../services/login/login.service';
 import { EncrDecrService } from './../../services/encrypt/encr-decr.service';
+import { BehaviorSubject } from 'rxjs';
+
 
 import ILogin from '../../model/ILogin';
 import ISesion from '../../model/ISesion';
@@ -23,6 +25,9 @@ export class LoginComponent implements OnInit {
   iSesion: ISesion = {};
   title: string;
   key = 'IntimodaFE2019$#';
+
+  private menux: BehaviorSubject<any> = new BehaviorSubject<any>([]);
+
 
   /* variables que tendran */
   loginPC = null;
@@ -119,6 +124,7 @@ export class LoginComponent implements OnInit {
         this.loginService.getMenu(postData2).subscribe(
           data2 => {
             alert('99');
+            console.log('99');
             console.log(data2);
           }, error => {
             this.errorMsg = error;

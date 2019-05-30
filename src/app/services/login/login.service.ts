@@ -14,7 +14,7 @@ import ISesion from './../../model/ISesion';
 
 export class LoginService {
   private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  private menu: BehaviorSubject<boolean> = new BehaviorSubject<any>('');
+  private menu: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   url = environment.baseUrl + 'login.php';
   urlMenu = environment.baseUrl + 'menu.php';
 
@@ -28,6 +28,7 @@ export class LoginService {
   }
 
   get getMenus() {
+    // return this.menu.value;
     return this.menu.asObservable();
   }
 
@@ -75,8 +76,11 @@ export class LoginService {
     return this.http.post<any>(this.urlMenu, postData)
       .pipe(
         map(res => {
-          alert(res);
+          // alert(res.json().toString());
+          console.log('xxx');
+          // console.log(res.json());
           this.menu.next(res);
+          console.log(this.menu.value);
           return res;
         }),
         catchError(transformError)

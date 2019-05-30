@@ -12,7 +12,7 @@
 <!--</p-toolbar>-->
 
 <div *ngIf="isLoggedIn$ | async as isLoggedIn">
-    <app-layout [menus]="menu$" [title]="'Facturación Electrónica'" (itemClick)="onItemClick($event)">
+    <app-layout [menus]="menu$ | async" [title]="'Facturación Electrónica'" (itemClick)="onItemClick($event)">
 
         <router-outlet></router-outlet>
 
@@ -21,7 +21,7 @@
                 <router-outlet></router-outlet>
             </div>
         </div>-->
-    </app-layout>
+    </app-layout>    
 </div>
 
 

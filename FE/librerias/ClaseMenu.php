@@ -62,13 +62,13 @@ class ClaseMenu {
                 $arr = array(
                     'id_menu' => $rows['id_menu'],
                     'id_menu_padre' => $rows['id_menu_padre'],
-                    //'text' => $rows['nombre_menu'],
-                    'nombre_menu' => $rows['nombre_menu'],
+                    'text' => $rows['nombre_menu'],
+                    //'nombre_menu' => $rows['nombre_menu'],
                     'tipo' => $rows['tipo'],
                     'iconCls' => trim($rows['icono']),
                     //'MN_ICONO' => trim($rows['MN_ICONO']),
                     //'mn_clase' => trim($rows['mn_clase']),
-                    'ruta' => trim($rows['ruta']),
+                    'routerLink' => trim($rows['ruta']),
                     'leaf' => $leaf,
                     'expanded' => $expanded,
                 );
@@ -109,11 +109,11 @@ class ClaseMenu {
                 $arr = array(
                     'id_menu' => $rows['id_menu'],
                     'id_menu_padre' => $rows['id_menu_padre'],
-                    'text' => $rows['mn_nombre'],
+                    'text' => $rows['nombre_menu'],
                     'tipo' => $rows['tipo'],
                     'iconCls' => trim($rows['icono']),
                     //'mn_clase' => trim($rows['mn_clase']),
-                    'ruta' => trim($rows['ruta']),
+                    'routerLink' => trim($rows['ruta']),
                     'leaf' => $leaf,
                     'expanded' => $expanded,
                 );
@@ -133,9 +133,6 @@ class ClaseMenu {
         $dataMenu = $this->getMenu();
 
         //echo $dataMenu;
-
-
-
 //        $Replacement = '***';
 //$Source = '1234 abcdefg 1234 abcdefg 1234 abcdefg';
 //        echo preg_replace('/{"children":[/', $Replacement, $dataMenu, 1);
@@ -145,9 +142,7 @@ class ClaseMenu {
         $dataMenu = $this->str_replace_once('{"children":[', "", $dataMenu);
         //$dataMenu = $this->str_replace_once(":", "...", $dataMenu);
         //$dataMenu = $this->str_replace_once("[", "...", $dataMenu);
-
         //echo $dataMenu;
-
         //echo '<hr>';
 
         $dataMenu = substr_replace($dataMenu, '', -2);
@@ -171,7 +166,6 @@ class ClaseMenu {
         array_push($menu, $dataMenu);
 
         //print_r($menu);
-
         //echo json_encode($menu);
 
         return json_encode($menu);

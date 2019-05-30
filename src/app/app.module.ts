@@ -17,6 +17,11 @@ import { LoginService } from './services/login/login.service';
 import { AuthGuard } from './guards/auth.guard';
 import { MensajeGenericoComponent } from './common/mensaje-generico/mensaje-generico.component';
 import { AppLayoutComponent } from './components/app-layout/app-layout.component';
+import { MantenimientoUsuariosComponent } from './components/general/mantenimiento-usuarios/mantenimiento-usuarios.component';
+import { CambioClaveComponent } from './components/general/cambio-clave/cambio-clave.component';
+import { FavoritosComponent } from './components/general/favoritos/favoritos.component';
+import { MantenimientoPerfilComponent } from './components/general/mantenimiento-perfil/mantenimiento-perfil.component';
+import { PermisosComponent } from './components/general/permisos/permisos.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +29,12 @@ import { AppLayoutComponent } from './components/app-layout/app-layout.component
     LoginComponent,
     HomeComponent,
     MensajeGenericoComponent,
-    AppLayoutComponent
+    AppLayoutComponent,
+    MantenimientoUsuariosComponent,
+    CambioClaveComponent,
+    FavoritosComponent,
+    MantenimientoPerfilComponent,
+    PermisosComponent
   ],
   imports: [
     BrowserModule,

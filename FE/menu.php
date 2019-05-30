@@ -71,6 +71,133 @@ function getMenuUsuario() {
 //    } else {
 //        $data = ClaseJson::getMessageJson(false, 'Los campos Login o Clave estan vacios');
 //    }
-
     echo $result;
+
+//    echo ' 
+//        [
+//        {
+//        "text": "Favoritos",
+//        "iconCls": "fa fa-star",
+//        "state": "open"
+//        }
+//      ]
+//    ';
+//    echo "
+//    {
+//      text: 'Favoritos',
+//      iconCls: 'fa fa-star',
+//      state: 'open',
+//      children: [
+//        {
+//          text: 'Cambio de Clave',
+//          routerLink: '/cambio-clave'
+//        },
+//        {
+//          text: 'Favoritos',
+//          routerLink: '/favoritos'
+//        },
+//        {
+//          text: 'Ambiente',
+//          routerLink: '/ambiente'
+//        },
+//        {
+//          text: 'Parametros',
+//          routerLink: '/parametros'
+//        },
+//        {
+//          text: 'Unidades de Tiempo',
+//          routerLink: '/ambiente'
+//        },
+//        {
+//          text: 'Formas de Pago',
+//          routerLink: '/ambiente'
+//        },
+//        {
+//          text: 'Procesar Documentos Electronicos',
+//          routerLink: '/parametros'
+//        },
+//        {
+//          text: 'Consulta de Documentos Electrónicos',
+//          routerLink: '/parametros'
+//        }
+//      ]
+//    },
+//    {
+//      text: 'Modulo General',
+//      iconCls: 'fa fa-home',
+//      children: [
+//        {
+//          text: 'Usuarios',
+//          children: [
+//            {
+//              text: 'Mantenimiento de Usuarios',
+//              routerLink: '/mantenimiento-usuarios'
+//            },
+//            {
+//              text: 'Cambio de Clave',
+//              routerLink: '/cambio-clave'
+//            },
+//            {
+//              text: 'Favoritos',
+//              routerLink: '/favoritos'
+//            }
+//          ]
+//        },
+//        {
+//          text: 'Seguridades',
+//          children: [
+//            {
+//              text: 'Mantenimiento de Perfil',
+//              routerLink: '/ambiente'
+//            },
+//            {
+//              text: 'Permisos',
+//              routerLink: '/ambiente'
+//            }
+//          ]
+//        }
+//      ]
+//    },
+//    {
+//      text: 'Parametros',
+//      iconCls: 'fa fa-wpforms',
+//      children: [
+//        {
+//          text: 'Ambiente',
+//          routerLink: '/ambiente'
+//        },
+//        {
+//          text: 'Parametros',
+//          routerLink: '/parametros'
+//        },
+//        {
+//          text: 'Unidades de Tiempo',
+//          routerLink: '/ambiente'
+//        },
+//        {
+//          text: 'Formas de Pago',
+//          routerLink: '/ambiente'
+//        }
+//      ]
+//    },
+//    {
+//      text: 'Transacciones',
+//      iconCls: 'fa fa-at',
+//      selected: true,
+//      children: [
+//        {
+//          text: 'Procesar Documentos Electronicos',
+//          routerLink: '/parametros'
+//        }
+//      ]
+//    }, {
+//      text: 'Consultas',
+//      iconCls: 'fa fa-table',
+//      children: [
+//        {
+//          text: 'Consulta de Documentos Electrónicos'
+//        }
+//      ]
+//    }
+//  ";
 }

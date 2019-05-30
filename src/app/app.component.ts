@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from './services/login/login.service';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -146,16 +147,25 @@ export class AppComponent implements OnInit {
   ];
 
   constructor(
-    private loginService: LoginService
+    private loginService: LoginService,
+    private router: Router
   ) { }
 
   ngOnInit() {
     this.isLoggedIn$ = this.loginService.isLoggedIn;
     this.menu$ = this.loginService.getMenus;
-    alert(this.menu$);
+    // this.menu$ = this.loginService.getMenu(1);
+    console.log('xddd');
+    console.log(this.isLoggedIn$);
+    console.log(this.menu$);
+    console.log(this.menu$);
+    // alert(this.menu$);
   }
 
   onItemClick(item) {
-    alert('1');
+    alert('8888');
+    this.selectedMenu = item;
+    // alert(this.selectedMenu.routerLink);
+    this.router.navigate([this.selectedMenu.routerLink]);
   }
 }

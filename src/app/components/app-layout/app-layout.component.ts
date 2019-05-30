@@ -1,9 +1,9 @@
 import { Component, Input, OnInit, ViewChild, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'app-layout',
-  /*templateUrl: './app-layout.component.html',*/
-  template: `
+    selector: 'app-layout',
+    /*templateUrl: './app-layout.component.html',*/
+    template: `
         <div class="f-column">
             <div class="main-header f-row">
                 <div class="f-row f-full">
@@ -29,17 +29,32 @@ import { Component, Input, OnInit, ViewChild, ViewEncapsulation, Output, EventEm
             </div>
         </div>
     `,
-  styleUrls: ['./app-layout.component.css'],
-  encapsulation: ViewEncapsulation.None
+    styleUrls: ['./app-layout.component.css'],
+    encapsulation: ViewEncapsulation.None
 })
 export class AppLayoutComponent implements OnInit {
-  @Input() menus;
-  @Input() title = null;
-  @Output() itemClick = new EventEmitter();
+    @Input() menus;
+    @Input() title = null;
+    @Output() itemClick = new EventEmitter();
 
-  constructor() { }
+    collapsed = false;
 
-  ngOnInit() {
-  }
+    constructor() { }
 
+    ngOnInit() {
+    }
+
+    toggle() {
+        this.collapsed = !this.collapsed;
+        // this.width = this.collapsed ? 50 : 260;
+    }
+
+    onItemClick(item) {
+        this.itemClick.emit(item);
+
+        // if (!this.collapsed) {
+        // this.router.navigate([item.routerLink]);
+        //    this.toggle();
+        // }
+    }
 }
