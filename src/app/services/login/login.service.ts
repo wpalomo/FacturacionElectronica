@@ -14,6 +14,7 @@ import ISesion from './../../model/ISesion';
 
 export class LoginService {
   private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private isVisible: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   private menu: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   url = environment.baseUrl + 'login.php';
   urlMenu = environment.baseUrl + 'menu.php';
@@ -22,6 +23,10 @@ export class LoginService {
     private router: Router,
     private http: HttpClient
   ) { }
+
+  get visible() {
+    return this.isVisible.asObservable();
+  }
 
   get isLoggedIn() {
     return this.loggedIn.asObservable();
@@ -48,6 +53,7 @@ export class LoginService {
           if (res.success) {
             if (res.ok === 'S') {
               this.loggedIn.next(true);
+              this.isVisible.next(false);
               this.router.navigate(['/home']);
               return res.data as ISesion;
             } else {

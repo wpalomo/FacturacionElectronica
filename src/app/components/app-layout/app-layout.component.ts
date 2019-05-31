@@ -1,11 +1,14 @@
 import { Component, Input, OnInit, ViewChild, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
+import { LoginService } from '../../services/login/login.service';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-layout',
     /*templateUrl: './app-layout.component.html',*/
     template: `
         <div class="f-column">
-            <div class="main-header f-row">
+            <div class="main-header f-row" *ngIf="isLoggedIn$ | async as isLoggedIn">
                 <div class="f-row f-full">
                     <div class="main-title f-animate f-row" [style.width.px]="width">
                         <img class="app-logo" src="https://www.jeasyui.com/favicon.ico">
@@ -17,7 +20,7 @@ import { Component, Input, OnInit, ViewChild, ViewEncapsulation, Output, EventEm
                 </div>
             </div>
             <div class="f-row f-full">
-                <div class="sidebar-body f-animate" [style.width.px]="width">
+                <div class="sidebar-body f-animate" [style.width.px]="width" *ngIf="isLoggedIn$ | async as isLoggedIn">
                     <div *ngIf="!collapsed" class="sidebar-user">
                         User Panel
                     </div>
@@ -37,16 +40,23 @@ export class AppLayoutComponent implements OnInit {
     @Input() title = null;
     @Output() itemClick = new EventEmitter();
 
+    isLoggedIn$: Observable<boolean>;
+
+    width = 260;
     collapsed = false;
 
-    constructor() { }
+    constructor(
+        private loginService: LoginService,
+        private router: Router
+    ) { }
 
     ngOnInit() {
+        this.isLoggedIn$ = this.loginService.isLoggedIn;
     }
 
     toggle() {
         this.collapsed = !this.collapsed;
-        // this.width = this.collapsed ? 50 : 260;
+        this.width = this.collapsed ? 50 : 260;
     }
 
     onItemClick(item) {

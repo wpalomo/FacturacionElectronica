@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 export class AppComponent implements OnInit {
   title = 'FacturacionElectronica';
   isLoggedIn$: Observable<boolean>;
+  visible$: Observable<boolean>;
   menu$: Observable<any>;
   selectedMenu = null;
 
@@ -153,7 +154,13 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.isLoggedIn$ = this.loginService.isLoggedIn;
+    this.visible$ = this.loginService.visible;
     this.menu$ = this.loginService.getMenus;
+
+    // this.isVisible$ = this.loginService.isLoggedIn;
+
+    // this.isVisible$.next(true);
+
     // this.menu$ = this.loginService.getMenu(1);
     console.log('xddd');
     console.log(this.isLoggedIn$);

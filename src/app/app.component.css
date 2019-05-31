@@ -1,0 +1,28 @@
+html,
+body {
+    /* make sure the body does not have a margin */
+    margin: 0;
+    /* this forces the body tag to fill the height of the window */
+    height: 100%;
+}
+
+.app {
+    /* the .app div needs to be AT LEAST 100% of the height of the window */
+    min-height: 100%;
+    /* now that it is 100% the height, we 'pull' the footer up */
+    /* margin-bottom must be the same height as the footer height below */
+    margin-bottom: -271px;
+}
+
+footer {
+    /* .set the height of the footer */
+    height: 271px;
+    /* just setting a color so you can see the footer */
+    background: orange;
+}
+
+/* the following is not necessary, just showing how a header could be added */
+header {
+    height: 30px;
+    background: teal;
+}

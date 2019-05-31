@@ -11,21 +11,44 @@
     </div>-->
 <!--</p-toolbar>-->
 
-<div *ngIf="isLoggedIn$ | async as isLoggedIn">
-    <app-layout [menus]="menu$ | async" [title]="'Facturación Electrónica'" (itemClick)="onItemClick($event)">
-
+<!--<div *ngIf="isLoggedIn$ | async as isLoggedIn">-->
+<!--<div class="app">-->
+<app-layout [menus]="menu$ | async" [title]="'Facturación Electrónica'" (itemClick)="onItemClick($event)">
+    <div class="container">
         <router-outlet></router-outlet>
+    </div>
 
-        <!--<div style="padding:20px">
+
+    <!--<div style="padding:20px">
             <div *ngIf="selectedMenu">
                 <router-outlet></router-outlet>
             </div>
         </div>-->
-    </app-layout>    
-</div>
+</app-layout>
+<!--</div>-->
+<!--<footer>
+        This is the footer
+    </footer>-->
+<!--</div>-->
 
 
 
+
+
+
+<!--
 <div class="container">
     <router-outlet></router-outlet>
 </div>
+-->
+<!--
+<div class="app">
+    <header>
+        Header here
+    </header>
+    Content isn't long enough to push footer to the bottom.
+    <footer>
+        This is the footer
+    </footer>
+</div>
+-->
