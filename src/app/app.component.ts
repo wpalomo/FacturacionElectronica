@@ -13,7 +13,9 @@ export class AppComponent implements OnInit {
   isLoggedIn$: Observable<boolean>;
   visible$: Observable<boolean>;
   menu$: Observable<any>;
+  sesion$: Observable<any>;
   selectedMenu = null;
+  Ses;
 
   data = [
     { code: 'FI-SW-01', name: 'Koi', unitcost: 10.00, status: 'P', listprice: 36.50, attr: 'Large', itemid: 'EST-1' },
@@ -157,6 +159,8 @@ export class AppComponent implements OnInit {
     this.visible$ = this.loginService.visible;
     this.menu$ = this.loginService.getMenus;
 
+
+    this.sesion$ = this.loginService.getSesion;
     // this.isVisible$ = this.loginService.isLoggedIn;
 
     // this.isVisible$.next(true);
@@ -166,7 +170,25 @@ export class AppComponent implements OnInit {
     console.log(this.isLoggedIn$);
     console.log(this.menu$);
     console.log(this.menu$);
+    console.log(this.sesion$);
+
+
+    console.log(this.menu$);
+    // console.log(this.sesion$.value);
     // alert(this.menu$);
+
+    this.Ses = this.sesion$;
+    console.log('123456');
+    console.log(this.Ses.apellido_nombre);
+
+    this.loginService.getSesion2().subscribe(
+      data => {
+        console.log('camboya');
+        console.log(data);
+        console.log(data.login);
+        console.log(data.id_sesion);
+      }
+    );
   }
 
   onItemClick(item) {

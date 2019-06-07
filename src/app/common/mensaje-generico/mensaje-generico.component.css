@@ -8,6 +8,16 @@
     color: white
 }
 
+:host>>>.my-panel-ok .ui-dialog-titlebar {
+    background: #428bca;
+    color: white
+}
+
+:host>>>.my-panel-ok .ui-dialog-titlebar-close {
+    background: #428bca;
+    color: white
+}
+
 .ui-inputtext {
     width: 90%
 }

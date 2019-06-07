@@ -1,0 +1,8 @@
+- al llamar a la base de datos hacer que el query sea el primer parametro obligatorio y luego un array donde iran las opciones
+- no olvidar manejar las sesiones y permisos
+- no olvidar manejar los commit
+- no olvidar documentar correctamente el proyecto
+- no olvidar generar el log de texto donde se almacenaran todas las peticiones a la base de datos.
+- ver como se hace para manejar correctamente el mensaje que se envie desde un sp para que no vaya como parte de la data.
+- no olvidar hacer un archivo para el codigo comun que se esta repitiendo como los headers y los includes
+- pasar correctamente el parametro del usuario que ingresa o actualiza un registro

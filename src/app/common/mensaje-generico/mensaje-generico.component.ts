@@ -8,12 +8,14 @@ import { Component, Input, OnInit } from '@angular/core';
 export class MensajeGenericoComponent implements OnInit {
   @Input() title: string;
   @Input() errorMsg: string;
-  displayError: boolean;
+  @Input() tipoMensaje: string;
+  displayMensaje: boolean;
 
   constructor() { }
 
   ngOnInit() {
-    this.displayError = true;
+    alert(this.tipoMensaje);
+    this.displayMensaje = true;
   }
 
 }

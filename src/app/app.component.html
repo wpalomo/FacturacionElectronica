@@ -13,7 +13,7 @@
 
 <!--<div *ngIf="isLoggedIn$ | async as isLoggedIn">-->
 <!--<div class="app">-->
-<app-layout [menus]="menu$ | async" [title]="'Facturación Electrónica'" (itemClick)="onItemClick($event)">
+<app-layout [menus]="menu$ | async" [title]="'Facturación Electrónica'" [sesion]="sesion$ | async" (itemClick)="onItemClick($event)">
     <div class="container">
         <router-outlet></router-outlet>
     </div>
