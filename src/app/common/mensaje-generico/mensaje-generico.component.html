@@ -1,3 +1,5 @@
+<!--TODO: hacer que tome el css con condicion para que si se envia un msje de error se presente de un color
+          y si todo esta correcto que se presente de otro color  -->
 <p-dialog [(visible)]="displayMensaje" [responsive]="true" showEffect="fade" [modal]="true"
   styleClass="tipoMensaje==='OK' ? my-panel-ok: my-panel ">
   <p-header>
@@ -7,8 +9,8 @@
   <p-footer>
     <div class="ui-dialog-buttonpane ui-helper-clearfix">
       <!-- <button pButton type="button" label="Ok" (click)="displayMensaje=false" class="ui-button-danger"></button>-->
-      <button pButton type="button" label="Ok" (click)="displayMensaje=false"
-        class="tipoMensaje==='OK' ? ui-button-primary: ui-button-danger"></button>
+      <button pButton type="button" label="Ok" (click)="displayMensaje=false" class="ui-button-danger">
+      </button>
     </div>
   </p-footer>
 </p-dialog>

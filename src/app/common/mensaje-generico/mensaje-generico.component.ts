@@ -10,12 +10,23 @@ export class MensajeGenericoComponent implements OnInit {
   @Input() errorMsg: string;
   @Input() tipoMensaje: string;
   displayMensaje: boolean;
+  trueTipoMensaje: boolean;
 
   constructor() { }
 
   ngOnInit() {
     alert(this.tipoMensaje);
     this.displayMensaje = true;
+
+    this.trueTipoMensaje = false;
+    if (this.tipoMensaje === 'OK') {
+      this.trueTipoMensaje = true;
+    }
   }
 
+  isTrueTipoMensaje(): boolean {
+    // return this.price >= this.previousPrice;
+    // alert(this.tipoMensaje);
+    return this.tipoMensaje === 'OK';
+  }
 }
