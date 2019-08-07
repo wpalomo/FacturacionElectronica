@@ -11,6 +11,7 @@ export class MensajeGenericoComponent implements OnInit {
   @Input() tipoMensaje: string;
   displayMensaje: boolean;
   trueTipoMensaje: boolean;
+  public stockClasses;
 
   constructor() { }
 
@@ -22,11 +23,21 @@ export class MensajeGenericoComponent implements OnInit {
     if (this.tipoMensaje === 'OK') {
       this.trueTipoMensaje = true;
     }
+
+    this.stockClasses = {
+      "my-panel-ok": this.trueTipoMensaje,
+      "my-panel": !this.trueTipoMensaje      
+    };
   }
 
   isTrueTipoMensaje(): boolean {
     // return this.price >= this.previousPrice;
     // alert(this.tipoMensaje);
+    alert(this.tipoMensaje === 'OK');
     return this.tipoMensaje === 'OK';
+  }
+
+  getStyles() {
+
   }
 }
