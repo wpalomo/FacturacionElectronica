@@ -1,11 +1,18 @@
-<p-dialog [(visible)]="displayError" [responsive]="true" showEffect="fade" [modal]="true" styleClass="my-panel">
+<!--TODO: hacer que tome el css con condicion para que si se envia un msje de error se presente de un color
+          y si todo esta correcto que se presente de otro color  -->
+<p-dialog [(visible)]="displayMensaje" [responsive]="true" showEffect="fade" [modal]="true" [ngClass]="stockClasses"
+  [style]="{width: '300px'}">
+  <!--styleClass=" tipoMensaje==='OK' ? my-panel-ok: my-panel ">-->
   <p-header>
     {{ title }}
   </p-header>
   {{errorMsg}}
   <p-footer>
-    <div class="ui-dialog-buttonpane ui-helper-clearfix">
-      <button pButton type="button" label="Ok" (click)="displayError=false" class="ui-button-danger"></button>
+    <div class=" ui-dialog-buttonpane ui-helper-clearfix">
+      <!-- <button pButton type="button" label="Ok" (click)="displayMensaje=false" class="ui-button-danger"></button>-->
+      <button pButton type="button" label="Ok" (click)="displayMensaje=false"
+        [class]="trueTipoMensaje ? 'ui-button-info' : 'ui-button-danger'">
+      </button>
     </div>
   </p-footer>
 </p-dialog>

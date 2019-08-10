@@ -40,8 +40,8 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // localStorage.removeItem('loginPC');
-    // localStorage.removeItem('clavePC');
+    localStorage.removeItem('loginPC');
+    localStorage.removeItem('clavePC');
 
     // const encrypted = this.encrDecr.set(this.key, 'password@123456');
     // const decrypted = this.encrDecr.get(this.key, encrypted);
@@ -107,6 +107,8 @@ export class LoginComponent implements OnInit {
         console.log(this.iSesion);
         this.displayWait = false;
 
+        console.log(this.iSesion.descripcion_perfil);
+
         // si login ok y check "recordar sesion" en 'on' entonces grabar datos en pc
         if (this.loginForm.get('chkRecordar').value) {
           localStorage.setItem('loginPC', this.login);
@@ -118,7 +120,11 @@ export class LoginComponent implements OnInit {
         }, 5000);
 
         alert('3');
+        console.log('3');
+        console.log(this.iSesion);
+        console.log(this.iSesion.id_usuario);
 
+        postData2.append('id_usuario', this.iSesion.id_usuario.toString());
         postData2.append('action', 'getMenuUsuario');
 
         this.loginService.getMenu(postData2).subscribe(

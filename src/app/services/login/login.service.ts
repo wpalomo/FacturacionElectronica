@@ -1,3 +1,7 @@
+// TODO: Revisar bien sobre como pasar una variable u objeto observable
+//       y corregirlo ya que se esta enviando la interfaz sesion desde una funcion con un get adelante
+//       y otra sin el get (getSesion2) dejar solo una.
+
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
@@ -16,6 +20,8 @@ export class LoginService {
   private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private isVisible: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   private menu: BehaviorSubject<any> = new BehaviorSubject<any>([]);
+  private iSesion: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  // private iSession = new BehaviorSubject<ISesion>({});
   url = environment.baseUrl + 'login.php';
   urlMenu = environment.baseUrl + 'menu.php';
 
@@ -37,6 +43,14 @@ export class LoginService {
     return this.menu.asObservable();
   }
 
+  get getSesion() {
+    return this.iSesion.asObservable();
+  }
+
+  getSesion2() {
+    return this.iSesion.asObservable();
+  }
+
   login(postData): Observable<ISesion> {
     // console.log(this.url);
     // console.log(postData);
@@ -55,6 +69,7 @@ export class LoginService {
               this.loggedIn.next(true);
               this.isVisible.next(false);
               this.router.navigate(['/home']);
+              this.iSesion.next(res.data[0]);
               return res.data as ISesion;
             } else {
               throw (res.mensaje);

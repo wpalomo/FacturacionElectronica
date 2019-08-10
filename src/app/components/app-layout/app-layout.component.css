@@ -124,3 +124,8 @@ body {
     padding: 20px;
     line-height: 20px;
 }
+
+.btn-default {
+    background-color: #3c8dbc !important;
+    color: #ffffff;
+}

@@ -8,12 +8,36 @@ import { Component, Input, OnInit } from '@angular/core';
 export class MensajeGenericoComponent implements OnInit {
   @Input() title: string;
   @Input() errorMsg: string;
-  displayError: boolean;
+  @Input() tipoMensaje: string;
+  displayMensaje: boolean;
+  trueTipoMensaje: boolean;
+  public stockClasses;
 
   constructor() { }
 
   ngOnInit() {
-    this.displayError = true;
+    alert(this.tipoMensaje);
+    this.displayMensaje = true;
+
+    this.trueTipoMensaje = false;
+    if (this.tipoMensaje === 'OK') {
+      this.trueTipoMensaje = true;
+    }
+
+    this.stockClasses = {
+      "my-panel-ok": this.trueTipoMensaje,
+      "my-panel": !this.trueTipoMensaje      
+    };
   }
 
+  isTrueTipoMensaje(): boolean {
+    // return this.price >= this.previousPrice;
+    // alert(this.tipoMensaje);
+    alert(this.tipoMensaje === 'OK');
+    return this.tipoMensaje === 'OK';
+  }
+
+  getStyles() {
+
+  }
 }
