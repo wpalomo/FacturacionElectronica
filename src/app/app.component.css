@@ -14,12 +14,18 @@ body {
     margin-bottom: -271px;
 }
 
-footer {
-    /* .set the height of the footer */
-    height: 271px;
-    /* just setting a color so you can see the footer */
-    background: orange;
-}
+.footer {
+    position: fixed;
+    
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+    /* background-color: lightslategray; */
+    background-color:#fff;
+    color: white;
+    text-align: center;
+    margin: 0px;
+  }
 
 /* the following is not necessary, just showing how a header could be added */
 header {
