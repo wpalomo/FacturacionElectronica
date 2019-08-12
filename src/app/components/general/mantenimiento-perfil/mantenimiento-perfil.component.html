@@ -1,3 +1,80 @@
-<p>
-  mantenimiento-perfil works!
-</p>
+<div class=" p-grid mt-4">
+  <div class="p-col-3">
+  </div>
+
+  <div class="p-col-6">
+    <p-table #dt [columns]="cols" [value]="perfiles" [responsive]="true" [paginator]="true" [rows]="3" [lazy]="true"
+      (onLazyLoad)="loadLazy($event)">
+
+      <ng-template pTemplate="caption">
+        Mantenimiento de Perfiles
+      </ng-template>
+
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of columns" [ngStyle]="{'width': col.width}" [pSortableColumn]="col.field">
+            {{col.header}}
+            <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+              ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order">
+            </p-sortIcon>
+          </th>
+          <th [ngStyle]="{'width':'10%'}"></th>
+        </tr>
+        <tr>
+          <th *ngFor="let col of columns" [ngSwitch]="col.field">
+            <input *ngSwitchCase="'id_perfil'" pInputText type="text"
+              (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
+
+            <input *ngSwitchCase="'descripcion_perfil'" pInputText type="text"
+              (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
+          </th>
+          <th></th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-perfil let-columns="columns">
+        <tr [pSelectableRow]="perfil">
+          <td *ngFor="let col of columns">
+            {{perfil[col.field]}}
+          </td>
+          <td><button type="button" pButton icon="pi pi-pencil" (click)="modificarRegistro(perfil)"></button></td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary" let-perfil>
+        <div style="text-align:left">
+          <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAdd()" label="Add"></button>
+        </div>
+      </ng-template>
+    </p-table>
+
+  </div>
+
+  <div class="p-col-3">
+  </div>
+</div>
+
+<p-dialog header="Mantenimiento de Perfil" [(visible)]="displayDialog" [responsive]="true" showEffect="fade"
+  [modal]="true" [style]="{width: '500px'}">
+  <div class="p-grid">
+    <div class="p-col-3">
+      <label for="id_perfil">Código</label>
+    </div>
+    <div class="p-col-9">
+      <input pInputText id="id_perfil" [(ngModel)]="perfil.id_perfil" [disabled]="disabled" />
+    </div>
+
+    <div class="p-col-3">
+      <label for="descripcion_perfil">Descripcion</label>
+    </div>
+    <div class="p-col-9">
+      <input pInputText id="descripcion_perfil" [(ngModel)]="perfil.descripcion_perfil" />
+    </div>
+  </div>
+  <p-footer>
+    <div class="ui-dialog-buttonpane ui-helper-clearfix">
+      <button type="button" pButton icon="pi pi-times" (click)="delete()" label="Delete"
+        [(hidden)]="displayButtonDelete"></button>
+      <button type="button" pButton icon="pi pi-check" (click)="save()" label="Save"></button>
+    </div>
+  </p-footer>
+</p-dialog>

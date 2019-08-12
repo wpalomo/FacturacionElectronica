@@ -14,6 +14,7 @@ import { HomeComponent } from './components/home/home.component';
 
 import { EncrDecrService } from './services/encrypt/encr-decr.service';
 import { LoginService } from './services/login/login.service';
+import { MantenimientoPerfilService } from './services/mantenimiento-perfil/mantenimiento-perfil.service';
 import { AuthGuard } from './guards/auth.guard';
 import { MensajeGenericoComponent } from './common/mensaje-generico/mensaje-generico.component';
 import { AppLayoutComponent } from './components/app-layout/app-layout.component';
@@ -49,7 +50,8 @@ import { PermisosComponent } from './components/general/permisos/permisos.compon
   providers: [
     AuthGuard,
     LoginService,
-    EncrDecrService
+    EncrDecrService,
+    MantenimientoPerfilService
   ],
   bootstrap: [AppComponent]
 })
