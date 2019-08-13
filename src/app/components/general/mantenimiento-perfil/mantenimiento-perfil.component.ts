@@ -72,10 +72,22 @@ export class MantenimientoPerfilComponent implements OnInit {
     //console.log(event.sortOrder);
     //console.log(event.filters);
 
-    this.mantenimientoPerfilService.getPerfiles(event).subscribe(
+    const postData = new FormData();
+    postData.append('action', 'Q');
+
+    //this.mantenimientoPerfilService.getPerfiles(event).subscribe(
+    //  data => {
+    //    this.perfiles = data;
+    //    console.log(this.perfiles);
+    //  }
+    //);
+
+
+    this.mantenimientoPerfilService.getPerfiles2(event, postData).subscribe(
       data => {
-        this.perfiles = data;
-        console.log(this.perfiles);
+        //this.perfiles = data;
+        //console.log(this.perfiles);
+        console.log(data);
       }
     );
 
