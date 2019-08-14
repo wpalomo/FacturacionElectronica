@@ -1,0 +1,28 @@
+{
+    "data": [
+        {
+            "id_perfil": 1,
+            "descripcion_perfil": "ADMINISTRADOR",
+            "estado_perfil": "A",
+            "descripcion_estado_perfil": "ACTIVO"
+        },
+        {
+            "id_perfil": 2,
+            "descripcion_perfil": "CLIENTE",
+            "estado_perfil": "A",
+            "descripcion_estado_perfil": "ACTIVO"
+        },
+        {
+            "id_perfil": 3,
+            "descripcion_perfil": "CONTABILIDAD",
+            "estado_perfil": "A",
+            "descripcion_estado_perfil": "ACTIVO"
+        },
+        {
+            "id_perfil": 4,
+            "descripcion_perfil": "BANCOS",
+            "estado_perfil": "A",
+            "descripcion_estado_perfil": "ACTIVO"
+        }
+    ]
+}
