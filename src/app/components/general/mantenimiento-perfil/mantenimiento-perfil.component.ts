@@ -16,6 +16,7 @@ export class MantenimientoPerfilComponent implements OnInit {
   nuevoRegistro: boolean;
   disabled: boolean = true;
   hiddenButtonDelete: boolean;
+  totalRecords = 150;
 
   constructor(
     private mantenimientoPerfilService: MantenimientoPerfilService
@@ -70,9 +71,19 @@ export class MantenimientoPerfilComponent implements OnInit {
     //console.log(event.rows);
     //console.log(event.sortField);
     //console.log(event.sortOrder);
-    //console.log(event.filters);
+
+    //if (event.filters) {
+    //  console.log(event.filters);
+    //  console.log(event.filters.id_perfil);
+    //  console.log(event.filters.id_perfil.value);
+    //}
 
     const postData = new FormData();
+    postData.append('start', event.first.toString());
+    postData.append('limit', event.rows.toString());
+    postData.append('sortField', event.sortField);
+    postData.append('sortOrder', event.sortOrder.toString());
+    postData.append('filters', JSON.stringify(event.filters));
     postData.append('action', 'Q');
 
     //this.mantenimientoPerfilService.getPerfiles(event).subscribe(
@@ -83,7 +94,7 @@ export class MantenimientoPerfilComponent implements OnInit {
     //);
 
 
-    this.mantenimientoPerfilService.getPerfiles2(event, postData).subscribe(
+    this.mantenimientoPerfilService.getPerfiles2(postData).subscribe(
       data => {
         //this.perfiles = data;
         //console.log(this.perfiles);
