@@ -16,17 +16,55 @@ class ClasePerfil {
     private $descripcion_perfil;
     private $estado_perfil;
 
-    public function __construct($id_perfil, $descripcion_perfil, $estado_perfil) {
-        $this->id_perfil = mssql_real_escape_string($id_perfil);
-        $this->descripcion_perfil = mssql_real_escape_string($descripcion_perfil);
-        $this->estado_perfil = mssql_real_escape_string($estado_perfil);
-    }
+//    public function __construct($id_perfil, $descripcion_perfil, $estado_perfil) {
+//        $this->id_perfil = mssql_real_escape_string($id_perfil);
+//        $this->descripcion_perfil = mssql_real_escape_string($descripcion_perfil);
+//        $this->estado_perfil = mssql_real_escape_string($estado_perfil);
+//    }
 
-    public function getPerfiles() {
-        $query = "
-            EXEC SP_GEN_PERFILES            
-            @in_operacion = 'Q'
+    public function getPerfiles($parametros) {
+
+        print_r($parametros);
+
+        $select = "
+            select *
+            from TB_GEN_PERFILES
         ";
+
+        $where = " WHERE id_perfil > 0 ";
+
+        $records = json_decode(stripslashes($parametros['filters']), true);
+
+        foreach ($records as $key => $val) {
+            echo 'KEY IS:' . $key . '<br/>';
+            foreach ($records[$key] as $_key => $_val) {
+                echo 'KEY IS:' . $_key . '<br/>';
+                echo 'VALUE IS: ' . $_val . '<br/>';
+
+                if ($_key == 'value') {
+                    $where = $where . " AND " . $key . " = '$_val' ";
+                }
+            }
+        }
+
+        
+        $order = 'ORDER BY id_perfil ';
+        if (is_null($parametros['sortField'])) {
+            $order = 'ORDER BY ' . $parametros['sortField'] . ' ';
+        }
+        
+        $offset = 'OFFSET ' . ($parametros['start'] * $parametros['limit']) . ' ROWS ';
+        $fetch = 'FETCH NEXT ' . $parametros['limit'] . ' ROWS ONLY';
+
+
+        $query = $select . $where . $order . $offset . $fetch;
+
+        echo $query;
+
+//        $query = "
+//            EXEC SP_GEN_PERFILES            
+//            @in_operacion = 'Q'
+//        ";
 
         $parametros = array(
             'query' => $query

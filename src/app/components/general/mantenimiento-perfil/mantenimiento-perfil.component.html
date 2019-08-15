@@ -4,7 +4,7 @@
 
   <div class="p-col-6">
     <p-table #dt [columns]="cols" [value]="perfiles" [responsive]="true" [paginator]="true" [rows]="5" [lazy]="true"
-    [totalRecords]="totalRecords" (onLazyLoad)="loadLazy($event)">
+      [totalRecords]="totalRecords" (onLazyLoad)="loadLazy($event)">
 
       <ng-template pTemplate="caption">
         Mantenimiento de Perfiles
@@ -27,6 +27,11 @@
 
             <input *ngSwitchCase="'descripcion_perfil'" pInputText type="text"
               (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
+
+            <p-dropdown *ngSwitchCase="'descripcion_estado_perfil'" [options]="estados" [style]="{'width':'100%'}"
+              (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter">
+            </p-dropdown>
+
           </th>
           <th></th>
         </tr>

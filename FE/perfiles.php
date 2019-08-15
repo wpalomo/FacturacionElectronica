@@ -5,25 +5,24 @@ include_once 'librerias/ClasePerfil.php';
 
 $action = isset($_GET['action']) ? $_GET['action'] : (isset($_POST['action']) ? $_POST['action'] : null);
 
-$objetoPerfil = new ClasePerfil(1, 1, 1);
+switch ($action) {
+    case 'getPerfiles':
+        getPerfiles();
+        break;
+}
 
-$result = $objetoPerfil->getPerfiles();
 
-$data = ClaseJson::getJson($result);
+/*
+  echo $_POST['start'];
+  echo $_POST['limit'];
+  echo $_POST['filters'];
 
-echo $data;
+  $records = json_decode(stripslashes($_POST['filters']), true);
 
-echo $_POST['start'];
-echo $_POST['limit'];
-echo $_POST['filters'];
-//var_dump($_POST['filters']);
-//$records = json_decode(stripslashes($datosStorePedido));
+  print_r($records);
 
-$records = json_decode(stripslashes($_POST['filters']), true);
-
-print_r($records);
-
-echo '<hr>';
+  echo '<hr>';
+ */
 
 //foreach ($records as $record => $value) {
 //    //echo $value;
@@ -67,43 +66,60 @@ echo '<hr>';
 //    }
 //}
 
+/*
+  $select = "
+  select *
+  from TB_GEN_PERFILES
+  ";
 
-$select = "
-    select *
-    from TB_GEN_PERFILES
-        ";
+  $where = ' WHERE id_perfil > 0 ';
 
-$where = ' WHERE id_perfil > 0 ';
+  foreach ($records as $key => $val) {
+  echo 'KEY IS:' . $key . '<br/>';
+  foreach ($records[$key] as $_key => $_val) {
+  echo 'KEY IS:' . $_key . '<br/>';
+  echo 'VALUE IS: ' . $_val . '<br/>';
 
-foreach ($records as $key => $val) {
-    echo 'KEY IS:' . $key . '<br/>';
-    foreach ($records[$key] as $_key => $_val) {
-        echo 'KEY IS:' . $_key . '<br/>';
-        echo 'VALUE IS: ' . $_val . '<br/>';
+  if ($_key == 'value') {
+  $where = $where . " AND " . $key . " = '$_val' ";
+  }
+  }
+  }
 
-        if ($_key == 'value') {
-            $where = $where . " AND " . $key . " = '$_val' ";
-        }
-    }
-}
-
-$order = 'ORDER BY ' . $_POST['sortField'] . ' ';
-$offset = 'OFFSET ' . ($_POST['start'] * $_POST['limit']) . ' ROWS ';
-$fetch = 'FETCH NEXT ' . $_POST['limit'] . ' ROWS ONLY';
+  $order = 'ORDER BY ' . $_POST['sortField'] . ' ';
+  $offset = 'OFFSET ' . ($_POST['start'] * $_POST['limit']) . ' ROWS ';
+  $fetch = 'FETCH NEXT ' . $_POST['limit'] . ' ROWS ONLY';
 
 
-$query = $select . $where . $order . $offset . $fetch;
+  $query = $select . $where . $order . $offset . $fetch;
 
-echo $query;
+  echo $query;
 
-switch ($action) {
-    case 'getPerfiles':
-        getPerfiles();
-        break;
-}
-
+  switch ($action) {
+  case 'getPerfiles':
+  getPerfiles();
+  break;
+  }
+ */
 function getPerfiles() {
-    
+
+    $parametros = array(
+        'start' => $_POST['start'],
+        'limit' => $_POST['limit'],
+        'sortField' => $_POST['sortField'],
+        'sortOrder' => $_POST['sortOrder'],
+        'filters' => $_POST['filters'],
+    );
+
+
+
+    $objetoPerfil = new ClasePerfil();
+
+    $result = $objetoPerfil->getPerfiles($parametros);
+
+    $data = ClaseJson::getJson($result);
+
+    echo $data;
 }
 
 //echo 'hola';
