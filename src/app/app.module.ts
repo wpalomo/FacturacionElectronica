@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { EasyUIModule } from 'ng-easyui/components/easyui/easyui.module';
-import { FlexLayoutModule } from '@angular/flex-layout'
+//import { FlexLayoutModule } from '@angular/flex-layout'
 
 import { AppComponent } from './app.component';
 
@@ -46,8 +46,8 @@ import { PermisosComponent } from './components/general/permisos/permisos.compon
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
-    EasyUIModule,
-    FlexLayoutModule
+    EasyUIModule
+    //FlexLayoutModule
   ],
   providers: [
     AuthGuard,

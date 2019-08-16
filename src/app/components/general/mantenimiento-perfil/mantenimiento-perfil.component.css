@@ -1,3 +1,13 @@
 .ui-inputtext {
     width: 90%
 }
+
+.old-car {
+    background-color: #1CA979 !important;
+    color: #ffffff !important;
+}
+
+.very-old-car {
+    background-color: #2CA8B1 !important;
+    color: #ffffff !important;
+}

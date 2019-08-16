@@ -20,6 +20,10 @@ export class MantenimientoPerfilComponent implements OnInit {
   hiddenButtonDelete: boolean;
   totalRecords = 150;
   estados: IEstados[];
+  grades: IEstados[];
+  errorMsg;
+  displayMensaje: boolean;
+  tipoMensaje: string;
 
   constructor(
     private mantenimientoPerfilService: MantenimientoPerfilService,
@@ -42,18 +46,22 @@ export class MantenimientoPerfilComponent implements OnInit {
       }
     )
 
+    this.grades = [];
+    this.grades.push({ label: 'ACTIVO', value: 'ACTIVO' });
+    this.grades.push({ label: 'INACTIVO', value: 'INACTIVO' });
+
     this.cols = [
       {
         field: 'id_perfil',
         header: 'Codigo',
-        filterMatchMode: 'equals',
+        filterMatchMode: 'startsWith',
         width: '20%'
       },
       {
         field: 'descripcion_perfil',
         header: 'Descripcion',
         filterMatchMode: 'contains',
-        width: '60%',
+        width: '40%',
         display: 'table-cell'
       },
       {
@@ -62,12 +70,16 @@ export class MantenimientoPerfilComponent implements OnInit {
         filterMatchMode: 'equals',
         width: '20%',
         display: 'table-cell'
+      },
+
+
+      {
+        field: 'descripcion_estado_perfil',
+        header: 'Estado',
+        filterMatchMode: 'in',
+        width: '20%',
+        display: 'table-cell'
       }
-      // {
-      //   field: 'descripcion_estado_perfil',
-      //   header: 'Estado',
-      //   display: 'none'
-      // }
     ];
 
     //this.estados = [];
@@ -126,6 +138,15 @@ export class MantenimientoPerfilComponent implements OnInit {
         this.perfiles = data;
         //console.log(this.perfiles);
         console.log(data);
+      },
+      error => {
+        //this.displayWait = false;
+        this.errorMsg = error;
+        //console.log(this.errorMsg);
+
+        //this.displayWait = false;
+        this.displayMensaje = true;
+        this.tipoMensaje = 'ERROR';
       }
     );
 

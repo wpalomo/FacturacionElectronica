@@ -33,12 +33,17 @@
               (onChange)="dt.filter($event.value, col.field, col.filterMatchMode)" styleClass="ui-column-filter">
             </p-dropdown>
 
+            <p-multiSelect *ngSwitchCase="'descripcion_estado_perfil'" [options]="grades" [style]="{'width':'100%'}"
+              defaultLabel="TODOS" (onChange)="dt.filter($event.value, col.field, col.filterMatchMode)"></p-multiSelect>
+            <!--(onChange)="dt.filter($event.value, col.field, 'in')"></p-multiSelect>            -->
+
           </th>
           <th></th>
         </tr>
       </ng-template>
 
       <ng-template pTemplate="body" let-perfil let-columns="columns">
+        <!--<tr [pSelectableRow]="perfil" [ngClass]="perfil['estado_perfil']=='A' ? 'old-car' : null">-->
         <tr [pSelectableRow]="perfil">
           <td *ngFor="let col of columns" [ngStyle]="{'display': col.display}">
             <span *ngIf="col.field!=='estado_perfil'">
@@ -46,7 +51,12 @@
             </span>
 
             <span *ngIf="col.field=='estado_perfil'">
-              {{perfil['descripcion_estado_perfil']}}
+              <div span [style.color]="'Green'" *ngIf="perfil['estado_perfil']=='A'">
+                {{perfil['descripcion_estado_perfil']}}
+              </div>
+              <div span [style.color]="'Red'" *ngIf="perfil['estado_perfil']=='I'">
+                {{perfil['descripcion_estado_perfil']}}
+              </div>
             </span>
           </td>
           <td><button type="button" pButton icon="pi pi-pencil" (click)="modificarRegistro(perfil)"></button></td>
@@ -90,3 +100,6 @@
     </div>
   </p-footer>
 </p-dialog>
+
+<app-mensaje-generico *ngIf="displayMensaje" [title]="title" [tipoMensaje]="tipoMensaje" [errorMsg]="errorMsg">
+</app-mensaje-generico>

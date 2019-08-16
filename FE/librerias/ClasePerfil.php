@@ -27,23 +27,72 @@ class ClasePerfil {
 //        print_r($parametros);
 
         $select = "
-            select *
-            from VW_PERFILES
+            select *, descripcion_perfil as descripcion_perfil2
+            from VW_PERFILESs
         ";
 
         $where = " WHERE id_perfil > 0 ";
 
         $records = json_decode(stripslashes($parametros['filters']), true);
 
+        //print_r($records);
+
         foreach ($records as $key => $val) {
             //echo 'KEY IS:' . $key . '<br/>';
+            $field = $key;
             foreach ($records[$key] as $_key => $_val) {
                 //echo 'KEY IS:' . $_key . '<br/>';
                 //echo 'VALUE IS: ' . $_val . '<br/>';
 
+
                 if ($_key == 'value') {
-                    $where = $where . " AND " . $key . " = '$_val' ";
+                    $valor = $_val;
                 }
+
+                if ($_key == 'matchMode') {
+                    if ($key == 'estado_perfil' && $valor == 'T') {
+                        continue;
+                    } else {
+                        switch ($_val) {
+                            case 'startsWith':
+                                $where = $where . " AND " . $key . " like '$valor%' ";
+                                break;
+                            case 'contains':
+                                $where = $where . " AND " . $key . " like '%$valor%' ";
+                                break;
+                            case 'equals':
+                                $where = $where . " AND " . $key . " = '$valor' ";
+                                break;
+                            case 'in':
+                                if (is_array($valor)) {
+                                    $cadenaIn = " IN(";
+                                    foreach ($valor as $valueIn) {
+                                        $cadenaIn = $cadenaIn . "'$valueIn'";
+
+                                        if (next($valor) == true) {
+                                            $cadenaIn = $cadenaIn . ",";
+                                        } else {
+                                            $cadenaIn = $cadenaIn . ") ";
+                                        }
+                                    }
+                                    //echo $cadenaIn;
+                                    $where = $where . " AND " . $key . $cadenaIn;
+                                }
+                                break;
+                        }
+                    }
+                }
+
+
+
+
+//                if ($_key == 'value') {
+//                    if ($key == 'estado_perfil' && $_val == 'T') {
+//                        continue;
+//                    } else {
+//                        $where = $where . " AND " . $key . " = '$_val' ";
+//                    }
+//                }
             }
         }
 
@@ -61,7 +110,6 @@ class ClasePerfil {
         $query = $select . $where . $order . $offset . $fetch;
 
 //        echo $query;
-
 //        $query = "
 //            EXEC SP_GEN_PERFILES            
 //            @in_operacion = 'Q'

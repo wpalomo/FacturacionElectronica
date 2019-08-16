@@ -17,6 +17,7 @@ import { SplitButtonModule } from 'primeng/splitbutton';
 import { CheckboxModule } from 'primeng/checkbox';
 import { CardModule } from 'primeng/card';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { ProgressBarModule } from 'primeng/progressbar';
         SplitButtonModule,
         CheckboxModule,
         CardModule,
-        ProgressBarModule
+        ProgressBarModule,
+        MultiSelectModule
     ],
     exports: [
         PanelModule,
@@ -56,7 +58,8 @@ import { ProgressBarModule } from 'primeng/progressbar';
         SplitButtonModule,
         CheckboxModule,
         CardModule,
-        ProgressBarModule
+        ProgressBarModule,
+        MultiSelectModule
     ],
 })
 export class PrimeNGModule { }
