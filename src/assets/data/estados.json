@@ -1,0 +1,16 @@
+{
+    "data": [
+        {
+            "label": "TODOS",
+            "value": "T"
+        },
+        {
+            "label": "ACTIVO",
+            "value": "A"
+        },
+        {
+            "label": "INACTIVO",
+            "value": "I"
+        }
+    ]
+}

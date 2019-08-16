@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { LazyLoadEvent } from 'primeng/components/common/api';
 import { MantenimientoPerfilService } from '../../../services/mantenimiento-perfil/mantenimiento-perfil.service';
+import { EstadoService } from '../../../services/estado/estado.service';
 import ITB_GEN_PERFILES from '../../../model/ITB_GEN_PERFILES';
+import IEstados from '../../../model/IEstados';
 
 @Component({
   selector: 'app-mantenimiento-perfil',
@@ -16,9 +18,12 @@ export class MantenimientoPerfilComponent implements OnInit {
   nuevoRegistro: boolean;
   disabled: boolean = true;
   hiddenButtonDelete: boolean;
+  totalRecords = 150;
+  estados: IEstados[];
 
   constructor(
-    private mantenimientoPerfilService: MantenimientoPerfilService
+    private mantenimientoPerfilService: MantenimientoPerfilService,
+    private estadoService: EstadoService
   ) { }
 
   ngOnInit() {
@@ -30,6 +35,12 @@ export class MantenimientoPerfilComponent implements OnInit {
       }
     );
       */
+
+    this.estadoService.getEstados().subscribe(
+      data => {
+        this.estados = data;
+      }
+    )
 
     this.cols = [
       {
@@ -47,10 +58,15 @@ export class MantenimientoPerfilComponent implements OnInit {
       {
         field: 'descripcion_estado_perfil',
         header: 'Estado',
-        filterMatchMode: 'contains',
+        filterMatchMode: 'equals',
         width: '20%'
       }
     ];
+
+    //this.estados = [];
+    //this.estados.push({ label: "ACTIVO", value: "A" })
+    //this.estados.push({ label: "INACTIVO", value: "I" })
+    //this.estados.push({ label: "TODOS", value: "T" })
   }
 
   loadLazy(event: LazyLoadEvent) {
@@ -70,10 +86,20 @@ export class MantenimientoPerfilComponent implements OnInit {
     //console.log(event.rows);
     //console.log(event.sortField);
     //console.log(event.sortOrder);
-    //console.log(event.filters);
+
+    //if (event.filters) {
+    //  console.log(event.filters);
+    //  console.log(event.filters.id_perfil);
+    //  console.log(event.filters.id_perfil.value);
+    //}
 
     const postData = new FormData();
-    postData.append('action', 'Q');
+    postData.append('start', event.first.toString());
+    postData.append('limit', event.rows.toString());
+    postData.append('sortField', event.sortField);
+    postData.append('sortOrder', event.sortOrder.toString());
+    postData.append('filters', JSON.stringify(event.filters));
+    postData.append('action', 'getPerfiles');
 
     //this.mantenimientoPerfilService.getPerfiles(event).subscribe(
     //  data => {
@@ -83,9 +109,10 @@ export class MantenimientoPerfilComponent implements OnInit {
     //);
 
 
-    this.mantenimientoPerfilService.getPerfiles2(event, postData).subscribe(
+    this.mantenimientoPerfilService.getPerfiles2(postData).subscribe(
       data => {
-        //this.perfiles = data;
+        alert(data);
+        this.perfiles = data;
         //console.log(this.perfiles);
         console.log(data);
       }

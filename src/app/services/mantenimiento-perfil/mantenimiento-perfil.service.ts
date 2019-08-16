@@ -32,7 +32,34 @@ export class MantenimientoPerfilService {
       );
   }
 
-  getPerfiles2(event, postData): any {
+  //getFormasPago(): Observable<IFormasPago[]> {
+  getPerfiles2(postData): Observable<ITB_GEN_PERFILES[]> {
+
+    //console.log('event.first: ' + postData.start);
+    //console.log('event.rows: ' + event.rows);
+    //console.log('event.sortField: ' + event.sortField);
+    //console.log('event.sortOrder: ' + event.sortOrder);
+    //console.log('event.filters: ' + event.filters);
+
+
+    /*
+    postData.append('start', event.first.toString());
+    postData.append('limit', event.rows.toString());
+    postData.append('sortField', event.sortField);
+    postData.append('sortOrder', event.sortOrder.toString());
+    postData.append('filters', event.filters.toString())
+    postData.append('action', 'Q');
+    */
+
+    /*
+    return this.http.get<any>(environment.baseUrl)
+          .pipe(
+            map(res => {
+              if (res.success) {
+                return res.data as IFormasPago[];
+              } else {
+    */
+
     return this.http.post<any>(this.url, postData)
       .pipe(
         map(res => {
@@ -40,7 +67,7 @@ export class MantenimientoPerfilService {
             alert('fddddd');
             //if (res.ok === 'S') {
             //  alert(res);
-            return res;
+            return res.data as ITB_GEN_PERFILES[];
             //} else {
             //  throw (res.mensaje);
             //}
