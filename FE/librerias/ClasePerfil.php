@@ -24,11 +24,11 @@ class ClasePerfil {
 
     public function getPerfiles($parametros) {
 
-        print_r($parametros);
+//        print_r($parametros);
 
         $select = "
             select *
-            from TB_GEN_PERFILES
+            from VW_PERFILES
         ";
 
         $where = " WHERE id_perfil > 0 ";
@@ -36,10 +36,10 @@ class ClasePerfil {
         $records = json_decode(stripslashes($parametros['filters']), true);
 
         foreach ($records as $key => $val) {
-            echo 'KEY IS:' . $key . '<br/>';
+            //echo 'KEY IS:' . $key . '<br/>';
             foreach ($records[$key] as $_key => $_val) {
-                echo 'KEY IS:' . $_key . '<br/>';
-                echo 'VALUE IS: ' . $_val . '<br/>';
+                //echo 'KEY IS:' . $_key . '<br/>';
+                //echo 'VALUE IS: ' . $_val . '<br/>';
 
                 if ($_key == 'value') {
                     $where = $where . " AND " . $key . " = '$_val' ";
@@ -47,19 +47,20 @@ class ClasePerfil {
             }
         }
 
-        
-        $order = 'ORDER BY id_perfil ';
-        if (is_null($parametros['sortField'])) {
-            $order = 'ORDER BY ' . $parametros['sortField'] . ' ';
+
+
+        $order = 'ORDER BY ' . $parametros['sortField'] . ' ';
+        if ($parametros['sortOrder'] == '-1') {
+            $order = $order . ' DESC ';
         }
-        
+
         $offset = 'OFFSET ' . ($parametros['start'] * $parametros['limit']) . ' ROWS ';
         $fetch = 'FETCH NEXT ' . $parametros['limit'] . ' ROWS ONLY';
 
 
         $query = $select . $where . $order . $offset . $fetch;
 
-        echo $query;
+//        echo $query;
 
 //        $query = "
 //            EXEC SP_GEN_PERFILES            

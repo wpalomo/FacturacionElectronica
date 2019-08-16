@@ -106,8 +106,8 @@ function getPerfiles() {
     $parametros = array(
         'start' => $_POST['start'],
         'limit' => $_POST['limit'],
-        'sortField' => $_POST['sortField'],
-        'sortOrder' => $_POST['sortOrder'],
+        'sortField' => isset($_POST['sortField']) ? $_POST['sortField'] : 'id_perfil',
+        'sortOrder' => isset($_POST['sortOrder']) ? $_POST['sortOrder'] : '1',
         'filters' => $_POST['filters'],
     );
 

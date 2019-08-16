@@ -53,14 +53,21 @@ export class MantenimientoPerfilComponent implements OnInit {
         field: 'descripcion_perfil',
         header: 'Descripcion',
         filterMatchMode: 'contains',
-        width: '60%'
+        width: '60%',
+        display: 'table-cell'
       },
       {
-        field: 'descripcion_estado_perfil',
+        field: 'estado_perfil',
         header: 'Estado',
         filterMatchMode: 'equals',
-        width: '20%'
+        width: '20%',
+        display: 'table-cell'
       }
+      // {
+      //   field: 'descripcion_estado_perfil',
+      //   header: 'Estado',
+      //   display: 'none'
+      // }
     ];
 
     //this.estados = [];
@@ -96,8 +103,12 @@ export class MantenimientoPerfilComponent implements OnInit {
     const postData = new FormData();
     postData.append('start', event.first.toString());
     postData.append('limit', event.rows.toString());
-    postData.append('sortField', event.sortField);
-    postData.append('sortOrder', event.sortOrder.toString());
+
+    if (event.sortField) {
+      postData.append('sortField', event.sortField);
+      postData.append('sortOrder', event.sortOrder.toString());
+    }
+
     postData.append('filters', JSON.stringify(event.filters));
     postData.append('action', 'getPerfiles');
 

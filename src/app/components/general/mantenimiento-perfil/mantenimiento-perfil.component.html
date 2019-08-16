@@ -12,7 +12,8 @@
 
       <ng-template pTemplate="header" let-columns>
         <tr>
-          <th *ngFor="let col of columns" [ngStyle]="{'width': col.width}" [pSortableColumn]="col.field">
+          <th *ngFor="let col of columns" [ngStyle]="{'width': col.width, 'display': col.display}"
+            [pSortableColumn]="col.field">
             {{col.header}}
             <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
               ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order">
@@ -28,8 +29,8 @@
             <input *ngSwitchCase="'descripcion_perfil'" pInputText type="text"
               (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
 
-            <p-dropdown *ngSwitchCase="'descripcion_estado_perfil'" [options]="estados" [style]="{'width':'100%'}"
-              (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter">
+            <p-dropdown *ngSwitchCase="'estado_perfil'" [options]="estados" [style]="{'width':'100%'}"
+              (onChange)="dt.filter($event.value, col.field, col.filterMatchMode)" styleClass="ui-column-filter">
             </p-dropdown>
 
           </th>
@@ -39,8 +40,14 @@
 
       <ng-template pTemplate="body" let-perfil let-columns="columns">
         <tr [pSelectableRow]="perfil">
-          <td *ngFor="let col of columns">
-            {{perfil[col.field]}}
+          <td *ngFor="let col of columns" [ngStyle]="{'display': col.display}">
+            <span *ngIf="col.field!=='estado_perfil'">
+              {{perfil[col.field]}}
+            </span>
+
+            <span *ngIf="col.field=='estado_perfil'">
+              {{perfil['descripcion_estado_perfil']}}
+            </span>
           </td>
           <td><button type="button" pButton icon="pi pi-pencil" (click)="modificarRegistro(perfil)"></button></td>
         </tr>
