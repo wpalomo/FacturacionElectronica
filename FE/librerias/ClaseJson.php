@@ -21,9 +21,14 @@ class ClaseJson {
             }
         }
 
+        $total = count($datos['data']);
+        if (array_key_exists('total', $datos)) {
+            $total = $datos['total'];
+        }
+
         $result = array(
             "success" => $success,
-            "total" => count($datos['data']),
+            "total" => $total,
             "totalFiltro" => count($datos['data']),
             "data" => $datos['data'],
             "mensaje" => $datos['mensaje']

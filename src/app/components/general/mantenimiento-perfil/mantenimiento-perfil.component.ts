@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { LazyLoadEvent } from 'primeng/components/common/api';
+import { Observable } from 'rxjs';
 import { MantenimientoPerfilService } from '../../../services/mantenimiento-perfil/mantenimiento-perfil.service';
 import { EstadoService } from '../../../services/estado/estado.service';
 import ITB_GEN_PERFILES from '../../../model/ITB_GEN_PERFILES';
 import IEstados from '../../../model/IEstados';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-mantenimiento-perfil',
@@ -11,6 +13,11 @@ import IEstados from '../../../model/IEstados';
   styleUrls: ['./mantenimiento-perfil.component.css']
 })
 export class MantenimientoPerfilComponent implements OnInit {
+  @ViewChild('dt') dt: any;
+  filtering() {
+    //alert('fffff');
+    this.dt.reset();
+  }
   displayDialog: boolean;
   perfiles: ITB_GEN_PERFILES[];
   perfil: ITB_GEN_PERFILES = {};
@@ -18,12 +25,15 @@ export class MantenimientoPerfilComponent implements OnInit {
   nuevoRegistro: boolean;
   disabled: boolean = true;
   hiddenButtonDelete: boolean;
-  totalRecords = 150;
   estados: IEstados[];
   grades: IEstados[];
   errorMsg;
   displayMensaje: boolean;
   tipoMensaje: string;
+  first = 0;
+
+
+  totalRecords$: Observable<number>;
 
   constructor(
     private mantenimientoPerfilService: MantenimientoPerfilService,
@@ -112,7 +122,12 @@ export class MantenimientoPerfilComponent implements OnInit {
     //  console.log(event.filters.id_perfil.value);
     //}
 
+
+    //this.filtering();
+
     const postData = new FormData();
+    //alert(event.first.toString());
+    //alert(event.rows.toString());
     postData.append('start', event.first.toString());
     postData.append('limit', event.rows.toString());
 
@@ -135,6 +150,8 @@ export class MantenimientoPerfilComponent implements OnInit {
     this.mantenimientoPerfilService.getPerfiles2(postData).subscribe(
       data => {
         alert(data);
+
+        this.totalRecords$ = this.mantenimientoPerfilService.getTotalRecords();
         this.perfiles = data;
         //console.log(this.perfiles);
         console.log(data);
@@ -152,6 +169,10 @@ export class MantenimientoPerfilComponent implements OnInit {
 
     //this.browserService.getBrowsers().subscribe((browsers: any) =>
     //  this.browsers = browsers.slice(event.first, (event.first + event.rows)));
+  }
+
+  reset() {
+    this.first = 0;
   }
 
   modificarRegistro(perfil: ITB_GEN_PERFILES) {

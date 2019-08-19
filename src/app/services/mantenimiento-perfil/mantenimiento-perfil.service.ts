@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
@@ -13,11 +14,15 @@ import ITB_GEN_PERFILES from '../../model/ITB_GEN_PERFILES';
 export class MantenimientoPerfilService {
   // TODO: que la ruta en php la traiga en variable y no quemada en codigo.
   url = environment.baseUrl + 'perfiles.php';
+  private totalRecords: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
   constructor(
     private http: HttpClient
   ) { }
 
+  getTotalRecords() {
+    return this.totalRecords.asObservable();
+  }
   getPerfiles(event): Observable<ITB_GEN_PERFILES[]> {
     console.log(event.first);
     console.log(event.rows);
@@ -67,6 +72,7 @@ export class MantenimientoPerfilService {
             alert('fddddd');
             //if (res.ok === 'S') {
             //  alert(res);
+            this.totalRecords.next(res.total);
             return res.data as ITB_GEN_PERFILES[];
             //} else {
             //  throw (res.mensaje);

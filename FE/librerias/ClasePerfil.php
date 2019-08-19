@@ -28,10 +28,15 @@ class ClasePerfil {
 
         $select = "
             select *, descripcion_perfil as descripcion_perfil2
-            from VW_PERFILESs
+            from VW_PERFILES
         ";
 
         $where = " WHERE id_perfil > 0 ";
+
+        $selectTotalRegistros = "
+            select count(*) as total_registros
+            from VW_PERFILES
+        ";
 
         $records = json_decode(stripslashes($parametros['filters']), true);
 
@@ -97,18 +102,25 @@ class ClasePerfil {
         }
 
 
+        $start = $parametros['start'];
+//        if ($start == 0) {
+//            $start = 1;
+//        }
 
         $order = 'ORDER BY ' . $parametros['sortField'] . ' ';
         if ($parametros['sortOrder'] == '-1') {
             $order = $order . ' DESC ';
         }
 
-        $offset = 'OFFSET ' . ($parametros['start'] * $parametros['limit']) . ' ROWS ';
+        //$offset = 'OFFSET ' . (($start - 1) * $parametros['limit']) . ' ROWS ';
+        $offset = 'OFFSET ' . ($start) . ' ROWS ';
         $fetch = 'FETCH NEXT ' . $parametros['limit'] . ' ROWS ONLY';
 
 
+        $queryTotalRegistros = $selectTotalRegistros . $where;
         $query = $select . $where . $order . $offset . $fetch;
 
+//        echo $queryTotalRegistros;
 //        echo $query;
 //        $query = "
 //            EXEC SP_GEN_PERFILES            
@@ -116,12 +128,29 @@ class ClasePerfil {
 //        ";
 
         $parametros = array(
-            'query' => $query
+            'query' => $queryTotalRegistros
         );
 
-        $result = ClaseBaseDatos::query($parametros);
+        $resultTotal = ClaseBaseDatos::query($parametros);
 
-        return $result;
+//        print_r($resultTotal);
+
+        if ($resultTotal['error'] == 'N') {
+            $dataTotal = $resultTotal['data'];
+            $totalRegistros = $dataTotal[0]['total_registros'];
+
+            $parametros = array(
+                'query' => $query,
+                'total' => $totalRegistros
+            );
+
+            $result = ClaseBaseDatos::query($parametros);
+
+//            print_r($result);
+            return $result;
+        } else {
+            return $resultTotal;
+        }
     }
 
 }

@@ -104,7 +104,7 @@ switch ($action) {
 function getPerfiles() {
 
     $parametros = array(
-        'start' => $_POST['start'],
+        'start' => $_POST['start'] ,
         'limit' => $_POST['limit'],
         'sortField' => isset($_POST['sortField']) ? $_POST['sortField'] : 'id_perfil',
         'sortOrder' => isset($_POST['sortOrder']) ? $_POST['sortOrder'] : '1',

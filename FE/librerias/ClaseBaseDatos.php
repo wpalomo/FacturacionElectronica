@@ -112,7 +112,7 @@ class ClaseBaseDatos {
                 if ($resp[0]['mensaje']) {
                     $mensaje = $resp[0]['mensaje'];
                 }
-
+                
                 if (!odbc_error()) {
                     if (self::$autocommit) {
                         self::commit();
@@ -137,6 +137,10 @@ class ClaseBaseDatos {
                         "mensaje" => $mensaje
                             //"mensaje" => array("reason" => $mensaje)
                     );
+                    
+                    if (array_key_exists('total', $parametros)) {
+                        $result['total'] = $parametros['total'];
+                    }
 
                     self::desconectarse();
                     return $result;
