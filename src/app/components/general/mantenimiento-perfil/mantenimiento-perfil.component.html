@@ -92,10 +92,15 @@
       <input pInputText id="descripcion_perfil" [(ngModel)]="perfil.descripcion_perfil" />
     </div>
   </div>
+
+  <h3 class="first">Single</h3>
+  <p-dropdown [options]="estados" [(ngModel)]="selectedCity" placeholder="Select a City" optionLabel="name"
+    [showClear]="true"></p-dropdown>
+
   <p-footer>
     <div class="ui-dialog-buttonpane ui-helper-clearfix">
-      <button type="button" pButton icon="pi pi-times" (click)="delete()" label="Delete"
-        [(hidden)]="displayButtonDelete"></button>
+      <button type="button" pButton icon="pi pi-times" (click)="delete()" label="Delete" [(hidden)]="hiddenButtonDelete"
+        [class]="'ui-button-danger'"></button>
       <button type="button" pButton icon="pi pi-check" (click)="save()" label="Save"></button>
     </div>
   </p-footer>
