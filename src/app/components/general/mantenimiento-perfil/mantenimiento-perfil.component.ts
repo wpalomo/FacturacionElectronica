@@ -26,11 +26,13 @@ export class MantenimientoPerfilComponent implements OnInit {
   disabled: boolean = true;
   hiddenButtonDelete: boolean;
   estados: IEstados[];
+  estadosActivos: IEstados[];
   grades: IEstados[];
   errorMsg;
   displayMensaje: boolean;
   tipoMensaje: string;
   first = 0;
+  selectedEstado: any;
 
 
   totalRecords$: Observable<number>;
@@ -55,6 +57,14 @@ export class MantenimientoPerfilComponent implements OnInit {
         this.estados = data;
       }
     )
+
+    this.estadoService.getEstadosActivos().subscribe(
+      data => {
+        this.estadosActivos = data;
+      }
+    )
+
+    //this.estadoService.getEstadosActivos().subscribe();
 
     this.grades = [];
     this.grades.push({ label: 'ACTIVO', value: 'ACTIVO' });
@@ -182,6 +192,12 @@ export class MantenimientoPerfilComponent implements OnInit {
     alert(this.perfil.descripcion_perfil);
     this.displayDialog = true;
     this.hiddenButtonDelete = false;
+    //this.selectedEstado.value = "A";
+    //this.selectedEstado.label = "ACTIVO";
+    //this.estados.v
+    //this.selectedEstado = "A";
+    //this.
+    this.selectedEstado = { label: perfil.descripcion_estado_perfil, value: perfil.estado_perfil }
   }
 
   showDialogToAdd() {

@@ -22,4 +22,44 @@ export class EstadoService {
         map(res => res.data as IEstados[])
       );
   }
+
+  getEstadosActivos() {
+    return this.http.get<any>('/assets/data/estados.json')
+      .pipe(
+        map(res => {
+          let estados: IEstados[];
+
+          res.data.forEach(element => {
+            alert('eewww');
+            console.log(element);
+            //if (element.value !== 'T') {
+            //  if (element.value !== 'X') {
+            //    console.log(element);
+            //    //estados.push(element);
+            //  }
+            //}
+          });
+
+          console.log(estados);
+          return estados;
+        })
+      );
+
+    /*.pipe(
+      map(res => {
+        let estados: any[];
+        res.data.forEach(element => {
+          //alert('99');
+          //alert(element.label);
+          //alert(element.value);
+          if (element.value !== 'T') {
+            if (element.value !== 'X') {
+              estados.push(element);
+            }
+          });
+      }
+      return estados;
+      )
+    );*/
+  }
 }

@@ -77,6 +77,7 @@
 
 <p-dialog header="Mantenimiento de Perfil" [(visible)]="displayDialog" [responsive]="true" showEffect="fade"
   [modal]="true" [style]="{width: '500px'}">
+
   <div class="p-grid">
     <div class="p-col-3">
       <label for="id_perfil">Código</label>
@@ -93,9 +94,11 @@
     </div>
   </div>
 
-  <h3 class="first">Single</h3>
-  <p-dropdown [options]="estados" [(ngModel)]="selectedCity" placeholder="Select a City" optionLabel="name"
-    [showClear]="true"></p-dropdown>
+  <div class="first">Estado</div>
+  <p-dropdown [options]="estadosActivos" [(ngModel)]="selectedEstado" placeholder="Seleccione un estado" optionLabel="label"
+    appendTo="body" [style]="{'width':'90%'}"></p-dropdown>
+  <p>Selected City: {{selectedEstado ? selectedEstado.label : 'none'}}</p>
+
 
   <p-footer>
     <div class="ui-dialog-buttonpane ui-helper-clearfix">
