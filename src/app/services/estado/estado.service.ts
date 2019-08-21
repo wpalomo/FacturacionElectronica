@@ -27,17 +27,18 @@ export class EstadoService {
     return this.http.get<any>('/assets/data/estados.json')
       .pipe(
         map(res => {
-          let estados: IEstados[];
+          let estados = [];
 
           res.data.forEach(element => {
             alert('eewww');
+            console.log('ewwww');
             console.log(element);
-            //if (element.value !== 'T') {
-            //  if (element.value !== 'X') {
-            //    console.log(element);
-            //    //estados.push(element);
-            //  }
-            //}
+            if (element.value !== 'T') {
+              if (element.value !== 'X') {
+                //    console.log(element);
+                estados.push(element);
+              }
+            }
           });
 
           console.log(estados);

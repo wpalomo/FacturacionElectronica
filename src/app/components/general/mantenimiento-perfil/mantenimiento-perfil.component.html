@@ -27,6 +27,7 @@
               (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
 
             <input *ngSwitchCase="'descripcion_perfil'" pInputText type="text"
+              oninput="this.value = this.value.toUpperCase()"
               (input)="dt.filter($event.target.value, col.field, col.filterMatchMode);reset();">
 
             <p-dropdown *ngSwitchCase="'estado_perfil'" [options]="estados" [style]="{'width':'100%'}"
@@ -95,8 +96,8 @@
   </div>
 
   <div class="first">Estado</div>
-  <p-dropdown [options]="estadosActivos" [(ngModel)]="selectedEstado" placeholder="Seleccione un estado" optionLabel="label"
-    appendTo="body" [style]="{'width':'90%'}"></p-dropdown>
+  <p-dropdown [options]="estadosActivos" [(ngModel)]="selectedEstado" placeholder="Seleccione un estado"
+    optionLabel="label" appendTo="body" [style]="{'width':'90%'}"></p-dropdown>
   <p>Selected City: {{selectedEstado ? selectedEstado.label : 'none'}}</p>
 
 
