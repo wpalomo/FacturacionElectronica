@@ -18,6 +18,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { CardModule } from 'primeng/card';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { KeyFilterModule } from 'primeng/keyfilter';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
         CheckboxModule,
         CardModule,
         ProgressBarModule,
-        MultiSelectModule
+        MultiSelectModule,
+        KeyFilterModule
     ],
     exports: [
         PanelModule,
@@ -59,7 +61,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
         CheckboxModule,
         CardModule,
         ProgressBarModule,
-        MultiSelectModule
+        MultiSelectModule,
+        KeyFilterModule
     ],
 })
 export class PrimeNGModule { }

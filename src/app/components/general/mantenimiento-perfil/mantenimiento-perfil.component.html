@@ -24,7 +24,7 @@
         <tr>
           <th *ngFor="let col of columns" [ngSwitch]="col.field">
             <input *ngSwitchCase="'id_perfil'" pInputText type="text"
-              (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
+              (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)" pKeyFilter="int">
 
             <input *ngSwitchCase="'descripcion_perfil'" pInputText type="text"
               oninput="this.value = this.value.toUpperCase()"
@@ -34,8 +34,9 @@
               (onChange)="dt.filter($event.value, col.field, col.filterMatchMode)" styleClass="ui-column-filter">
             </p-dropdown>
 
-            <p-multiSelect *ngSwitchCase="'descripcion_estado_perfil'" [options]="grades" [style]="{'width':'100%'}"
-              defaultLabel="TODOS" (onChange)="dt.filter($event.value, col.field, col.filterMatchMode)"></p-multiSelect>
+            <p-multiSelect *ngSwitchCase="'descripcion_estado_perfil'" [options]="estadosActivos"
+              [style]="{'width':'100%'}" defaultLabel="TODOS"
+              (onChange)="dt.filter($event.value, col.field, col.filterMatchMode)"></p-multiSelect>
             <!--(onChange)="dt.filter($event.value, col.field, 'in')"></p-multiSelect>            -->
 
           </th>
@@ -65,7 +66,8 @@
       </ng-template>
       <ng-template pTemplate="summary" let-perfil>
         <div style="text-align:left">
-          <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAdd()" label="Add"></button>
+          <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAdd()"
+            label="Agregar nuevo Perfil"></button>
         </div>
       </ng-template>
     </p-table>
@@ -91,21 +93,21 @@
       <label for="descripcion_perfil">Descripcion</label>
     </div>
     <div class="p-col-9">
-      <input pInputText id="descripcion_perfil" [(ngModel)]="perfil.descripcion_perfil" />
+      <input pInputText id="descripcion_perfil" [(ngModel)]="perfil.descripcion_perfil" #name matInput />
     </div>
   </div>
 
   <div class="first">Estado</div>
   <p-dropdown [options]="estadosActivos" [(ngModel)]="selectedEstado" placeholder="Seleccione un estado"
-    optionLabel="label" appendTo="body" [style]="{'width':'90%'}"></p-dropdown>
+    optionLabel="label" appendTo="body" [style]="{'width':'90%'}" [(disabled)]="hiddenButtonDelete"></p-dropdown>
   <p>Selected City: {{selectedEstado ? selectedEstado.label : 'none'}}</p>
 
 
   <p-footer>
     <div class="ui-dialog-buttonpane ui-helper-clearfix">
-      <button type="button" pButton icon="pi pi-times" (click)="delete()" label="Delete" [(hidden)]="hiddenButtonDelete"
-        [class]="'ui-button-danger'"></button>
-      <button type="button" pButton icon="pi pi-check" (click)="save()" label="Save"></button>
+      <button type="button" pButton icon="pi pi-times" (click)="delete()" label="Eliminar"
+        [(hidden)]="hiddenButtonDelete" [class]="'ui-button-danger'"></button>
+      <button type="button" pButton icon="pi pi-check" (click)="save()" label="Grabar"></button>
     </div>
   </p-footer>
 </p-dialog>

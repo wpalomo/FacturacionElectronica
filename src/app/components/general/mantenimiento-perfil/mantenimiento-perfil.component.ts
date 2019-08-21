@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { LazyLoadEvent } from 'primeng/components/common/api';
 import { Observable } from 'rxjs';
 import { MantenimientoPerfilService } from '../../../services/mantenimiento-perfil/mantenimiento-perfil.service';
@@ -18,6 +18,14 @@ export class MantenimientoPerfilComponent implements OnInit {
     //alert('fffff');
     this.dt.reset();
   }
+
+  @ViewChild("name") nameField: ElementRef;
+  editName(): void {
+    //alert('fdefeeeeeeeeeeeeeee');
+    this.nameField.nativeElement.focus();
+    document.getElementById('descripcion_perfil').focus();
+  }
+
   displayDialog: boolean;
   perfiles: ITB_GEN_PERFILES[];
   perfil: ITB_GEN_PERFILES = {};
@@ -205,6 +213,10 @@ export class MantenimientoPerfilComponent implements OnInit {
     this.displayDialog = true;
     this.hiddenButtonDelete = true;
     this.perfil = {};
+    this.editName()
+    //document.getElementById("descripcion_perfil").focus();
+    //input.setFocus();
+    //this.selectedEstado = { label: "ACTIVO", value: "A" };
   }
 
   cloneRegistro(c: ITB_GEN_PERFILES): ITB_GEN_PERFILES {
