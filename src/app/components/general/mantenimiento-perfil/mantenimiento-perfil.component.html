@@ -93,8 +93,10 @@
       <label for="descripcion_perfil">Descripcion</label>
     </div>
     <div class="p-col-9">
-      <input pInputText id="descripcion_perfil" [(ngModel)]="perfil.descripcion_perfil" #txtElement />
-     
+      <input pInputText id="descripcion_perfil" [(ngModel)]="perfil.descripcion_perfil" #txtElement
+        oninput="this.value = this.value.toUpperCase()" (click)="$event.target.select()"
+        (keydown)="onKeydown($event, btnSave)" />
+
     </div>
   </div>
 
@@ -108,7 +110,7 @@
     <div class="ui-dialog-buttonpane ui-helper-clearfix">
       <button type="button" pButton icon="pi pi-times" (click)="delete()" label="Eliminar"
         [(hidden)]="hiddenButtonDelete" [class]="'ui-button-danger'"></button>
-      <button type="button" pButton icon="pi pi-check" (click)="save()" label="Grabar"></button>
+      <button type="button" pButton icon="pi pi-check" (click)="save()" label="Grabar" #btnSave></button>
     </div>
   </p-footer>
 </p-dialog>

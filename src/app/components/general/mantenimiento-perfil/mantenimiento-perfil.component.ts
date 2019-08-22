@@ -218,7 +218,7 @@ export class MantenimientoPerfilComponent implements OnInit {
     //this.editName()
     //document.getElementById("descripcion_perfil").focus();
     //input.setFocus();
-    //this.selectedEstado = { label: "ACTIVO", value: "A" };
+    this.selectedEstado = { label: "ACTIVO", value: "A" };
     //setTimeout(() => element.focus(), 0);
   }
 
@@ -237,5 +237,16 @@ export class MantenimientoPerfilComponent implements OnInit {
     setTimeout(() => {
       elm.focus()
     }, 500);
+  }
+
+  onKeydown(event, elm: HTMLInputElement) {
+    if (event.key === "Enter") {
+      console.log(event);
+      this.setFocus(elm);
+    }
+  }
+
+  save() {
+    alert('grabando');
   }
 }
