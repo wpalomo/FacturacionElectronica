@@ -79,7 +79,7 @@
 </div>
 
 <p-dialog header="Mantenimiento de Perfil" [(visible)]="displayDialog" [responsive]="true" showEffect="fade"
-  [modal]="true" [style]="{width: '500px'}">
+  [modal]="true" [style]="{width: '500px'}" focusOnShow="false" (onShow)="setFocus(txtElement)">
 
   <div class="p-grid">
     <div class="p-col-3">
@@ -93,7 +93,8 @@
       <label for="descripcion_perfil">Descripcion</label>
     </div>
     <div class="p-col-9">
-      <input pInputText id="descripcion_perfil" [(ngModel)]="perfil.descripcion_perfil" #name matInput />
+      <input pInputText id="descripcion_perfil" [(ngModel)]="perfil.descripcion_perfil" #txtElement />
+     
     </div>
   </div>
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { LazyLoadEvent } from 'primeng/components/common/api';
 import { Observable } from 'rxjs';
 import { MantenimientoPerfilService } from '../../../services/mantenimiento-perfil/mantenimiento-perfil.service';
@@ -19,12 +19,12 @@ export class MantenimientoPerfilComponent implements OnInit {
     this.dt.reset();
   }
 
-  @ViewChild("name") nameField: ElementRef;
-  editName(): void {
-    //alert('fdefeeeeeeeeeeeeeee');
-    this.nameField.nativeElement.focus();
-    document.getElementById('descripcion_perfil').focus();
-  }
+  //@ViewChild("name") nameField: ElementRef;
+  //editName(): void {
+  //  //alert('fdefeeeeeeeeeeeeeee');
+  //  this.nameField.nativeElement.focus();
+  //  document.getElementById('descripcion_perfil').focus();
+  //}
 
   displayDialog: boolean;
   perfiles: ITB_GEN_PERFILES[];
@@ -47,7 +47,8 @@ export class MantenimientoPerfilComponent implements OnInit {
 
   constructor(
     private mantenimientoPerfilService: MantenimientoPerfilService,
-    private estadoService: EstadoService
+    private estadoService: EstadoService,
+    public renderer: Renderer2
   ) { }
 
   ngOnInit() {
@@ -195,9 +196,9 @@ export class MantenimientoPerfilComponent implements OnInit {
 
   modificarRegistro(perfil: ITB_GEN_PERFILES) {
     this.nuevoRegistro = false;
-    alert(perfil.id_perfil);
+    //alert(perfil.id_perfil);
     this.perfil = this.cloneRegistro(perfil);
-    alert(this.perfil.descripcion_perfil);
+    //alert(this.perfil.descripcion_perfil);
     this.displayDialog = true;
     this.hiddenButtonDelete = false;
     //this.selectedEstado.value = "A";
@@ -209,14 +210,16 @@ export class MantenimientoPerfilComponent implements OnInit {
   }
 
   showDialogToAdd() {
+    //const element = this.renderer.selectRootElement('#myInput');
     this.nuevoRegistro = true;
     this.displayDialog = true;
     this.hiddenButtonDelete = true;
     this.perfil = {};
-    this.editName()
+    //this.editName()
     //document.getElementById("descripcion_perfil").focus();
     //input.setFocus();
     //this.selectedEstado = { label: "ACTIVO", value: "A" };
+    //setTimeout(() => element.focus(), 0);
   }
 
   cloneRegistro(c: ITB_GEN_PERFILES): ITB_GEN_PERFILES {
@@ -228,5 +231,11 @@ export class MantenimientoPerfilComponent implements OnInit {
 
     }
     return perfil;
+  }
+
+  setFocus(elm: HTMLInputElement) {
+    setTimeout(() => {
+      elm.focus()
+    }, 500);
   }
 }
