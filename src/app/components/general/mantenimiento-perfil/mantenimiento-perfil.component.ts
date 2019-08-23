@@ -41,6 +41,7 @@ export class MantenimientoPerfilComponent implements OnInit {
   tipoMensaje: string;
   first = 0;
   selectedEstado: any;
+  tipoOperacion: string = "";
 
 
   totalRecords$: Observable<number>;
@@ -195,6 +196,7 @@ export class MantenimientoPerfilComponent implements OnInit {
   }
 
   modificarRegistro(perfil: ITB_GEN_PERFILES) {
+    this.tipoOperacion = 'U';
     this.nuevoRegistro = false;
     //alert(perfil.id_perfil);
     this.perfil = this.cloneRegistro(perfil);
@@ -211,6 +213,7 @@ export class MantenimientoPerfilComponent implements OnInit {
 
   showDialogToAdd() {
     //const element = this.renderer.selectRootElement('#myInput');
+    this.tipoOperacion = 'I';
     this.nuevoRegistro = true;
     this.displayDialog = true;
     this.hiddenButtonDelete = true;
@@ -233,6 +236,15 @@ export class MantenimientoPerfilComponent implements OnInit {
     return perfil;
   }
 
+  onChange(event) {
+    //alert('onChange');
+    //alert('event :' + event);
+    //alert(event.value);
+    //alert(this.selectedEstado.label);
+    //alert(this.selectedEstado.value);
+
+  }
+
   setFocus(elm: HTMLInputElement) {
     setTimeout(() => {
       elm.focus()
@@ -246,7 +258,33 @@ export class MantenimientoPerfilComponent implements OnInit {
     }
   }
 
+  onDialogClose(event) {
+    alert('close dialog');
+    this.displayMensaje = event;
+  }
+
   save() {
-    alert('grabando');
+    this.displayMensaje = false;
+    //alert('grabando');
+    //this.perfil.estado_perfil = this.selectedEstado.value;
+    //this.perfil.descripcion_estado_perfil = this.selectedEstado.label;
+    //alert(this.perfil.id_perfil);
+    //alert(this.perfil.descripcion_perfil);
+    //alert(this.perfil.estado_perfil);
+
+    //if (this.tipoOperacion === 'U' && this.perfil.id_perfil is undefined)
+    if (this.tipoOperacion == 'U' && !(this.perfil.id_perfil)) {
+      alert('error en el id del perfil');
+      return;
+    }
+
+    if (!(this.perfil.descripcion_perfil)) {
+      alert('error en la descripcion');
+      this.displayMensaje = true;
+      this.tipoMensaje = 'ERROR';
+      this.errorMsg = 'Debe ingresar la descripcion del Perfil';
+      return;
+    }
+
   }
 }

@@ -102,7 +102,8 @@
 
   <div class="first">Estado</div>
   <p-dropdown [options]="estadosActivos" [(ngModel)]="selectedEstado" placeholder="Seleccione un estado"
-    optionLabel="label" appendTo="body" [style]="{'width':'90%'}" [(disabled)]="hiddenButtonDelete"></p-dropdown>
+    optionLabel="label" appendTo="body" [style]="{'width':'90%'}" [(disabled)]="hiddenButtonDelete"
+    (onChange)="onChange($event)"></p-dropdown>
   <p>Selected City: {{selectedEstado ? selectedEstado.label : 'none'}}</p>
 
 
@@ -115,5 +116,6 @@
   </p-footer>
 </p-dialog>
 
-<app-mensaje-generico *ngIf="displayMensaje" [title]="title" [tipoMensaje]="tipoMensaje" [errorMsg]="errorMsg">
+<app-mensaje-generico *ngIf="displayMensaje" [title]="title" [tipoMensaje]="tipoMensaje" [errorMsg]="errorMsg"
+  (displayChange)="onDialogClose($event)">
 </app-mensaje-generico>

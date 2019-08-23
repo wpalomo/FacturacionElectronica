@@ -1,7 +1,7 @@
 <!--TODO: hacer que tome el css con condicion para que si se envia un msje de error se presente de un color
           y si todo esta correcto que se presente de otro color  -->
 <p-dialog [(visible)]="displayMensaje" [responsive]="true" showEffect="fade" [modal]="true" [ngClass]="stockClasses"
-  [style]="{width: '300px'}">
+  [style]="{width: '300px'}" (onHide)="onHide($event)">
   <!--styleClass=" tipoMensaje==='OK' ? my-panel-ok: my-panel ">-->
   <p-header>
     {{ title }}

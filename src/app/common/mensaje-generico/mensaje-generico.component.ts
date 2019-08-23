@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-mensaje-generico',
@@ -9,6 +9,7 @@ export class MensajeGenericoComponent implements OnInit {
   @Input() title: string;
   @Input() errorMsg: string;
   @Input() tipoMensaje: string;
+  @Output() displayChange = new EventEmitter();
   displayMensaje: boolean;
   trueTipoMensaje: boolean;
   public stockClasses;
@@ -26,7 +27,7 @@ export class MensajeGenericoComponent implements OnInit {
 
     this.stockClasses = {
       "my-panel-ok": this.trueTipoMensaje,
-      "my-panel": !this.trueTipoMensaje      
+      "my-panel": !this.trueTipoMensaje
     };
   }
 
@@ -39,5 +40,20 @@ export class MensajeGenericoComponent implements OnInit {
 
   getStyles() {
 
+  }
+
+  onClose() {
+    alert('xddddddddddddddd');
+    this.displayChange.emit(false);
+  }
+
+  onHide(e: any) {
+    alert('hide');
+    this.displayChange.emit(false);
+  }
+
+  // Work against memory leak if component is destroyed
+  ngOnDestroy() {
+    this.displayChange.unsubscribe();
   }
 }
