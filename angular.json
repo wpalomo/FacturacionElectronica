@@ -30,7 +30,8 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/ng-easyui/themes/material/easyui.css",
               "node_modules/ng-easyui/themes/angular.css",
-              "node_modules/ng-easyui/themes/icon.css"
+              "node_modules/ng-easyui/themes/icon.css",
+              "node_modules/primeflex/primeflex.css"
             ],
             "scripts": [
               "node_modules/crypto-js/crypto-js.js"
@@ -96,7 +97,8 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/ng-easyui/themes/material/easyui.css",
               "node_modules/ng-easyui/themes/angular.css",
-              "node_modules/ng-easyui/themes/icon.css"
+              "node_modules/ng-easyui/themes/icon.css",
+              "node_modules/primeflex/primeflex.css"
             ],
             "scripts": [
               "node_modules/crypto-js/crypto-js.js"

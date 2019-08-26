@@ -19,6 +19,7 @@ import { CardModule } from 'primeng/card';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { KeyFilterModule } from 'primeng/keyfilter';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { KeyFilterModule } from 'primeng/keyfilter';
         CardModule,
         ProgressBarModule,
         MultiSelectModule,
-        KeyFilterModule
+        KeyFilterModule,
+        ProgressSpinnerModule
     ],
     exports: [
         PanelModule,
@@ -62,7 +64,8 @@ import { KeyFilterModule } from 'primeng/keyfilter';
         CardModule,
         ProgressBarModule,
         MultiSelectModule,
-        KeyFilterModule
+        KeyFilterModule,
+        ProgressSpinnerModule
     ],
 })
 export class PrimeNGModule { }

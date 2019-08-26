@@ -4,10 +4,19 @@ include_once 'librerias/header.php';
 include_once 'librerias/ClasePerfil.php';
 
 $action = isset($_GET['action']) ? $_GET['action'] : (isset($_POST['action']) ? $_POST['action'] : null);
+$tipo = '';
 
 switch ($action) {
     case 'getPerfiles':
         getPerfiles();
+        break;
+    case 'insert':
+        $tipo = 'I';
+        insert();
+        break;
+    case 'update':
+        $tipo = 'U';
+        update();
         break;
 }
 
@@ -104,7 +113,7 @@ switch ($action) {
 function getPerfiles() {
 
     $parametros = array(
-        'start' => $_POST['start'] ,
+        'start' => $_POST['start'],
         'limit' => $_POST['limit'],
         'sortField' => isset($_POST['sortField']) ? $_POST['sortField'] : 'id_perfil',
         'sortOrder' => isset($_POST['sortOrder']) ? $_POST['sortOrder'] : '1',
@@ -120,6 +129,13 @@ function getPerfiles() {
     $data = ClaseJson::getJson($result);
 
     echo $data;
+}
+
+function insert() {
+    $parametros = array(
+        'perfil' => $_POST['perfil'],
+        'tipo' => $tipo
+    );
 }
 
 //echo 'hola';

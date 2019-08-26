@@ -153,4 +153,12 @@ class ClasePerfil {
         }
     }
 
+    public function insert() {
+        
+    }
+
+    public function update() {
+        
+    }
+
 }

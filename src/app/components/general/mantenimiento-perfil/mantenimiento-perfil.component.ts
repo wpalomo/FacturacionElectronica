@@ -19,7 +19,7 @@ export class MantenimientoPerfilComponent implements OnInit {
     this.dt.reset();
   }
 
-  //@ViewChild("name") nameField: ElementRef;
+  @ViewChild("txtElement") nameField: ElementRef;
   //editName(): void {
   //  //alert('fdefeeeeeeeeeeeeeee');
   //  this.nameField.nativeElement.focus();
@@ -27,6 +27,7 @@ export class MantenimientoPerfilComponent implements OnInit {
   //}
 
   displayDialog: boolean;
+  displayWait: boolean;
   perfiles: ITB_GEN_PERFILES[];
   perfil: ITB_GEN_PERFILES = {};
   cols: any[];
@@ -223,6 +224,7 @@ export class MantenimientoPerfilComponent implements OnInit {
     //input.setFocus();
     this.selectedEstado = { label: "ACTIVO", value: "A" };
     //setTimeout(() => element.focus(), 0);
+
   }
 
   cloneRegistro(c: ITB_GEN_PERFILES): ITB_GEN_PERFILES {
@@ -258,16 +260,21 @@ export class MantenimientoPerfilComponent implements OnInit {
     }
   }
 
-  onDialogClose(event) {
+  onDialogClose(event, tipo) {
     alert('close dialog');
     this.displayMensaje = event;
+    //this.setFocus(this.nameField.nativeElement);
+    if (tipo === 'F') {
+      //this.setFocus(elm);
+      this.setFocus(this.nameField.nativeElement);
+    }
   }
 
   save() {
     this.displayMensaje = false;
     //alert('grabando');
-    //this.perfil.estado_perfil = this.selectedEstado.value;
-    //this.perfil.descripcion_estado_perfil = this.selectedEstado.label;
+    this.perfil.estado_perfil = this.selectedEstado.value;
+    this.perfil.descripcion_estado_perfil = this.selectedEstado.label;
     //alert(this.perfil.id_perfil);
     //alert(this.perfil.descripcion_perfil);
     //alert(this.perfil.estado_perfil);
@@ -283,8 +290,45 @@ export class MantenimientoPerfilComponent implements OnInit {
       this.displayMensaje = true;
       this.tipoMensaje = 'ERROR';
       this.errorMsg = 'Debe ingresar la descripcion del Perfil';
+      //let element: HTMLInputElement = "#txtElement";
+      this.setFocus(this.nameField.nativeElement);
+      this.nameField.nativeElement.focus();
       return;
     }
 
+    console.log(this.perfil);
+    this.callService();
+
+  }
+
+  callService() {
+    const postData = new FormData();
+    let action: string;
+
+    this.displayWait = true;
+
+    action = this.tipoOperacion === 'I' ? 'insert' : 'update';
+
+    postData.append('perfil', JSON.stringify(this.perfil));
+    postData.append('action', action);
+
+    this.mantenimientoPerfilService.insert(postData).subscribe(
+      data => {
+        this.displayWait = false;
+        this.tipoMensaje = 'OK';
+        this.displayMensaje = true;
+        this.errorMsg = data.mensaje;
+        // alert(data.mensaje);
+      },
+      error => {
+        this.displayWait = false;
+        this.errorMsg = error;
+        console.log(this.errorMsg);
+
+        //this.displayWait = false;
+        this.displayMensaje = true;
+        this.tipoMensaje = 'ERROR';
+      }
+    );
   }
 }

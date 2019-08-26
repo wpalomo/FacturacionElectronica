@@ -86,4 +86,26 @@ export class MantenimientoPerfilService {
         catchError(transformError)
       );
   }
+
+  insert(postData): any {
+    console.log(postData);
+    return this.http.post<any>(this.url, postData)
+      .pipe(
+        map(res => {
+          if (res.success) {
+            if (res.ok === 'S') {
+              alert(res);
+              return res;
+            } else {
+              throw (res.mensaje);
+            }
+          } else {
+            console.log('error');
+            console.log('res.mensaje');
+            throw (res.mensaje);
+          }
+        }),
+        catchError(transformError)
+      );
+  }
 }
