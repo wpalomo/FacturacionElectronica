@@ -94,7 +94,7 @@ export class MantenimientoPerfilService {
         map(res => {
           if (res.success) {
             if (res.ok === 'S') {
-              alert(res);
+              //alert(res);
               return res;
             } else {
               throw (res.mensaje);

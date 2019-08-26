@@ -20,6 +20,10 @@ export class MantenimientoPerfilComponent implements OnInit {
   }
 
   @ViewChild("txtElement") nameField: ElementRef;
+  //@ViewChild("txtDescripcion") nameDescripcion: ElementRef;
+
+
+
   //editName(): void {
   //  //alert('fdefeeeeeeeeeeeeeee');
   //  this.nameField.nativeElement.focus();
@@ -41,9 +45,13 @@ export class MantenimientoPerfilComponent implements OnInit {
   displayMensaje: boolean;
   tipoMensaje: string;
   first = 0;
+  selectedEstadoFilter: any;
+  selectedMultipleEstadoFilter: any;
   selectedEstado: any;
   tipoOperacion: string = "";
-
+  //auxEvent: LazyLoadEvent;
+  txtDescripcion: string;
+  txtIdPerfil: string;
 
   totalRecords$: Observable<number>;
 
@@ -63,23 +71,15 @@ export class MantenimientoPerfilComponent implements OnInit {
     );
       */
 
-    this.estadoService.getEstados().subscribe(
-      data => {
-        this.estados = data;
-      }
-    )
 
-    this.estadoService.getEstadosActivos().subscribe(
-      data => {
-        this.estadosActivos = data;
-      }
-    )
 
     //this.estadoService.getEstadosActivos().subscribe();
 
-    this.grades = [];
-    this.grades.push({ label: 'ACTIVO', value: 'ACTIVO' });
-    this.grades.push({ label: 'INACTIVO', value: 'INACTIVO' });
+    //this.grades = [];
+    //this.grades.push({ label: 'ACTIVO', value: 'ACTIVO' });
+    //this.grades.push({ label: 'INACTIVO', value: 'INACTIVO' });
+
+    this.inicializarPantalla();
 
     this.cols = [
       {
@@ -102,8 +102,6 @@ export class MantenimientoPerfilComponent implements OnInit {
         width: '20%',
         display: 'table-cell'
       },
-
-
       {
         field: 'descripcion_estado_perfil',
         header: 'Estado',
@@ -113,24 +111,58 @@ export class MantenimientoPerfilComponent implements OnInit {
       }
     ];
 
+
+
     //this.estados = [];
     //this.estados.push({ label: "ACTIVO", value: "A" })
     //this.estados.push({ label: "INACTIVO", value: "I" })
     //this.estados.push({ label: "TODOS", value: "T" })
+
+    //this.nameDescripcion.nativeElement.value = 'JPABLOS';
+    //this.nameDescripcion.nativeElement.focus();
+  }
+
+  inicializarPantalla() {
+    this.txtDescripcion = '';
+    this.txtIdPerfil = '';
+
+    this.estadoService.getEstados().subscribe(
+      data => {
+        this.estados = data;
+        //this.selectedEstadoFilter = { label: "ACTIVO", value: "A" };
+      }
+    );
+
+    this.estadoService.getEstadosActivos().subscribe(
+      data => {
+        this.estadosActivos = data;
+        //this.selectedMultipleEstadoFilter = { label: "ACTIVO", value: "A" };
+      }
+    );
+
+    //this.estados = { label: "ACTIVO", value: "A" };
+    //this.selectedEstado = { label: "ACTIVO", value: "A" };
+
+
+
+    //this.dt.reset();
   }
 
   loadLazy(event: LazyLoadEvent) {
+    //this.auxEvent = event;
     //event.first = First row offset
     //event.rows = Number of rows per page
     //event.sortField = Field name to sort with
     //event.sortOrder = Sort order as number, 1 for asc and -1 for dec
     //filters: FilterMetadata object having field as key and filter value, filter matchMode as value
 
-    //alert(event.first);
-    //alert(event.rows);
-    //alert(event.sortField);
-    //alert(event.sortOrder);
-    //alert(event.filters);
+    alert(event.first);
+    alert(event.rows);
+    alert(event.sortField);
+    alert(event.sortOrder);
+    alert(event.filters);
+
+    console.log(event.filters);
 
     //console.log(event.first);
     //console.log(event.rows);
@@ -244,7 +276,7 @@ export class MantenimientoPerfilComponent implements OnInit {
     //alert(event.value);
     //alert(this.selectedEstado.label);
     //alert(this.selectedEstado.value);
-
+    //this.first = 0;
   }
 
   setFocus(elm: HTMLInputElement) {
@@ -316,9 +348,19 @@ export class MantenimientoPerfilComponent implements OnInit {
       data => {
         this.displayWait = false;
         this.tipoMensaje = 'OK';
-        this.displayMensaje = true;
-        this.errorMsg = data.mensaje;
+
+        //this.displayMensaje = true;
+        //this.errorMsg = data.mensaje;
+
+        this.displayDialog = false;
+
+        this.inicializarPantalla();
+
+        //this.loadLazy(this.auxEvent);
+        //this.dt.reset();
+
         // alert(data.mensaje);
+        //this.reset();
       },
       error => {
         this.displayWait = false;

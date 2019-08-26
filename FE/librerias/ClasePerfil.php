@@ -153,8 +153,30 @@ class ClasePerfil {
         }
     }
 
-    public function insert() {
+    public function insert($parametros) {
+        $perfil = json_decode(stripslashes($parametros['perfil']), true);
+
+        //print_r($perfil);
+        //echo $perfil['descripcion_perfil'];
+        //echo $perfil['estado_perfil'];
+
+        $descripcion_perfil = mssql_real_escape_string($perfil['descripcion_perfil']);
+        $estado_perfil = mssql_real_escape_string($perfil['estado_perfil']);
+
+        $query = "
+            EXEC SP_GEN_PERFILES
+            @in_descripcion_perfil = '$descripcion_perfil',
+            @in_estado_perfil = '$estado_perfil',
+            @in_operacion = 'I'
+        ";
         
+        $parametros = array(
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        return $result;
     }
 
     public function update() {

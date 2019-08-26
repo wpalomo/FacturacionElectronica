@@ -24,19 +24,22 @@
         <tr>
           <th *ngFor="let col of columns" [ngSwitch]="col.field">
             <input *ngSwitchCase="'id_perfil'" pInputText type="text"
-              (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)" pKeyFilter="int">
+              (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)" pKeyFilter="int"
+              [(ngModel)]="txtIdPerfil">
 
             <input *ngSwitchCase="'descripcion_perfil'" pInputText type="text"
               oninput="this.value = this.value.toUpperCase()"
-              (input)="dt.filter($event.target.value, col.field, col.filterMatchMode);reset();">
+              (input)="dt.filter($event.target.value, col.field, col.filterMatchMode);reset();"
+              [(ngModel)]="txtDescripcion">
 
             <p-dropdown *ngSwitchCase="'estado_perfil'" [options]="estados" [style]="{'width':'100%'}"
-              (onChange)="dt.filter($event.value, col.field, col.filterMatchMode)" styleClass="ui-column-filter">
+              (onChange)="first = 0; dt.filter($event.value, col.field, col.filterMatchMode)" styleClass="ui-column-filter">
             </p-dropdown>
 
             <p-multiSelect *ngSwitchCase="'descripcion_estado_perfil'" [options]="estadosActivos"
               [style]="{'width':'100%'}" defaultLabel="TODOS"
-              (onChange)="dt.filter($event.value, col.field, col.filterMatchMode)"></p-multiSelect>
+              (onChange)="dt.filter($event.value, col.field, col.filterMatchMode)">
+            </p-multiSelect>
             <!--(onChange)="dt.filter($event.value, col.field, 'in')"></p-multiSelect>            -->
 
           </th>

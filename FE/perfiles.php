@@ -132,10 +132,22 @@ function getPerfiles() {
 }
 
 function insert() {
-    $parametros = array(
-        'perfil' => $_POST['perfil'],
-        'tipo' => $tipo
-    );
+    if (isset($_POST['perfil'])) {
+        $parametros = array(
+            'perfil' => $_POST['perfil'],
+            'tipo' => $tipo
+        );
+
+        $objetoPerfil = new ClasePerfil();
+
+        $result = $objetoPerfil->insert($parametros);
+
+        $data = ClaseJson::getJson($result);
+    } else {
+        $data = ClaseJson::getMessageJson(false, 'Error en el envio de información');
+    }
+
+    echo $data;
 }
 
 //echo 'hola';
