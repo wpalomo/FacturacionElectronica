@@ -41,65 +41,227 @@ class ClasePerfil {
         $records = json_decode(stripslashes($parametros['filters']), true);
 
         //print_r($records);
+        echo '<br>';
 
-        foreach ($records as $key => $val) {
-            //echo 'KEY IS:' . $key . '<br/>';
-            $field = $key;
-            foreach ($records[$key] as $_key => $_val) {
-                //echo 'KEY IS:' . $_key . '<br/>';
-                //echo 'VALUE IS: ' . $_val . '<br/>';
+        foreach ($records as $k => $value) {
+            $valor = '';
+            $tmp = '';
+            foreach ($value as $key => $_value) {
+                echo $key . ' - ';
+                //echo '<br>';
 
 
-                if ($_key == 'value') {
-                    $valor = $_val;
-                }
-
-                if ($_key == 'matchMode') {
-                    if ($key == 'estado_perfil' && $valor == 'T') {
-                        continue;
-                    } else {
-                        switch ($_val) {
-                            case 'startsWith':
-                                $where = $where . " AND " . $key . " like '$valor%' ";
-                                break;
-                            case 'contains':
-                                $where = $where . " AND " . $key . " like '%$valor%' ";
-                                break;
-                            case 'equals':
-                                $where = $where . " AND " . $key . " = '$valor' ";
-                                break;
-                            case 'in':
-                                if (is_array($valor)) {
-                                    $cadenaIn = " IN(";
-                                    foreach ($valor as $valueIn) {
-                                        $cadenaIn = $cadenaIn . "'$valueIn'";
-
-                                        if (next($valor) == true) {
-                                            $cadenaIn = $cadenaIn . ",";
-                                        } else {
-                                            $cadenaIn = $cadenaIn . ") ";
-                                        }
-                                    }
-                                    //echo $cadenaIn;
-                                    $where = $where . " AND " . $key . $cadenaIn;
-                                }
-                                break;
-                        }
+                if (is_array($_value)) {
+                    $tmp = $_value;
+//                    foreach ($_value as $key2 => $value2) {
+//                        echo $value2 . ' ';
+//                        $valor = $value2;
+//                    }
+                } else {
+//                    echo $_value . ' xxx ';
+                    if ($key == 'value') {
+                        $valor = $_value;
                     }
                 }
 
+                if ($key == 'matchMode') {
 
+//                    echo 'matchMode-' . $_value;
+//                    if ($k == 'estado_perfil' && $valor == 'T') {
+//                        
+//                    }
+                    switch ($_value) {
+                        case 'startsWith':
+                            $where = $where . " AND " . $k . " like '$valor%' ";
+                            break;
+                        case 'contains':
+                            $where = $where . " AND " . $k . " like '%$valor%' ";
+                            break;
+                        case 'equals':
+                            if (is_array($tmp)) {
+                                echo 'dfasdfsdfdf';
+                                print_r($tmp);
+                                foreach ($tmp as $k2 => $v2) {
+                                    if ($k2 == 'value') {
+                                        $valor = $v2;
+                                    }
 
+                                    if ($k == 'estado_perfil' && $valor == 'T') {
+                                        continue;
+                                    }
+                                }
 
-//                if ($_key == 'value') {
-//                    if ($key == 'estado_perfil' && $_val == 'T') {
-//                        continue;
-//                    } else {
-//                        $where = $where . " AND " . $key . " = '$_val' ";
+                                $where = $where . " AND " . $k . " = '$valor' ";
+                            } else {
+                                $where = $where . " AND " . $k . " = '$valor' ";
+                            }
+                            break;
+                        case 'in':
+                            if (is_array($tmp)) {
+                                $cadenaIn = " IN(";
+                                foreach ($tmp as $valueIn) {
+                                    $cadenaIn = $cadenaIn . "'$valueIn'";
+
+                                    if (next($tmp) == true) {
+                                        $cadenaIn = $cadenaIn . ",";
+                                    } else {
+                                        $cadenaIn = $cadenaIn . ") ";
+                                    }
+                                }
+                                //echo $cadenaIn;
+                                $where = $where . " AND " . $key . $cadenaIn;
+                            }
+                            break;
+                    }
+                }
+            }
+
+            echo '<br>';
+        }
+
+//        foreach ($records as $key => $val) {
+//            echo 'KEY IS: ' . $key . '<br/>';
+//            echo 'VALUE IS: ' . $val . '<br/>';
+//
+//            foreach ($records[$key] as $_key => $_val) {
+//                echo '_KEY IS: ' . $_key . '<br/>';
+//                echo '_VALUE IS: ' . $_val . '<br/>';
+//
+//                if (is_array($_val)) {
+//                    foreach ($_val as $tmpKey => $tmpVal) {
+//                        echo '__KEY IS: ' . $tmpKey . '<br/>';
+//                        echo '__VALUE IS: ' . $tmpVal . '<br/>';
+//                        $valor = $tmpVal;
+//                    }
+//                } else {
+//                    if ($_key == 'value') {
+//                        $valor = $_val;
 //                    }
 //                }
-            }
-        }
+//
+//
+//
+//                if ($_key == 'matchMode') {
+//                    if ($key == 'estado_perfil' && $valor == 'T') {
+//                        continue;
+//                    } else {
+//                        echo 'ppp';
+//                        echo $_val;
+//                        echo 'ppp';
+//                        switch ($_val) {
+//                            case 'startsWith':
+//                                $where = $where . " AND " . $key . " like '$valor%' ";
+//                                break;
+//                            case 'contains':
+//                                $where = $where . " AND " . $key . " like '%$valor%' ";
+//                                break;
+//                            case 'equals':
+//                                echo 'fdfdfddfd';
+//                                $where = $where . " AND " . $key . " = '$valor' ";
+//                                break;
+//                            case 'in':
+//                                echo '999<br>...';
+//                                echo $valor;
+//                                echo '...<br>999';
+//                                //print_r($valor)
+//                                echo 'Este es el valor fgfgsf <br>999';
+//                                if (is_array($_val)) {
+//                                    echo 'Este es el valor <br>999';
+//                                    print_r($_val);
+//                                    echo 'Este es el valor <br>999';
+//                                    echo '<br>';
+//                                    $valAux = $_val;
+//                                    $cadenaIn = " IN(";
+//                                    foreach ($valAux as $valueIn) {
+//                                        $cadenaIn = $cadenaIn . "'$valueIn'";
+//
+//                                        if (next($valor) == true) {
+//                                            $cadenaIn = $cadenaIn . ",";
+//                                        } else {
+//                                            $cadenaIn = $cadenaIn . ") ";
+//                                        }
+//                                    }
+//                                    //echo $cadenaIn;
+//                                    $where = $where . " AND " . $key . $cadenaIn;
+//                                }
+//                                break;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        echo '<br>....';
+//        echo $valor;
+//        foreach ($records as $key => $val) {
+//            //echo 'KEY IS:' . $key . '<br/>';
+//            $field = $key;
+//            foreach ($records[$key] as $_key => $_val) {
+//                echo 'KEY IS:' . $_key . '<br/>';
+//                //echo 'VALUE IS: ' . $_val . '<br/>';
+//
+//
+//                if ($_key == 'value') {
+//                    echo 'if key';
+//                    if (is_array($_key)) {
+//                        echo 'if2 key';
+//                        $tmpRecord = $_key;
+//
+//                        foreach ($tmpRecord as $tmpKey => $auxVal) {
+//                            if ($tmpKey == 'value') {
+//                                $valor = $auxVal;
+//                            }
+//                        }
+//                    } else {
+//                        $valor = $_val;
+//                    }
+//                }
+//
+//                if ($_key == 'matchMode') {
+//                    if ($key == 'estado_perfil' && $valor == 'T') {
+//                        continue;
+//                    } else {
+//                        switch ($_val) {
+//                            case 'startsWith':
+//                                $where = $where . " AND " . $key . " like '$valor%' ";
+//                                break;
+//                            case 'contains':
+//                                $where = $where . " AND " . $key . " like '%$valor%' ";
+//                                break;
+//                            case 'equals':
+//                                $where = $where . " AND " . $key . " = '$valor' ";
+//                                break;
+//                            case 'in':
+//                                if (is_array($valor)) {
+//                                    $cadenaIn = " IN(";
+//                                    foreach ($valor as $valueIn) {
+//                                        $cadenaIn = $cadenaIn . "'$valueIn'";
+//
+//                                        if (next($valor) == true) {
+//                                            $cadenaIn = $cadenaIn . ",";
+//                                        } else {
+//                                            $cadenaIn = $cadenaIn . ") ";
+//                                        }
+//                                    }
+//                                    //echo $cadenaIn;
+//                                    $where = $where . " AND " . $key . $cadenaIn;
+//                                }
+//                                break;
+//                        }
+//                    }
+//                }
+//
+//
+//
+//
+////                if ($_key == 'value') {
+////                    if ($key == 'estado_perfil' && $_val == 'T') {
+////                        continue;
+////                    } else {
+////                        $where = $where . " AND " . $key . " = '$_val' ";
+////                    }
+////                }
+//            }
+//        }
 
 
         $start = $parametros['start'];
@@ -121,7 +283,7 @@ class ClasePerfil {
         $query = $select . $where . $order . $offset . $fetch;
 
 //        echo $queryTotalRegistros;
-//        echo $query;
+        echo $query;
 //        $query = "
 //            EXEC SP_GEN_PERFILES            
 //            @in_operacion = 'Q'
@@ -169,7 +331,7 @@ class ClasePerfil {
             @in_estado_perfil = '$estado_perfil',
             @in_operacion = 'I'
         ";
-        
+
         $parametros = array(
             'query' => $query
         );

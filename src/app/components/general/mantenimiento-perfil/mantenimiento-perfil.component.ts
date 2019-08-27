@@ -146,8 +146,10 @@ export class MantenimientoPerfilComponent implements OnInit {
 
 
     this.dt.reset();
-    this.selectedEstadoFilter = { label: "TODOS", value: "T" };
+    //this.selectedEstadoFilter = { label: "INACTIVO", value: "I" };
+    //this.selectedEstadoFilter = { value: "I" };
     //alert(this.selectedEstadoFilter);
+    //this.estados.value 
   }
 
   loadLazy(event: LazyLoadEvent) {
