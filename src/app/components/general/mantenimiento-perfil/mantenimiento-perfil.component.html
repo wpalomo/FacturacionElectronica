@@ -33,7 +33,8 @@
               [(ngModel)]="txtDescripcion">
 
             <p-dropdown *ngSwitchCase="'estado_perfil'" [options]="estados" [style]="{'width':'100%'}"
-              (onChange)="first = 0; dt.filter($event.value, col.field, col.filterMatchMode)" styleClass="ui-column-filter">
+              (onChange)="dt.filter($event.value, col.field, col.filterMatchMode)" styleClass="ui-column-filter"
+              [(ngModel)]="selectedEstadoFilter" optionLabel="label">
             </p-dropdown>
 
             <p-multiSelect *ngSwitchCase="'descripcion_estado_perfil'" [options]="estadosActivos"

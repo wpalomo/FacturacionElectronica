@@ -145,7 +145,9 @@ export class MantenimientoPerfilComponent implements OnInit {
 
 
 
-    //this.dt.reset();
+    this.dt.reset();
+    this.selectedEstadoFilter = { label: "TODOS", value: "T" };
+    //alert(this.selectedEstadoFilter);
   }
 
   loadLazy(event: LazyLoadEvent) {
@@ -355,6 +357,7 @@ export class MantenimientoPerfilComponent implements OnInit {
         this.displayDialog = false;
 
         this.inicializarPantalla();
+        this.first = 0;
 
         //this.loadLazy(this.auxEvent);
         //this.dt.reset();
