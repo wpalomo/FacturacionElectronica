@@ -146,7 +146,7 @@ export class MantenimientoPerfilComponent implements OnInit {
 
 
     this.dt.reset();
-    //this.selectedEstadoFilter = { label: "INACTIVO", value: "I" };
+    this.selectedEstadoFilter = { label: "TODOS", value: "T" };
     //this.selectedEstadoFilter = { value: "I" };
     //alert(this.selectedEstadoFilter);
     //this.estados.value 
@@ -249,6 +249,26 @@ export class MantenimientoPerfilComponent implements OnInit {
   }
 
   showDialogToAdd() {
+    //alert(this.dt.rows);
+    console.log(this.totalRecords$);
+
+    this.totalRecords$.forEach(element => {
+      console.log('x');
+      console.log(element);
+      console.log('x2');
+    });
+
+
+    //this.totalRecords$.f
+
+    //this.totalRecords$.forEach(element, function(value, key) { ... });
+
+    //angular.forEach(this.totalRecords$, function(value, key) { ... })
+
+/*    forEach(this.totalRecords$, function (value, index) {
+      // `this` will reference myArray: []
+  }, myArray);*/
+
     //const element = this.renderer.selectRootElement('#myInput');
     this.tipoOperacion = 'I';
     this.nuevoRegistro = true;
