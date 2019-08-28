@@ -40,36 +40,20 @@ class ClasePerfil {
 
         $records = json_decode(stripslashes($parametros['filters']), true);
 
-        //print_r($records);
-        echo '<br>';
-
         foreach ($records as $k => $value) {
             $valor = '';
             $tmp = '';
             foreach ($value as $key => $_value) {
-                echo $key . ' - ';
-                //echo '<br>';
-
 
                 if (is_array($_value)) {
                     $tmp = $_value;
-//                    foreach ($_value as $key2 => $value2) {
-//                        echo $value2 . ' ';
-//                        $valor = $value2;
-//                    }
                 } else {
-//                    echo $_value . ' xxx ';
                     if ($key == 'value') {
                         $valor = $_value;
                     }
                 }
 
                 if ($key == 'matchMode') {
-
-//                    echo 'matchMode-' . $_value;
-//                    if ($k == 'estado_perfil' && $valor == 'T') {
-//                        
-//                    }
                     switch ($_value) {
                         case 'startsWith':
                             $where = $where . " AND " . $k . " like '$valor%' ";
@@ -79,8 +63,6 @@ class ClasePerfil {
                             break;
                         case 'equals':
                             if (is_array($tmp)) {
-                                echo 'dfasdfsdfdf';
-                                print_r($tmp);
                                 foreach ($tmp as $k2 => $v2) {
                                     if ($k2 == 'value') {
                                         $valor = $v2;
@@ -109,14 +91,12 @@ class ClasePerfil {
                                     }
                                 }
                                 //echo $cadenaIn;
-                                $where = $where . " AND " . $key . $cadenaIn;
+                                $where = $where . " AND " . $k . $cadenaIn;
                             }
                             break;
                     }
                 }
             }
-
-            echo '<br>';
         }
 
 //        foreach ($records as $key => $val) {
@@ -283,7 +263,7 @@ class ClasePerfil {
         $query = $select . $where . $order . $offset . $fetch;
 
 //        echo $queryTotalRegistros;
-        echo $query;
+//        echo $query;
 //        $query = "
 //            EXEC SP_GEN_PERFILES            
 //            @in_operacion = 'Q'

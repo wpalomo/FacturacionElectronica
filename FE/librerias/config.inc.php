@@ -5,7 +5,7 @@ define("_SERVIDOR", "localhost");
 define("_ODBC", "SISOEMP");
 define("_BASE", "FacturacionElectronica");
 define("_USUARIO", "sa");
-define("_CLAVE", "webpedidos*2013");
+define("_CLAVE", "solsa");
 define("_AMBIENTE_FE", "1");
 //---------------------------------------
 //mail
