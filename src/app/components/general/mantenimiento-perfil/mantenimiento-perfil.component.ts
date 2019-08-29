@@ -160,6 +160,10 @@ export class MantenimientoPerfilComponent implements OnInit {
     //event.sortOrder = Sort order as number, 1 for asc and -1 for dec
     //filters: FilterMetadata object having field as key and filter value, filter matchMode as value
 
+    console.log(event);
+    console.log(event.filters);
+
+
     alert(event.first);
     alert(event.rows);
     alert(event.sortField);
@@ -226,6 +230,8 @@ export class MantenimientoPerfilComponent implements OnInit {
 
     //this.browserService.getBrowsers().subscribe((browsers: any) =>
     //  this.browsers = browsers.slice(event.first, (event.first + event.rows)));
+
+
   }
 
   reset() {
@@ -249,8 +255,11 @@ export class MantenimientoPerfilComponent implements OnInit {
   }
 
   showDialogToAdd() {
+    //this.first = 17;
     //alert(this.dt.rows);
     console.log(this.totalRecords$);
+
+    //this.setCurrentPage(3);
 
     this.totalRecords$.forEach(element => {
       console.log('x');
@@ -258,6 +267,47 @@ export class MantenimientoPerfilComponent implements OnInit {
       console.log('x2');
     });
 
+    this.totalRecords$.subscribe
+
+    console.log('-------------------');
+    this.totalRecords$.subscribe(num => {
+      let paginas = Math.floor(num / this.dt.rows);
+      let residuo = num % this.dt.rows;
+      console.log('paginas: ', paginas);
+      console.log('residuo: ', residuo);
+
+      if (residuo > 0) {
+        paginas = paginas + 1
+      }
+
+      console.log('paginas: ', paginas);
+    }
+      //this.stopwatchValue = num
+      //console.log(num)
+      //const paginas 
+    );
+    console.log('-------------------');
+
+    this.totalRecords$.forEach(function (element) {
+      console.log(element);
+    });
+
+    console.log('-------------------');
+    for (const [key, value] of Object.entries(this.totalRecords$)) {
+      console.log(key);
+    }
+    console.log('-------------------');
+
+
+    this.loadLazy({ 'first': 3 });
+
+
+    //this.totalRecords$.next().value
+    //mapIter.next().value
+
+    //this.totalRecords$.forEach(function callback(currentValue, index, array) {
+    // tu iterador
+    //});
 
     //this.totalRecords$.f
 
@@ -265,9 +315,9 @@ export class MantenimientoPerfilComponent implements OnInit {
 
     //angular.forEach(this.totalRecords$, function(value, key) { ... })
 
-/*    forEach(this.totalRecords$, function (value, index) {
-      // `this` will reference myArray: []
-  }, myArray);*/
+    /*    forEach(this.totalRecords$, function (value, index) {
+          // `this` will reference myArray: []
+      }, myArray);*/
 
     //const element = this.renderer.selectRootElement('#myInput');
     this.tipoOperacion = 'I';
@@ -379,7 +429,11 @@ export class MantenimientoPerfilComponent implements OnInit {
         this.displayDialog = false;
 
         this.inicializarPantalla();
-        this.first = 0;
+
+        this.first = 17;
+
+
+
 
         //this.loadLazy(this.auxEvent);
         //this.dt.reset();
@@ -397,5 +451,13 @@ export class MantenimientoPerfilComponent implements OnInit {
         this.tipoMensaje = 'ERROR';
       }
     );
+  }
+
+  setCurrentPage(n: number) {
+    let paging = {
+      first: ((n - 1) * this.dt.rows),
+      rows: this.dt.rows
+    };
+    this.dt.paginate(paging);
   }
 }
