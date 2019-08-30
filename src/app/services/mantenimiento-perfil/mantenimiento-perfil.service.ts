@@ -69,7 +69,7 @@ export class MantenimientoPerfilService {
       .pipe(
         map(res => {
           if (res.success) {
-            alert('fddddd');
+            //alert('fddddd');
             //if (res.ok === 'S') {
             //  alert(res);
             this.totalRecords.next(res.total);

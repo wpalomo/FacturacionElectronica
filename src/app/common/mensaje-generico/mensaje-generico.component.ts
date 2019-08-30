@@ -17,7 +17,7 @@ export class MensajeGenericoComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    alert(this.tipoMensaje);
+    //alert(this.tipoMensaje);
     this.displayMensaje = true;
 
     this.trueTipoMensaje = false;
@@ -34,7 +34,7 @@ export class MensajeGenericoComponent implements OnInit {
   isTrueTipoMensaje(): boolean {
     // return this.price >= this.previousPrice;
     // alert(this.tipoMensaje);
-    alert(this.tipoMensaje === 'OK');
+    //alert(this.tipoMensaje === 'OK');
     return this.tipoMensaje === 'OK';
   }
 
@@ -43,12 +43,12 @@ export class MensajeGenericoComponent implements OnInit {
   }
 
   onClose() {
-    alert('xddddddddddddddd');
+    //alert('xddddddddddddddd');
     this.displayChange.emit(false);
   }
 
   onHide(e: any) {
-    alert('hide');
+    //alert('hide');
     this.displayChange.emit(false);
   }
 

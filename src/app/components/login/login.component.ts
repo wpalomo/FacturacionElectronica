@@ -101,7 +101,7 @@ export class LoginComponent implements OnInit {
 
     this.loginService.login(postData).subscribe(
       data => {
-        alert('1');
+        //alert('1');
         console.log(data);
         this.iSesion = data[0];
         console.log(this.iSesion);
@@ -116,10 +116,10 @@ export class LoginComponent implements OnInit {
         }
 
         setTimeout(() => {
-          alert('2');
+          //alert('2');
         }, 5000);
 
-        alert('3');
+        //alert('3');
         console.log('3');
         console.log(this.iSesion);
         console.log(this.iSesion.id_usuario);
@@ -129,7 +129,7 @@ export class LoginComponent implements OnInit {
 
         this.loginService.getMenu(postData2).subscribe(
           data2 => {
-            alert('99');
+            //alert('99');
             console.log('99');
             console.log(data2);
           }, error => {
