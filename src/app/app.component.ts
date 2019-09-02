@@ -192,7 +192,7 @@ export class AppComponent implements OnInit {
   }
 
   onItemClick(item) {
-    alert('8888');
+    //alert('8888');
     this.selectedMenu = item;
     // alert(this.selectedMenu.routerLink);
     this.router.navigate([this.selectedMenu.routerLink]);

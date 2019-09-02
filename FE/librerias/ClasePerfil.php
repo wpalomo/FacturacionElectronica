@@ -31,7 +31,7 @@ class ClasePerfil {
             from VW_PERFILES
         ";
 
-        $where = " WHERE id_perfil > 0 ";
+        $where = " WHERE id_perfil > 0 and estado_perfil != 'X' ";
 
         $selectTotalRegistros = "
             select count(*) as total_registros
@@ -321,8 +321,50 @@ class ClasePerfil {
         return $result;
     }
 
-    public function update() {
-        
+    public function update($parametros) {
+        $perfil = json_decode(stripslashes($parametros['perfil']), true);
+
+        $id_perfil = mssql_real_escape_string($perfil['id_perfil']);
+        $descripcion_perfil = mssql_real_escape_string($perfil['descripcion_perfil']);
+        $estado_perfil = mssql_real_escape_string($perfil['estado_perfil']);
+
+        $query = "
+            EXEC SP_GEN_PERFILES
+            @in_id_perfil = '$id_perfil',
+            @in_descripcion_perfil = '$descripcion_perfil',
+            @in_estado_perfil = '$estado_perfil',
+            @in_operacion = 'U'
+        ";
+
+        $parametros = array(
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        return $result;
+    }
+
+    public function delete($parametros) {
+        $perfil = json_decode(stripslashes($parametros['perfil']), true);
+
+        $id_perfil = mssql_real_escape_string($perfil['id_perfil']);
+        //$descripcion_perfil = mssql_real_escape_string($perfil['descripcion_perfil']);
+        //$estado_perfil = mssql_real_escape_string($perfil['estado_perfil']);
+
+        $query = "
+            EXEC SP_GEN_PERFILES
+            @in_id_perfil = '$id_perfil',
+            @in_operacion = 'D'
+        ";
+
+        $parametros = array(
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        return $result;
     }
 
 }

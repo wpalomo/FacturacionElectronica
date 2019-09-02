@@ -30,7 +30,7 @@ export class EstadoService {
           let estados = [];
 
           res.data.forEach(element => {
-            alert('eewww');
+            //alert('eewww');
             console.log('ewwww');
             console.log(element);
             if (element.value !== 'T') {
