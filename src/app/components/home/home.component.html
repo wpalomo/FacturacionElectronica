@@ -1,3 +1,21 @@
-<p>
-  home works!
-</p>
+<h3 class="first">Default</h3>
+<p-tabMenu [model]="items1" [activeItem]="items1[0]"></p-tabMenu>
+
+<h3>Templating</h3>
+<p-tabMenu [model]="items2" [activeItem]="activeItem">
+  <ng-template pTemplate="item" let-item let-i="index">
+    <div style="position: relative; text-align: center; min-width: 10em">
+      <div class="ui-menuitem-icon" [ngClass]="item.icon" *ngIf="item.icon" style="font-size: 2em"></div>
+      <div class="ui-menuitem-text">
+        {{item.label}}
+      </div>
+      <a tabindex="0" class="ui-menuitem-icon" (click)="closeItem($event, i)"
+        style="position: absolute; right: -1em; top: -.5em; padding: 0" *ngIf="i !== 0">
+        <span class="pi pi-times"></span>
+      </a>
+    </div>
+    <div>
+      <app-cambio-clave></app-cambio-clave>
+    </div>
+  </ng-template>
+</p-tabMenu>

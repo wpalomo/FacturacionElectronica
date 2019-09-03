@@ -18,6 +18,10 @@ switch ($action) {
         $tipo = 'U';
         update();
         break;
+    case 'delete':
+        $tipo = 'D';
+        delete();
+        break;
 }
 
 
@@ -169,4 +173,26 @@ function update() {
     echo $data;
 }
 
+<<<<<<< HEAD
+=======
+function delete() {
+    if (isset($_POST['perfil'])) {
+        $parametros = array(
+            'perfil' => $_POST['perfil'],
+            'tipo' => $tipo
+        );
+
+        $objetoPerfil = new ClasePerfil();
+
+        $result = $objetoPerfil->delete($parametros);
+
+        $data = ClaseJson::getJson($result);
+    } else {
+        $data = ClaseJson::getMessageJson(false, 'Error en el envio de información');
+    }
+
+    echo $data;
+}
+
+>>>>>>> 4f6327e1050c7c0b02590e9ca962bd9ed901fc12
 //echo 'hola';

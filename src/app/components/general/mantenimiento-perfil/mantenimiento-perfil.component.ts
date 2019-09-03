@@ -1,5 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { LazyLoadEvent, Message } from 'primeng/components/common/api';
+<<<<<<< HEAD
+=======
+import { ConfirmationService } from 'primeng/api';
+
+>>>>>>> 4f6327e1050c7c0b02590e9ca962bd9ed901fc12
 //import { ConfirmationService } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { MantenimientoPerfilService } from '../../../services/mantenimiento-perfil/mantenimiento-perfil.service';
@@ -63,7 +68,11 @@ export class MantenimientoPerfilComponent implements OnInit {
     private mantenimientoPerfilService: MantenimientoPerfilService,
     private estadoService: EstadoService,
     public renderer: Renderer2,
+<<<<<<< HEAD
     //private confirmationService: ConfirmationService
+=======
+    private confirmationService: ConfirmationService
+>>>>>>> 4f6327e1050c7c0b02590e9ca962bd9ed901fc12
   ) { }
 
   ngOnInit() {
@@ -265,6 +274,7 @@ export class MantenimientoPerfilComponent implements OnInit {
     // //this.first = 17;
     // //alert(this.dt.rows);
     // console.log(this.totalRecords$);
+<<<<<<< HEAD
 
     // //this.setCurrentPage(5);
 
@@ -298,6 +308,41 @@ export class MantenimientoPerfilComponent implements OnInit {
     // );
     // console.log('-------------------');
 
+=======
+
+    // //this.setCurrentPage(5);
+
+    // this.totalRecords$.forEach(element => {
+    //   console.log('x');
+    //   console.log(element);
+    //   console.log('x2');
+    // });
+
+    // this.totalRecords$.subscribe
+
+    // console.log('-------------------');
+    // this.totalRecords$.subscribe(num => {
+    //   /*
+    //   paginas = Math.floor(num / this.dt.rows);
+    //   let residuo = num % this.dt.rows;
+    //   console.log('paginas: ', paginas);
+    //   console.log('residuo: ', residuo);
+
+    //   if (residuo > 0) {
+    //     paginas = paginas + 1
+    //   }
+    //   */
+
+    //   paginas = num - 1;
+    //   console.log('paginas: ', paginas);
+    // }
+    //   //this.stopwatchValue = num
+    //   //console.log(num)
+    //   //const paginas 
+    // );
+    // console.log('-------------------');
+
+>>>>>>> 4f6327e1050c7c0b02590e9ca962bd9ed901fc12
     // this.totalRecords$.forEach(function (element) {
     //   console.log(element);
     // });
@@ -428,6 +473,27 @@ export class MantenimientoPerfilComponent implements OnInit {
   }
 
   delete() {
+<<<<<<< HEAD
+=======
+    this.confirmationService.confirm({
+      message: 'Esta seguro que desea eliminar este registro ?',
+      header: 'Confirmacion',
+      icon: 'pi pi-info-circle',
+      accept: () => {
+        //alert('accpet');
+        //console.log(this.perfil);
+        //this.msgs = [{ severity: 'info', summary: 'Confirmed', detail: 'Record deleted' }];
+        this.tipoOperacion = 'D';
+        this.callService();
+      },
+      reject: () => {
+        alert('regect');
+        //this.msgs = [{ severity: 'info', summary: 'Rejected', detail: 'You have rejected' }];
+      }
+    });
+
+
+>>>>>>> 4f6327e1050c7c0b02590e9ca962bd9ed901fc12
     // this.confirmationService.confirm({
     //   message: 'Do you want to delete this record?',
     //   header: 'Delete Confirmation',
@@ -448,7 +514,19 @@ export class MantenimientoPerfilComponent implements OnInit {
 
     this.displayWait = true;
 
-    action = this.tipoOperacion === 'I' ? 'insert' : 'update';
+    //action = this.tipoOperacion === 'I' ? 'insert' : 'update';
+
+    switch (this.tipoOperacion) {
+      case 'I':
+        action = 'insert';
+        break;
+      case 'U':
+        action = 'update';
+        break;
+      case 'D':
+        action = 'delete';
+        break;
+    }
 
     postData.append('perfil', JSON.stringify(this.perfil));
     postData.append('action', action);
@@ -537,4 +615,9 @@ export class MantenimientoPerfilComponent implements OnInit {
     //event.pageCount: Total number of pages 
     //let pageIndex = event.first / event.rows + 1 // Index of the new page if event.page not defined.
   }
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 4f6327e1050c7c0b02590e9ca962bd9ed901fc12
 }
