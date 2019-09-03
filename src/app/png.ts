@@ -21,11 +21,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
-
-//import {ConfirmDialogModule} from 'primeng/components/confirmdialog/confirmdialog';
-//import {ConfirmationService} from 'primeng/components/common/api';
-//import { ConfirmDialogModule } from 'primeng/confirmdialog';
-//import { ConfirmationService } from 'primeng/api';
+import {TabMenuModule} from 'primeng/tabmenu';
 
 @NgModule({
     imports: [
@@ -50,7 +46,7 @@ import {ConfirmDialogModule} from 'primeng/confirmdialog';
         KeyFilterModule,
         ProgressSpinnerModule,
         ConfirmDialogModule,
-        //ConfirmationService
+        TabMenuModule
     ],
     exports: [
         PanelModule,
@@ -74,7 +70,7 @@ import {ConfirmDialogModule} from 'primeng/confirmdialog';
         KeyFilterModule,
         ProgressSpinnerModule,
         ConfirmDialogModule,
-        //ConfirmationService
+        TabMenuModule
     ],
 })
 export class PrimeNGModule { }
