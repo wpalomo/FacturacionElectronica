@@ -24,11 +24,6 @@ import { CambioClaveComponent } from './components/general/cambio-clave/cambio-c
 import { FavoritosComponent } from './components/general/favoritos/favoritos.component';
 import { MantenimientoPerfilComponent } from './components/general/mantenimiento-perfil/mantenimiento-perfil.component';
 import { PermisosComponent } from './components/general/permisos/permisos.component';
-<<<<<<< HEAD
-=======
-import { ConfirmationService } from 'primeng/api';
-
->>>>>>> 4f6327e1050c7c0b02590e9ca962bd9ed901fc12
 //import { ConfirmationService } from 'primeng/api';
 //import { ConfirmationService } from 'primeng/components/common/api';
 
@@ -61,11 +56,7 @@ import { ConfirmationService } from 'primeng/api';
     LoginService,
     EncrDecrService,
     MantenimientoPerfilService,
-<<<<<<< HEAD
     //ConfirmationService
-=======
-    ConfirmationService
->>>>>>> 4f6327e1050c7c0b02590e9ca962bd9ed901fc12
   ],
   bootstrap: [AppComponent]
 })
