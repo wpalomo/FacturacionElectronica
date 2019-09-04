@@ -335,9 +335,6 @@ class ClasePerfil {
             @in_estado_perfil = '$estado_perfil',
             @in_operacion = 'U'
         ";
-<<<<<<< HEAD
-        
-=======
 
         $parametros = array(
             'query' => $query
@@ -361,7 +358,6 @@ class ClasePerfil {
             @in_operacion = 'D'
         ";
 
->>>>>>> 4f6327e1050c7c0b02590e9ca962bd9ed901fc12
         $parametros = array(
             'query' => $query
         );

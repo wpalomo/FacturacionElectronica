@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { LazyLoadEvent, Message } from 'primeng/components/common/api';
+import { ConfirmationService } from 'primeng/api';
+
 //import { ConfirmationService } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { MantenimientoPerfilService } from '../../../services/mantenimiento-perfil/mantenimiento-perfil.service';
@@ -63,7 +65,7 @@ export class MantenimientoPerfilComponent implements OnInit {
     private mantenimientoPerfilService: MantenimientoPerfilService,
     private estadoService: EstadoService,
     public renderer: Renderer2,
-    //private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService
   ) { }
 
   ngOnInit() {
@@ -428,6 +430,24 @@ export class MantenimientoPerfilComponent implements OnInit {
   }
 
   delete() {
+    this.confirmationService.confirm({
+      message: 'Esta seguro que desea eliminar este registro ?',
+      header: 'Confirmacion',
+      icon: 'pi pi-info-circle',
+      accept: () => {
+        //alert('accpet');
+        //console.log(this.perfil);
+        //this.msgs = [{ severity: 'info', summary: 'Confirmed', detail: 'Record deleted' }];
+        this.tipoOperacion = 'D';
+        this.callService();
+      },
+      reject: () => {
+        alert('regect');
+        //this.msgs = [{ severity: 'info', summary: 'Rejected', detail: 'You have rejected' }];
+      }
+    });
+
+
     // this.confirmationService.confirm({
     //   message: 'Do you want to delete this record?',
     //   header: 'Delete Confirmation',
@@ -549,4 +569,6 @@ export class MantenimientoPerfilComponent implements OnInit {
     //event.pageCount: Total number of pages 
     //let pageIndex = event.first / event.rows + 1 // Index of the new page if event.page not defined.
   }
+
+
 }

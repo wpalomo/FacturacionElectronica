@@ -173,8 +173,6 @@ function update() {
     echo $data;
 }
 
-<<<<<<< HEAD
-=======
 function delete() {
     if (isset($_POST['perfil'])) {
         $parametros = array(
@@ -194,5 +192,4 @@ function delete() {
     echo $data;
 }
 
->>>>>>> 4f6327e1050c7c0b02590e9ca962bd9ed901fc12
 //echo 'hola';
