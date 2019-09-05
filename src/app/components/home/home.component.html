@@ -1,3 +1,28 @@
+<!--
+<p-tabView>
+  <p-tabPanel header="Header 1">
+    <app-cambio-clave></app-cambio-clave>
+  </p-tabPanel>
+  <p-tabPanel header="Header 2">
+    <app-mantenimiento-perfil></app-mantenimiento-perfil>
+  </p-tabPanel>
+  <p-tabPanel header="Header 3">
+    Content 3
+  </p-tabPanel>
+</p-tabView>
+-->
+
+<button pButton type="button" label="Click" (click)="handleClick($event)"></button>
+<p-tabView [style]="{'height':'600px'}">
+  <p-tabPanel [header]="item.header" *ngFor="let item of items; let i = index" [selected]="i == 0" [closable]="true">
+    <app-cambio-clave *ngIf="item.content==='app-cambio-clave'"></app-cambio-clave>
+    <app-mantenimiento-perfil *ngIf="item.content==='app-mantenimiento-perfil'"></app-mantenimiento-perfil>
+  </p-tabPanel>
+</p-tabView>
+
+
+
+<!--
 <h3 class="first">Default</h3>
 <p-tabMenu [model]="items1" [activeItem]="items1[0]"></p-tabMenu>
 
@@ -19,3 +44,4 @@
     </div>
   </ng-template>
 </p-tabMenu>
+-->
