@@ -87,6 +87,23 @@ export class MantenimientoPerfilService {
       );
   }
 
+  getPerfilesxEstado(postData): Observable<ITB_GEN_PERFILES[]> {
+    return this.http.post<any>(this.url, postData)
+      .pipe(
+        map(res => {
+          if (res.success) {
+            this.totalRecords.next(res.total);
+            return res.data as ITB_GEN_PERFILES[];
+          } else {
+            console.log('error');
+            console.log('res.mensaje');
+            throw (res.mensaje);
+          }
+        }),
+        catchError(transformError)
+      );
+  }
+
   insert(postData): any {
     console.log(postData);
     return this.http.post<any>(this.url, postData)

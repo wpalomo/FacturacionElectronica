@@ -10,6 +10,9 @@ switch ($action) {
     case 'getPerfiles':
         getPerfiles();
         break;
+    case 'getPerfilesxEstado':
+        getPerfilesxEstado();
+        break;
     case 'insert':
         $tipo = 'I';
         insert();
@@ -129,6 +132,20 @@ function getPerfiles() {
     $objetoPerfil = new ClasePerfil();
 
     $result = $objetoPerfil->getPerfiles($parametros);
+
+    $data = ClaseJson::getJson($result);
+
+    echo $data;
+}
+
+function getPerfilesxEstado() {
+//    $parametros = array(
+//        'estado_perfil' => $_POST['estado_perfil']
+//    );
+
+    $objetoPerfil = new ClasePerfil();
+
+    $result = $objetoPerfil->getPerfilesxEstado($_POST['estado_perfil']);
 
     $data = ClaseJson::getJson($result);
 

@@ -7,6 +7,7 @@ interface ITB_GEN_USUARIOS {
     apellido?: string;
     email?: string;
     estado_usuario?: string;
+    descripcion_estado_usuario?: string;
     fecha_ingreso?: string;
     id_usuario_ingreso?: number;
     fecha_actualizacion?: string;

@@ -1,3 +1,168 @@
-<p>
-  mantenimiento-usuarios works!
-</p>
+<div class=" p-grid mt-4">
+  <!--<div class="p-col">
+  </div>-->
+
+  <div class="p-col">
+    <p-table #dt [columns]="cols" [value]="usuarios" [responsive]="true" [paginator]="true" [rows]="10" [lazy]="true"
+      [totalRecords]="totalRecords$  | async" (onLazyLoad)="loadLazy($event)" [(first)]="first">
+
+      <ng-template pTemplate="caption">
+        Mantenimiento de Usuarios
+      </ng-template>
+
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of columns" [ngStyle]="{'width': col.width, 'display': col.display}"
+            [pSortableColumn]="col.field">
+            {{col.header}}
+            <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+              ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order">
+            </p-sortIcon>
+          </th>
+          <th [ngStyle]="{'width':'10%'}"></th>
+        </tr>
+        <tr>
+          <th *ngFor="let col of columns" [ngSwitch]="col.field">
+            <input *ngSwitchCase="'id_usuario'" pInputText type="text"
+              (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)" pKeyFilter="int"
+              [(ngModel)]="txtIdUsuario">
+
+            <input *ngSwitchCase="'nombre_apellido'" pInputText type="text"
+              oninput="this.value = this.value.toUpperCase()"
+              (input)="dt.filter($event.target.value, col.field, col.filterMatchMode);reset();"
+              [(ngModel)]="txtNombreApellido">
+
+            <input *ngSwitchCase="'descripcion_perfil'" pInputText type="text"
+              oninput="this.value = this.value.toUpperCase()"
+              (input)="dt.filter($event.target.value, col.field, col.filterMatchMode);reset();"
+              [(ngModel)]="txtDescripcion">
+
+            <input *ngSwitchCase="'login'" pInputText type="text" oninput="this.value = this.value.toUpperCase()"
+              (input)="dt.filter($event.target.value, col.field, col.filterMatchMode);reset();" [(ngModel)]="txtLogin">
+
+            <p-dropdown *ngSwitchCase="'estado_usuario'" [options]="estados" [style]="{'width':'90%'}"
+              (onChange)="dt.filter($event.value, col.field, col.filterMatchMode)" styleClass="ui-column-filter"
+              [(ngModel)]="selectedEstadoFilter" optionLabel="label">
+            </p-dropdown>
+
+            <!-- 
+            <p-multiSelect *ngSwitchCase="'descripcion_estado_usuario'" [options]="estadosActivos"
+              [style]="{'width':'100%'}" defaultLabel="TODOS"
+              (onChange)="dt.filter($event.value, col.field, col.filterMatchMode)">
+            </p-multiSelect>
+            -->
+
+
+          </th>
+          <th></th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-usuario let-columns="columns">
+        <!--<tr [pSelectableRow]="perfil" [ngClass]="perfil['estado_usuario']=='A' ? 'old-car' : null">-->
+        <tr [pSelectableRow]="usuario">
+          <td *ngFor="let col of columns" [ngStyle]="{'display': col.display}">
+            <span *ngIf="col.field!=='estado_usuario'">
+              {{usuario[col.field]}}
+            </span>
+
+            <span *ngIf="col.field=='estado_usuario'">
+              <div span [style.color]="'Green'" *ngIf="usuario['estado_usuario']=='A'">
+                {{usuario['descripcion_estado_usuario']}}
+              </div>
+              <div span [style.color]="'Red'" *ngIf="usuario['estado_usuario']=='I'">
+                {{usuario['descripcion_estado_usuario']}}
+              </div>
+            </span>
+          </td>
+          <td><button type="button" pButton icon="pi pi-pencil" (click)="modificarRegistro(usuario)"></button></td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary" let-usuario>
+        <div style="text-align:left">
+          <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAdd()"
+            label="Agregar nuevo Usuario"></button>
+        </div>
+      </ng-template>
+    </p-table>
+
+  </div>
+</div>
+
+<p-confirmDialog [style]="{width: '30vw'}" acceptLabel="Si"></p-confirmDialog>
+
+<p-dialog header="Mantenimiento de Usuarios" [(visible)]="displayDialog" [responsive]="true" showEffect="fade"
+  [modal]="true" [style]="{width: '500px'}" focusOnShow="false" (onShow)="setFocus(txtElement)">
+
+
+  <div class="p-grid">
+    <div class="p-col-3">
+      <label for="id_usuario">Código</label>
+    </div>
+    <div class="p-col-9">
+      <input pInputText id="id_usuario" [(ngModel)]="usuario.id_usuario" [disabled]="disabled" />
+    </div>
+
+    <div class="p-col-3">
+      <label for="nombre">Nombre</label>
+    </div>
+    <div class="p-col-9">
+      <input pInputText id="nombre" [(ngModel)]="usuario.nombre" oninput="this.value = this.value.toUpperCase()"
+        (click)="$event.target.select()" (keydown)="onKeydown($event, btnSave)" />
+    </div>
+
+    <div class="p-col-3">
+      <label for="apellido">Apellido</label>
+    </div>
+    <div class="p-col-9">
+      <input pInputText id="apellido" [(ngModel)]="usuario.apellido" oninput="this.value = this.value.toUpperCase()"
+        (click)="$event.target.select()" (keydown)="onKeydown($event, btnSave)" />
+    </div>
+
+    <div class="p-col-3">
+      <label for="login">Login</label>
+    </div>
+    <div class="p-col-9">
+      <input pInputText id="login" [(ngModel)]="usuario.login" [disabled]="disabled"
+        oninput="this.value = this.value.toUpperCase()" (click)="$event.target.select()"
+        (keydown)="onKeydown($event, btnSave)" />
+    </div>
+
+    <div class="p-col-3">
+      <div class="first">Perfil</div>
+    </div>
+    <div class="p-col-9">
+      <p-dropdown [options]="perfilesActivos" [(ngModel)]="selectedPerfil" placeholder="Seleccione un perfil"
+        optionLabel="label" appendTo="body" [style]="{'width':'90%'}" (onChange)="onChange($event)">
+      </p-dropdown>
+    </div>
+
+    <!--
+    <div class="p-col-3">
+      <label for="descripcion_perfil">Descripcion</label>
+    </div>
+    <div class="p-col-9">
+      <input pInputText id="descripcion_perfil" [(ngModel)]="perfil.descripcion_perfil" #txtElement
+        oninput="this.value = this.value.toUpperCase()" (click)="$event.target.select()"
+        (keydown)="onKeydown($event, btnSave)" />
+    </div>
+    -->
+    <div class="p-col-3">
+      <div class="first">Estado</div>
+    </div>
+    <div class="p-col-9">
+      <p-dropdown [options]="estadosActivos" [(ngModel)]="selectedEstado" placeholder="Seleccione un estado"
+        optionLabel="label" appendTo="body" [style]="{'width':'90%'}" [(disabled)]="hiddenButtonDelete"
+        (onChange)="onChange($event)"></p-dropdown>
+    </div>
+  </div>
+
+
+  <p-footer>
+    <div class="ui-dialog-buttonpane ui-helper-clearfix">
+      <button type="button" pButton icon="pi pi-times" (click)="delete()" label="Eliminar"
+        [(hidden)]="hiddenButtonDelete" [class]="'ui-button-danger'"></button>
+      <button type="button" pButton icon="pi pi-check" (click)="save()" label="Grabar" #btnSave></button>
+    </div>
+  </p-footer>
+</p-dialog>

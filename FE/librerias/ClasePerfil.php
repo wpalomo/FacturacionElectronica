@@ -295,6 +295,27 @@ class ClasePerfil {
         }
     }
 
+    public function getPerfilesxEstado($estado_perfil) {
+        //print_r($parametros);
+        //$perfil = json_decode(stripslashes($parametros['perfil']), true);
+
+        $estado_perfil = mssql_real_escape_string($estado_perfil);
+
+        $query = "
+            EXEC SP_GEN_PERFILES
+            @in_estado_perfil = '$estado_perfil',
+            @in_operacion = 'QE'
+        ";
+        
+        $parametros = array(
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        return $result;
+    }
+
     public function insert($parametros) {
         $perfil = json_decode(stripslashes($parametros['perfil']), true);
 

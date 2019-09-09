@@ -1,0 +1,22 @@
+.ui-inputtext {
+    width: 90%
+}
+
+.ui-dropdown {
+    width: 90%
+}
+
+.old-car {
+    background-color: #1CA979 !important;
+    color: #ffffff !important;
+}
+
+.very-old-car {
+    background-color: #2CA8B1 !important;
+    color: #ffffff !important;
+}
+
+
+.my-dialog .ui-dialog .ui-dialog-titlebar{
+    display:none !important;
+}
