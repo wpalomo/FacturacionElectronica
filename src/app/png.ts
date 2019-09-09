@@ -23,6 +23,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { TabViewModule } from 'primeng/tabview';
+import { PasswordModule } from 'primeng/password';
 
 @NgModule({
     imports: [
@@ -48,7 +49,8 @@ import { TabViewModule } from 'primeng/tabview';
         ProgressSpinnerModule,
         ConfirmDialogModule,
         TabMenuModule,
-        TabViewModule
+        TabViewModule,
+        PasswordModule
     ],
     exports: [
         PanelModule,
@@ -73,7 +75,8 @@ import { TabViewModule } from 'primeng/tabview';
         ProgressSpinnerModule,
         ConfirmDialogModule,
         TabMenuModule,
-        TabViewModule
+        TabViewModule,
+        PasswordModule
     ],
 })
 export class PrimeNGModule { }

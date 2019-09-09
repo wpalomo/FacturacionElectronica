@@ -137,6 +137,30 @@
       </p-dropdown>
     </div>
 
+    <div class="p-col-3">
+      <label for="email">Email</label>
+    </div>
+    <div class="p-col-9">
+      <input pInputText type="email" id="email" [(ngModel)]="usuario.email" (click)="$event.target.select()"
+        (keydown)="onKeydown($event, btnSave)" />
+    </div>
+
+    <div class="p-col-3">
+      <label for="clave">Clave</label>
+    </div>
+    <div class="p-col-9">
+      <input pPassword type="password" id="clave" [(ngModel)]="usuario.clave" (click)="$event.target.select()"
+        (keydown)="onKeydown($event, btnSave)" [feedback]="false" />
+    </div>
+
+    <div class="p-col-3">
+      <label for="confirmarClave">Confirmar Clave</label>
+    </div>
+    <div class="p-col-9">
+      <input pPassword type="password" id="confirmarClave" (click)="$event.target.select()"
+        (keydown)="onKeydown($event, btnSave)" [feedback]="false" />
+    </div>
+
     <!--
     <div class="p-col-3">
       <label for="descripcion_perfil">Descripcion</label>

@@ -33,7 +33,7 @@ export class MantenimientoUsuariosComponent implements OnInit {
   hiddenButtonDelete: boolean;
   estados: IEstados[];
   estadosActivos: IEstados[];
-  perfilesActivos: IEstados[] = [];
+  perfilesActivos: IEstados[];
   grades: IEstados[];
   errorMsg;
   displayMensaje: boolean;
@@ -63,6 +63,7 @@ export class MantenimientoUsuariosComponent implements OnInit {
 
   ngOnInit() {
     this.inicializarPantalla();
+
 
     this.cols = [
       /*
@@ -232,6 +233,7 @@ export class MantenimientoUsuariosComponent implements OnInit {
     postData.append('estado_perfil', 'A');
     postData.append('action', 'getPerfilesxEstado');
 
+
     this.mantenimientoPerfilService.getPerfilesxEstado(postData).subscribe(
       data => {
         this.perfiles = data;
@@ -243,14 +245,25 @@ export class MantenimientoUsuariosComponent implements OnInit {
 
 
         //this.perfiles.find()
-
+        this.perfilesActivos = [];
         data.forEach(d => {
           console.log(d.id_perfil);
 
           this.perfilesActivos.push({ label: d.descripcion_perfil, value: d.id_perfil });
+          //this.perfilesActivos.push({ label: 'ACTIVO', value: 'ACTIVO' });
+          //this.perfilesActivos.push({ label: 'INACTIVO', value: 'INACTIVO' });
+          //this.perfilesActivos.push({ label: 'TODOS', value: 'TODOS' });
+          //this.perfilesActivos.push({ label: 'x', value: 'XXX' });
+
+
+          //this.perfilesActivos.push({ label: 'ACTIVO', value: 'ACTIVO' });
+          //this.perfilesActivos.push({ label: 'INACTIVO', value: 'INACTIVO' });
+          //this.perfilesActivos.push({ label: 'TODOS', value: 'TODOS' });
+          //this.perfilesActivos.push({ label: 'x', value: 'XXX' });
         });
 
-        
+
+
         this.selectedPerfil = { label: data[0].descripcion_perfil, value: data[0].id_perfil };
 
         this.tipoOperacion = 'I';
