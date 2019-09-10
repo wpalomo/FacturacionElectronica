@@ -25,6 +25,7 @@ import { TabMenuModule } from 'primeng/tabmenu';
 import { TabViewModule } from 'primeng/tabview';
 import { PasswordModule } from 'primeng/password';
 import { FieldsetModule } from 'primeng/fieldset';
+import { AccordionModule } from 'primeng/accordion';
 
 @NgModule({
     imports: [
@@ -52,7 +53,8 @@ import { FieldsetModule } from 'primeng/fieldset';
         TabMenuModule,
         TabViewModule,
         PasswordModule,
-        FieldsetModule
+        FieldsetModule,
+        AccordionModule
     ],
     exports: [
         PanelModule,
@@ -79,7 +81,8 @@ import { FieldsetModule } from 'primeng/fieldset';
         TabMenuModule,
         TabViewModule,
         PasswordModule,
-        FieldsetModule
+        FieldsetModule,
+        AccordionModule
     ],
 })
 export class PrimeNGModule { }

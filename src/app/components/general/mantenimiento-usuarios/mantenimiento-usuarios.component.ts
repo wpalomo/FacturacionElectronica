@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Renderer2 } from '@angular/core';
+import { Component, OnInit, ViewChild, Renderer2, ElementRef } from '@angular/core';
 import { LazyLoadEvent, Message } from 'primeng/components/common/api';
 import { ConfirmationService } from 'primeng/api';
 
@@ -9,6 +9,7 @@ import { EstadoService } from '../../../services/estado/estado.service';
 import ITB_GEN_USUARIOS from '../../../model/ITB_GEN_USUARIOS';
 import ITB_GEN_PERFILES from '../../../model/ITB_GEN_PERFILES';
 import IEstados from '../../../model/IEstados';
+import { Dropdown } from 'primeng/dropdown';
 
 @Component({
   selector: 'app-mantenimiento-usuarios',
@@ -21,6 +22,18 @@ export class MantenimientoUsuariosComponent implements OnInit {
     //alert('fffff');
     this.dt.reset();
   }
+
+  @ViewChild("txtNombre1") nameField: ElementRef;
+  @ViewChild("txtApellido1") apellidoField: ElementRef;
+  @ViewChild("txtLogin1") loginField: ElementRef;
+  //@ViewChild("cmbPerfil1") perfilField: ElementRef;
+  //@ViewChild('cmbPerfil1') perfilField: Dropdown;
+  @ViewChild("txtEmail1") emailField: ElementRef;
+  @ViewChild("txtClave1") claveField: ElementRef;
+  @ViewChild("txtConfirmarClave1") confirmarClaveField: ElementRef;
+  @ViewChild("txtCambiarClave1") cambiarClaveField: ElementRef;
+  @ViewChild("txtConfirmarCambiarClave1") confirmarCambiarClaveField: ElementRef;
+  @ViewChild("btnSave") saveField: ElementRef;
 
   displayDialog: boolean;
   displayWait: boolean;
@@ -49,7 +62,9 @@ export class MantenimientoUsuariosComponent implements OnInit {
   txtNombreApellido: string;
   txtIdUsuario: string;
   txtLogin: string;
+  txtCambiarClave: string;
   txtConfirmarClave: string;
+  txtConfirmarCambiarClave: string;
   msgs: Message[] = [];
 
   totalRecords$: Observable<number>;
@@ -221,6 +236,8 @@ export class MantenimientoUsuariosComponent implements OnInit {
   }
 
   modificarRegistro(usuario: ITB_GEN_USUARIOS) {
+    this.txtCambiarClave = '';
+    this.txtConfirmarCambiarClave = '';
     this.tipoOperacion = 'U';
     this.nuevoRegistro = false;
     this.usuario = this.cloneRegistro(usuario);
@@ -295,4 +312,77 @@ export class MantenimientoUsuariosComponent implements OnInit {
     }
     return perfil;
   }
+
+  setFocus(elm: HTMLInputElement) {
+    setTimeout(() => {
+      elm.focus()
+    }, 300);
+  }
+
+  onKeydown(event) {
+    if (event.key === "Enter") {
+      console.log(event);
+      //console.log(field);
+      console.log(event.target.id);
+      this.ordenFocus(event.target.id);
+      //this.setFocus(elm);
+      //let ht:HTMLInputElement = document.getElementById(field);
+      //this.setFocus(ht);
+    }
+  }
+
+  ordenFocus(field: string) {
+    switch (field) {
+      case 'nombre':
+        this.setFocus(this.apellidoField.nativeElement)
+        break;
+      case 'apellido':
+        if (this.tipoOperacion == 'I') {
+          this.setFocus(this.loginField.nativeElement)
+        } else {
+          //this.setFocus(this.perfilField.nativeElement)
+          //this.perfilField.nativeElement.focus();
+          //this.perfilField.nativeElement.focus();
+          //this.perfilField.focus();
+          //this.perfilField.nativeElement.style.focus();
+          //document.getElementById('cmbPerfil').focus();
+          //this.perfilField.panel
+          //this.perfilField.panelVisible = true;
+          this.setFocus(this.emailField.nativeElement);
+        }
+        break;
+      case 'login':
+        this.setFocus(this.emailField.nativeElement);
+        break;
+      case 'email':
+        if (this.tipoOperacion == 'I') {
+          this.setFocus(this.claveField.nativeElement);
+        } else {
+          this.setFocus(this.cambiarClaveField.nativeElement);
+        }
+        break;
+      case 'clave':
+        this.setFocus(this.confirmarClaveField.nativeElement);
+        break;
+      case 'confirmarClave':
+        this.setFocus(this.saveField.nativeElement);
+        break;
+      case 'cambiarClave':
+        this.setFocus(this.confirmarCambiarClaveField.nativeElement);
+        break;
+      case 'confirmarCambiarClave':
+        this.setFocus(this.saveField.nativeElement);
+        break;
+    }
+  }
+
+  /*
+  onKeydown(event, elm: HTMLInputElement) {
+    if (event.key === "Enter") {
+      console.log(event);
+      console.log(elm);
+      this.setFocus(elm);
+    }
+  }
+  */
 }

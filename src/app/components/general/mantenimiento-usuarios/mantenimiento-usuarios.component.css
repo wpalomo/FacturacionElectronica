@@ -20,3 +20,11 @@
 .my-dialog .ui-dialog .ui-dialog-titlebar{
     display:none !important;
 }
+
+/*
+::ng-deep p-dialog .ui-dialog {
+    overflow: scroll;
+    max-height: 100%;
+    width: 500px;
+}
+*/

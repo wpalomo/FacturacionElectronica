@@ -14,6 +14,8 @@ interface ITB_GEN_USUARIOS {
     id_usuario_actualizacion?: number;
     fecha_anulacion?: string;
     id_usuario_anulacion?: number;
+    cambiar_clave?: boolean;
+    clave_nueva?: string;
 }
 
 export default ITB_GEN_USUARIOS;

@@ -92,7 +92,11 @@
 <p-confirmDialog [style]="{width: '30vw'}" acceptLabel="Si"></p-confirmDialog>
 
 <p-dialog header="Mantenimiento de Usuarios" [(visible)]="displayDialog" [responsive]="true" showEffect="fade"
-  [modal]="true" [style]="{width: '500px'}" focusOnShow="false" (onShow)="setFocus(txtElement)">
+  [modal]="true" [contentStyle]="{'max-height':'65vh', width: '500px'}" focusOnShow="false"
+  (onShow)="setFocus(txtNombre1)">
+  <!--[modal]="true" [style]="{width: '500px'}" focusOnShow="false" (onShow)="setFocus(txtElement)">-->
+
+
 
 
   <div class="p-grid">
@@ -108,7 +112,7 @@
     </div>
     <div class="p-col-9">
       <input pInputText id="nombre" [(ngModel)]="usuario.nombre" oninput="this.value = this.value.toUpperCase()"
-        (click)="$event.target.select()" (keydown)="onKeydown($event, btnSave)" />
+        (click)="$event.target.select()" (keydown)="onKeydown($event)" #txtNombre1 />
     </div>
 
     <div class="p-col-3">
@@ -116,7 +120,7 @@
     </div>
     <div class="p-col-9">
       <input pInputText id="apellido" [(ngModel)]="usuario.apellido" oninput="this.value = this.value.toUpperCase()"
-        (click)="$event.target.select()" (keydown)="onKeydown($event, btnSave)" />
+        (click)="$event.target.select()" (keydown)="onKeydown($event)" #txtApellido1 />
     </div>
 
     <div class="p-col-3">
@@ -124,16 +128,17 @@
     </div>
     <div class="p-col-9">
       <input pInputText id="login" [(ngModel)]="usuario.login" [disabled]="!hiddenButtonDelete"
-        oninput="this.value = this.value.toUpperCase()" (click)="$event.target.select()"
-        (keydown)="onKeydown($event, btnSave)" />
+        oninput="this.value = this.value.toUpperCase()" (click)="$event.target.select()" (keydown)="onKeydown($event)"
+        #txtLogin1 />
     </div>
 
     <div class="p-col-3">
       <div class="first">Perfil</div>
     </div>
     <div class="p-col-9">
-      <p-dropdown [options]="perfilesActivos" [(ngModel)]="selectedPerfil" placeholder="Seleccione un perfil"
-        optionLabel="label" appendTo="body" [style]="{'width':'90%'}" (onChange)="onChange($event)">
+      <p-dropdown id="cmbPerfil" [options]="perfilesActivos" [(ngModel)]="selectedPerfil"
+        placeholder="Seleccione un perfil" optionLabel="label" appendTo="body" [style]="{'width':'90%'}"
+        (onChange)="onChange($event)">
       </p-dropdown>
     </div>
 
@@ -142,39 +147,30 @@
     </div>
     <div class="p-col-9">
       <input pInputText type="email" id="email" [(ngModel)]="usuario.email" (click)="$event.target.select()"
-        (keydown)="onKeydown($event, btnSave)" />
+        (keydown)="onKeydown($event)" #txtEmail1 />
     </div>
 
-    <div class="p-col-3">
-      <label for="clave">Clave</label>
-    </div>
-    <div class="p-col-9">
-      <input pPassword type="password" id="clave" [(ngModel)]="usuario.clave" (click)="$event.target.select()"
-        (keydown)="onKeydown($event, btnSave)" [feedback]="false" />
+    <div class="p-col-12" *ngIf="tipoOperacion=='I'">
+      <div class="p-grid">
+        <div class="p-col-3">
+          <label for="clave">Clave</label>
+        </div>
+        <div class="p-col-9">
+          <input pPassword type="password" id="clave" [(ngModel)]="usuario.clave" (click)="$event.target.select()"
+            (keydown)="onKeydown($event)" [feedback]="false" (keydown)="onKeydown($event)" #txtClave1 />
+        </div>
+
+        <div class="p-col-3">
+          <label for="confirmarClave">Confirmar Clave</label>
+        </div>
+        <div class="p-col-9">
+          <input pPassword type="password" id="confirmarClave" [(ngModel)]="txtConfirmarClave"
+            (click)="$event.target.select()" (keydown)="onKeydown($event)" [feedback]="false"
+            (keydown)="onKeydown($event)" #txtConfirmarClave1 />
+        </div>
+      </div>
     </div>
 
-    <div class="p-col-3">
-      <label for="confirmarClave">Confirmar Clave</label>
-    </div>
-    <div class="p-col-9">
-      <input pPassword type="password" id="confirmarClave" [(ngModel)]="txtConfirmarClave"
-        (click)="$event.target.select()" (keydown)="onKeydown($event, btnSave)" [feedback]="false" />
-    </div>
-
-    <p-fieldset legend="Header" [toggleable]="true">
-      Content
-    </p-fieldset>
-
-    <!--
-    <div class="p-col-3">
-      <label for="descripcion_perfil">Descripcion</label>
-    </div>
-    <div class="p-col-9">
-      <input pInputText id="descripcion_perfil" [(ngModel)]="perfil.descripcion_perfil" #txtElement
-        oninput="this.value = this.value.toUpperCase()" (click)="$event.target.select()"
-        (keydown)="onKeydown($event, btnSave)" />
-    </div>
-    -->
     <div class="p-col-3">
       <div class="first">Estado</div>
     </div>
@@ -182,6 +178,31 @@
       <p-dropdown [options]="estadosActivos" [(ngModel)]="selectedEstado" placeholder="Seleccione un estado"
         optionLabel="label" appendTo="body" [style]="{'width':'90%'}" [(disabled)]="hiddenButtonDelete"
         (onChange)="onChange($event)"></p-dropdown>
+    </div>
+
+    <div class="p-col-12" *ngIf="tipoOperacion=='U'">
+      <p-accordion>
+        <p-accordionTab header="Cambiar Clave" [selected]="true">
+          <div class="p-grid">
+            <div class="p-col-3">
+              <label for="clave">Clave</label>
+            </div>
+            <div class="p-col-9">
+              <input pPassword type="password" id="cambiarClave" [(ngModel)]="txtCambiarClave"
+                (click)="$event.target.select()" (keydown)="onKeydown($event)" [feedback]="false" #txtCambiarClave1 />
+            </div>
+
+            <div class="p-col-3">
+              <label for="confirmarClave">Confirmar Clave</label>
+            </div>
+            <div class="p-col-9">
+              <input pPassword type="password" id="confirmarCambiarClave" [(ngModel)]="txtConfirmarCambiarClave"
+                (click)="$event.target.select()" (keydown)="onKeydown($event)" [feedback]="false"
+                #txtConfirmarCambiarClave1 />
+            </div>
+          </div>
+        </p-accordionTab>
+      </p-accordion>
     </div>
   </div>
 
