@@ -123,7 +123,7 @@
       <label for="login">Login</label>
     </div>
     <div class="p-col-9">
-      <input pInputText id="login" [(ngModel)]="usuario.login" [disabled]="disabled"
+      <input pInputText id="login" [(ngModel)]="usuario.login" [disabled]="!hiddenButtonDelete"
         oninput="this.value = this.value.toUpperCase()" (click)="$event.target.select()"
         (keydown)="onKeydown($event, btnSave)" />
     </div>
@@ -157,9 +157,13 @@
       <label for="confirmarClave">Confirmar Clave</label>
     </div>
     <div class="p-col-9">
-      <input pPassword type="password" id="confirmarClave" (click)="$event.target.select()"
-        (keydown)="onKeydown($event, btnSave)" [feedback]="false" />
+      <input pPassword type="password" id="confirmarClave" [(ngModel)]="txtConfirmarClave"
+        (click)="$event.target.select()" (keydown)="onKeydown($event, btnSave)" [feedback]="false" />
     </div>
+
+    <p-fieldset legend="Header" [toggleable]="true">
+      Content
+    </p-fieldset>
 
     <!--
     <div class="p-col-3">

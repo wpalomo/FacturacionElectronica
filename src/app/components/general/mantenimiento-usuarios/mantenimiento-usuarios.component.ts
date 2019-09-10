@@ -49,6 +49,7 @@ export class MantenimientoUsuariosComponent implements OnInit {
   txtNombreApellido: string;
   txtIdUsuario: string;
   txtLogin: string;
+  txtConfirmarClave: string;
   msgs: Message[] = [];
 
   totalRecords$: Observable<number>;
@@ -232,6 +233,7 @@ export class MantenimientoUsuariosComponent implements OnInit {
     const postData = new FormData();
     postData.append('estado_perfil', 'A');
     postData.append('action', 'getPerfilesxEstado');
+    this.txtConfirmarClave = '';
 
 
     this.mantenimientoPerfilService.getPerfilesxEstado(postData).subscribe(

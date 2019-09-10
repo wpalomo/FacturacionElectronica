@@ -24,6 +24,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { TabViewModule } from 'primeng/tabview';
 import { PasswordModule } from 'primeng/password';
+import { FieldsetModule } from 'primeng/fieldset';
 
 @NgModule({
     imports: [
@@ -50,7 +51,8 @@ import { PasswordModule } from 'primeng/password';
         ConfirmDialogModule,
         TabMenuModule,
         TabViewModule,
-        PasswordModule
+        PasswordModule,
+        FieldsetModule
     ],
     exports: [
         PanelModule,
@@ -76,7 +78,8 @@ import { PasswordModule } from 'primeng/password';
         ConfirmDialogModule,
         TabMenuModule,
         TabViewModule,
-        PasswordModule
+        PasswordModule,
+        FieldsetModule
     ],
 })
 export class PrimeNGModule { }
