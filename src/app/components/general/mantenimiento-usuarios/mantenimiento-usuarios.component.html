@@ -131,8 +131,11 @@
         <label for="login">Login</label>
       </div>
       <div class="p-col-9">
-        <input pInputText id="login" oninput="this.value = this.value.toUpperCase()"
-          (click)="$event.target.select()" (keydown)="onKeydown($event)" formControlName="txtLogin" #txtLogin1 />
+        <fieldset [disabled]="!hiddenButtonDelete">
+          <input pInputText id="login" oninput="this.value = this.value.toUpperCase()" (click)="$event.target.select()"
+            (keydown)="onKeydown($event)" formControlName="txtLogin" #txtLogin1 />
+        </fieldset>
+
       </div>
 
       <div class="p-col-3">
@@ -142,6 +145,69 @@
         <p-dropdown id="cmbPerfil1" [options]="perfilesActivos" placeholder="Seleccione un perfil" optionLabel="label"
           appendTo="body" [style]="{'width':'90%'}" (onChange)="onChange($event)" formControlName="cmbPerfil">
         </p-dropdown>
+      </div>
+
+      <div class="p-col-3">
+        <label for="email">Email</label>
+      </div>
+      <div class="p-col-9">
+        <input pInputText type="email" id="email" (click)="$event.target.select()" (keydown)="onKeydown($event)"
+          formControlName="txtEmail" #txtEmail1 />
+      </div>
+
+      <div class="p-col-12" *ngIf="tipoOperacion=='I'">
+        <div class="p-grid">
+          <div class="p-col-3">
+            <label for="clave">Clave</label>
+          </div>
+          <div class="p-col-9">
+            <input pPassword type="password" id="clave" (click)="$event.target.select()" (keydown)="onKeydown($event)"
+              [feedback]="false" (keydown)="onKeydown($event)" formControlName="txtClave" #txtClave1 />
+          </div>
+
+          <div class="p-col-3">
+            <label for="confirmarClave">Confirmar Clave</label>
+          </div>
+          <div class="p-col-9">
+            <input pPassword type="password" id="confirmarClave" (click)="$event.target.select()"
+              (keydown)="onKeydown($event)" [feedback]="false" (keydown)="onKeydown($event)"
+              formControlName="txtConfirmarClave" #txtConfirmarClave1 />
+          </div>
+        </div>
+      </div>
+
+      <div class="p-col-3">
+        <div class="first">Estado</div>
+      </div>
+      <div class="p-col-9">
+        <p-dropdown [options]="estadosActivos" optionLabel="label" appendTo="body" [style]="{'width':'90%'}"
+          [(disabled)]="hiddenButtonDelete" (onChange)="onChange($event)" formControlName="cmbEstado"></p-dropdown>
+      </div>
+
+      <div class="p-col-12" *ngIf="tipoOperacion=='U'">
+        <p-accordion>
+          <p-accordionTab header="Cambiar Clave" [selected]="true">
+            <div class="p-grid">
+              <div class="p-col-3">
+                <label for="clave">Clave</label>
+              </div>
+              <div class="p-col-9">
+                <input pPassword type="password" id="cambiarClave" (click)="$event.target.select()"
+                  (keydown)="onKeydown($event)" [feedback]="false" formControlName="txtCambiarClave"
+                  #txtCambiarClave1 />
+              </div>
+
+              <div class="p-col-3">
+                <label for="confirmarClave">Confirmar Clave</label>
+              </div>
+              <div class="p-col-9">
+                <input pPassword type="password" id="confirmarCambiarClave" (click)="$event.target.select()"
+                  (keydown)="onKeydown($event)" [feedback]="false" formControlName="txtConfirmarCambiarClave"
+                  #txtConfirmarCambiarClave1 />
+              </div>
+            </div>
+          </p-accordionTab>
+        </p-accordion>
       </div>
     </div>
 

@@ -63,13 +63,13 @@ export class MantenimientoUsuariosComponent implements OnInit {
   selectedPerfil: any;
   tipoOperacion: string = "";
   auxEvent: LazyLoadEvent;
-  txtDescripcion: string;
-  txtNombreApellido: string;
-  txtIdUsuario: string;
-  txtLogin: string;
-  txtCambiarClave: string;
-  txtConfirmarClave: string;
-  txtConfirmarCambiarClave: string;
+  //txtDescripcion: string;
+  //txtNombreApellido: string;
+  //txtIdUsuario: string;
+  //txtLogin: string;
+  //txtCambiarClave: string;
+  //txtConfirmarClave: string;
+  //txtConfirmarCambiarClave: string;
   msgs: Message[] = [];
 
   totalRecords$: Observable<number>;
@@ -133,10 +133,10 @@ export class MantenimientoUsuariosComponent implements OnInit {
   }
 
   inicializarPantalla() {
-    this.txtDescripcion = '';
-    this.txtIdUsuario = '';
-    this.txtLogin = '';
-    this.txtNombreApellido = '';
+    //this.txtDescripcion = '';
+    //this.txtIdUsuario = '';
+    //this.txtLogin = '';
+    //this.txtNombreApellido = '';
 
     this.estadoService.getEstados().subscribe(
       data => {
@@ -245,8 +245,8 @@ export class MantenimientoUsuariosComponent implements OnInit {
   }
 
   modificarRegistro(usuario: ITB_GEN_USUARIOS) {
-    this.txtCambiarClave = '';
-    this.txtConfirmarCambiarClave = '';
+    //this.txtCambiarClave = '';
+    //this.txtConfirmarCambiarClave = '';
     this.tipoOperacion = 'U';
     this.nuevoRegistro = false;
     this.usuario = this.cloneRegistro(usuario);
@@ -279,7 +279,7 @@ export class MantenimientoUsuariosComponent implements OnInit {
     const postData = new FormData();
     postData.append('estado_perfil', 'A');
     postData.append('action', 'getPerfilesxEstado');
-    this.txtConfirmarClave = '';
+    //this.txtConfirmarClave = '';
 
 
     this.mantenimientoPerfilService.getPerfilesxEstado(postData).subscribe(
@@ -306,6 +306,7 @@ export class MantenimientoUsuariosComponent implements OnInit {
         this.selectedEstado = { label: "ACTIVO", value: "A" };
 
         this.buildForm();
+        this.setValidators();
       },
       error => {
         this.errorMsg = error;
@@ -322,9 +323,46 @@ export class MantenimientoUsuariosComponent implements OnInit {
     this.form = this.fb.group({
       txtNombre: ['', Validators.required],
       txtApellido: ['', Validators.required],
-      txtLogin: [{ value: '', disabled: !this.hiddenButtonDelete }, Validators.required],
-      cmbPerfil: [this.selectedPerfil, Validators.required]
+      txtLogin: ['', Validators.required],
+      cmbPerfil: [this.selectedPerfil, Validators.required],
+      txtEmail: ['', Validators.email],
+      txtClave: ['', Validators.required],
+      txtConfirmarClave: ['', Validators.required],
+      cmbEstado: [this.selectedEstado, Validators.required],
+      txtCambiarClave: [''],
+      txtConfirmarCambiarClave: ['']
+
+      /*
+      txtNombre: ['', Validators.required],
+      txtApellido: ['', Validators.required],
+      txtLogin: ['', Validators.required],
+      cmbPerfil: [this.selectedPerfil, Validators.required],
+      txtEmail: ['', Validators.email],
+      txtClave: ['', Validators.required],
+      txtConfirmarClave: ['', Validators.required],
+      cmbEstado: ['', Validators.required],
+      txtCambiarClave: [''],
+      txtConfirmarCambiarClave: ['']
+      */
     });
+  }
+
+  setValidators() {
+    if (this.tipoOperacion == 'I') {
+      let txtCambiarClaveControl = this.form.get('txtCambiarClave');
+      let txtConfirmarCambiarClaveControl = this.form.get('txtConfirmarCambiarClave');
+
+      txtCambiarClaveControl.setValidators(null);
+      txtConfirmarCambiarClaveControl.setValidators(null);
+    }
+
+    if (this.tipoOperacion == 'U') {
+      let txtClaveControl = this.form.get('txtClave');
+      let txtConfirmarClaveControl = this.form.get('txtConfirmarClave');
+
+      txtClaveControl.setValidators(null);
+      txtConfirmarClaveControl.setValidators(null);
+    }
   }
 
   cloneRegistro(c: ITB_GEN_USUARIOS): ITB_GEN_USUARIOS {
@@ -409,7 +447,7 @@ export class MantenimientoUsuariosComponent implements OnInit {
     this.form.controls.cmbPerfil.setValue(this.selectedPerfil);
 
 
-    
+
 
     this.hiddenButtonDelete = !this.hiddenButtonDelete;
 
