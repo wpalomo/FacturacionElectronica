@@ -89,129 +89,73 @@
   </div>
 </div>
 
+<p-toast [style]="{marginTop: '80px'}"></p-toast>
+
+<!--
 <p-confirmDialog [style]="{width: '30vw'}" acceptLabel="Si"></p-confirmDialog>
+
+
+
+<p-toast [style]="{marginTop: '80px'}" position="top-left" key="tl"></p-toast>
+
+<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
+
+<p-toast [style]="{marginTop: '80px'}" styleClass="custom-toast" key="custom" position="bottom-center"></p-toast>
+-->
+
 
 <p-dialog header="Mantenimiento de Usuarios" [(visible)]="displayDialog" [responsive]="true" showEffect="fade"
   [modal]="true" [contentStyle]="{'max-height':'65vh', width: '500px'}" focusOnShow="false"
   (onShow)="setFocus(txtNombre1)">
-  <!--[modal]="true" [style]="{width: '500px'}" focusOnShow="false" (onShow)="setFocus(txtElement)">-->
 
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
+    <div class="p-grid">
+      <div class="p-col-3">
+        <label for="nombre">Nombre</label>
+      </div>
+      <div class="p-col-9">
+        <input pInputText id="nombre" oninput="this.value = this.value.toUpperCase()" (click)="$event.target.select()"
+          (keydown)="onKeydown($event)" formControlName="txtNombre" #txtNombre1 />
+      </div>
 
+      <div class="p-col-3">
+        <label for="apellido">Apellido</label>
+      </div>
+      <div class="p-col-9">
+        <input pInputText id="apellido" oninput="this.value = this.value.toUpperCase()" (click)="$event.target.select()"
+          (keydown)="onKeydown($event)" formControlName="txtApellido" #txtApellido1 />
+      </div>
 
-  <div class="p-grid">
-    <div class="p-col-3">
-      <label for="id_usuario">Código</label>
-    </div>
-    <div class="p-col-9">
-      <input pInputText id="id_usuario" [(ngModel)]="usuario.id_usuario" [disabled]="disabled" />
-    </div>
+      <div class="p-col-3">
+        <label for="login">Login</label>
+      </div>
+      <div class="p-col-9">
+        <input pInputText id="login" oninput="this.value = this.value.toUpperCase()"
+          (click)="$event.target.select()" (keydown)="onKeydown($event)" formControlName="txtLogin" #txtLogin1 />
+      </div>
 
-    <div class="p-col-3">
-      <label for="nombre">Nombre</label>
-    </div>
-    <div class="p-col-9">
-      <input pInputText id="nombre" [(ngModel)]="usuario.nombre" oninput="this.value = this.value.toUpperCase()"
-        (click)="$event.target.select()" (keydown)="onKeydown($event)" #txtNombre1 />
-    </div>
-
-    <div class="p-col-3">
-      <label for="apellido">Apellido</label>
-    </div>
-    <div class="p-col-9">
-      <input pInputText id="apellido" [(ngModel)]="usuario.apellido" oninput="this.value = this.value.toUpperCase()"
-        (click)="$event.target.select()" (keydown)="onKeydown($event)" #txtApellido1 />
-    </div>
-
-    <div class="p-col-3">
-      <label for="login">Login</label>
-    </div>
-    <div class="p-col-9">
-      <input pInputText id="login" [(ngModel)]="usuario.login" [disabled]="!hiddenButtonDelete"
-        oninput="this.value = this.value.toUpperCase()" (click)="$event.target.select()" (keydown)="onKeydown($event)"
-        #txtLogin1 />
-    </div>
-
-    <div class="p-col-3">
-      <div class="first">Perfil</div>
-    </div>
-    <div class="p-col-9">
-      <p-dropdown id="cmbPerfil" [options]="perfilesActivos" [(ngModel)]="selectedPerfil"
-        placeholder="Seleccione un perfil" optionLabel="label" appendTo="body" [style]="{'width':'90%'}"
-        (onChange)="onChange($event)">
-      </p-dropdown>
-    </div>
-
-    <div class="p-col-3">
-      <label for="email">Email</label>
-    </div>
-    <div class="p-col-9">
-      <input pInputText type="email" id="email" [(ngModel)]="usuario.email" (click)="$event.target.select()"
-        (keydown)="onKeydown($event)" #txtEmail1 />
-    </div>
-
-    <div class="p-col-12" *ngIf="tipoOperacion=='I'">
-      <div class="p-grid">
-        <div class="p-col-3">
-          <label for="clave">Clave</label>
-        </div>
-        <div class="p-col-9">
-          <input pPassword type="password" id="clave" [(ngModel)]="usuario.clave" (click)="$event.target.select()"
-            (keydown)="onKeydown($event)" [feedback]="false" (keydown)="onKeydown($event)" #txtClave1 />
-        </div>
-
-        <div class="p-col-3">
-          <label for="confirmarClave">Confirmar Clave</label>
-        </div>
-        <div class="p-col-9">
-          <input pPassword type="password" id="confirmarClave" [(ngModel)]="txtConfirmarClave"
-            (click)="$event.target.select()" (keydown)="onKeydown($event)" [feedback]="false"
-            (keydown)="onKeydown($event)" #txtConfirmarClave1 />
-        </div>
+      <div class="p-col-3">
+        <div class="first">Perfil</div>
+      </div>
+      <div class="p-col-9">
+        <p-dropdown id="cmbPerfil1" [options]="perfilesActivos" placeholder="Seleccione un perfil" optionLabel="label"
+          appendTo="body" [style]="{'width':'90%'}" (onChange)="onChange($event)" formControlName="cmbPerfil">
+        </p-dropdown>
       </div>
     </div>
 
-    <div class="p-col-3">
-      <div class="first">Estado</div>
-    </div>
-    <div class="p-col-9">
-      <p-dropdown [options]="estadosActivos" [(ngModel)]="selectedEstado" placeholder="Seleccione un estado"
-        optionLabel="label" appendTo="body" [style]="{'width':'90%'}" [(disabled)]="hiddenButtonDelete"
-        (onChange)="onChange($event)"></p-dropdown>
-    </div>
-
-    <div class="p-col-12" *ngIf="tipoOperacion=='U'">
-      <p-accordion>
-        <p-accordionTab header="Cambiar Clave" [selected]="true">
-          <div class="p-grid">
-            <div class="p-col-3">
-              <label for="clave">Clave</label>
-            </div>
-            <div class="p-col-9">
-              <input pPassword type="password" id="cambiarClave" [(ngModel)]="txtCambiarClave"
-                (click)="$event.target.select()" (keydown)="onKeydown($event)" [feedback]="false" #txtCambiarClave1 />
-            </div>
-
-            <div class="p-col-3">
-              <label for="confirmarClave">Confirmar Clave</label>
-            </div>
-            <div class="p-col-9">
-              <input pPassword type="password" id="confirmarCambiarClave" [(ngModel)]="txtConfirmarCambiarClave"
-                (click)="$event.target.select()" (keydown)="onKeydown($event)" [feedback]="false"
-                #txtConfirmarCambiarClave1 />
-            </div>
-          </div>
-        </p-accordionTab>
-      </p-accordion>
-    </div>
-  </div>
 
 
-  <p-footer>
-    <div class="ui-dialog-buttonpane ui-helper-clearfix">
-      <button type="button" pButton icon="pi pi-times" (click)="delete()" label="Eliminar"
-        [(hidden)]="hiddenButtonDelete" [class]="'ui-button-danger'"></button>
-      <button type="button" pButton icon="pi pi-check" (click)="save()" label="Grabar" #btnSave></button>
-    </div>
-  </p-footer>
+    <p-footer>
+      <div class="ui-dialog-buttonpane ui-helper-clearfix">
+        <button type="button" pButton icon="pi pi-times" (click)="delete()" label="Eliminar"
+          [(hidden)]="hiddenButtonDelete" [class]="'ui-button-danger'"></button>
+        <button type="button" pButton icon="pi pi-check" (click)="save()" label="Grabar" #btnSave></button>
+        <button pButton type="submit" label="Aceptar" [disabled]="!form.valid" class="btn btn-block"></button>
+      </div>
+    </p-footer>
+
+  </form>
+
 </p-dialog>

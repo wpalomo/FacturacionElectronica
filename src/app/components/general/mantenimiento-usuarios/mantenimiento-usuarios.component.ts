@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, Renderer2, ElementRef } from '@angular/core';
 import { LazyLoadEvent, Message } from 'primeng/components/common/api';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 
 import { Observable } from 'rxjs';
 import { MantenimientoUsuarioService } from '../../../services/mantenimiento-usuario/mantenimiento-usuario.service';
@@ -10,6 +12,7 @@ import ITB_GEN_USUARIOS from '../../../model/ITB_GEN_USUARIOS';
 import ITB_GEN_PERFILES from '../../../model/ITB_GEN_PERFILES';
 import IEstados from '../../../model/IEstados';
 import { Dropdown } from 'primeng/dropdown';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-mantenimiento-usuarios',
@@ -34,6 +37,8 @@ export class MantenimientoUsuariosComponent implements OnInit {
   @ViewChild("txtCambiarClave1") cambiarClaveField: ElementRef;
   @ViewChild("txtConfirmarCambiarClave1") confirmarCambiarClaveField: ElementRef;
   @ViewChild("btnSave") saveField: ElementRef;
+
+
 
   displayDialog: boolean;
   displayWait: boolean;
@@ -69,17 +74,21 @@ export class MantenimientoUsuariosComponent implements OnInit {
 
   totalRecords$: Observable<number>;
 
+  form: FormGroup;
+
   constructor(
+    private fb: FormBuilder,
     private mantenimientoUsuarioService: MantenimientoUsuarioService,
     private mantenimientoPerfilService: MantenimientoPerfilService,
     private estadoService: EstadoService,
     public renderer: Renderer2,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService
   ) { }
 
   ngOnInit() {
     this.inicializarPantalla();
-
+    this.buildForm();
 
     this.cols = [
       /*
@@ -247,6 +256,26 @@ export class MantenimientoUsuariosComponent implements OnInit {
   }
 
   showDialogToAdd() {
+    //this.buildForm();
+
+    /**/
+    //this.tipoOperacion = 'I';
+    //this.nuevoRegistro = true;
+    //this.displayDialog = true;
+    //this.hiddenButtonDelete = true;
+    //this.usuario = {};
+    //this.selectedEstado = { label: "ACTIVO", value: "A" };
+    /**/
+
+    //this.form.controls['txtNombre'].value = 'xxx';
+
+
+    //this.newForm.setValue({
+    //  firstName: 'abc',
+    //  lastName: 'def'
+    //});
+
+    // TODO: manejar los errores al cargar los perfiles, ya que cuando dio un error no se presento el error en angular.
     const postData = new FormData();
     postData.append('estado_perfil', 'A');
     postData.append('action', 'getPerfilesxEstado');
@@ -256,34 +285,18 @@ export class MantenimientoUsuariosComponent implements OnInit {
     this.mantenimientoPerfilService.getPerfilesxEstado(postData).subscribe(
       data => {
         this.perfiles = data;
-        //this.perfilesActivos = data;
-        //console.log(this.perfiles);
         console.log(data);
         console.log(data[0].id_perfil);
         console.log(data[0].descripcion_perfil);
 
-
-        //this.perfiles.find()
         this.perfilesActivos = [];
         data.forEach(d => {
           console.log(d.id_perfil);
 
           this.perfilesActivos.push({ label: d.descripcion_perfil, value: d.id_perfil });
-          //this.perfilesActivos.push({ label: 'ACTIVO', value: 'ACTIVO' });
-          //this.perfilesActivos.push({ label: 'INACTIVO', value: 'INACTIVO' });
-          //this.perfilesActivos.push({ label: 'TODOS', value: 'TODOS' });
-          //this.perfilesActivos.push({ label: 'x', value: 'XXX' });
-
-
-          //this.perfilesActivos.push({ label: 'ACTIVO', value: 'ACTIVO' });
-          //this.perfilesActivos.push({ label: 'INACTIVO', value: 'INACTIVO' });
-          //this.perfilesActivos.push({ label: 'TODOS', value: 'TODOS' });
-          //this.perfilesActivos.push({ label: 'x', value: 'XXX' });
         });
 
-
-
-        this.selectedPerfil = { label: data[0].descripcion_perfil, value: data[0].id_perfil };
+        this.selectedPerfil = { label: data[1].descripcion_perfil, value: data[1].id_perfil };
 
         this.tipoOperacion = 'I';
         this.nuevoRegistro = true;
@@ -291,6 +304,8 @@ export class MantenimientoUsuariosComponent implements OnInit {
         this.hiddenButtonDelete = true;
         this.usuario = {};
         this.selectedEstado = { label: "ACTIVO", value: "A" };
+
+        this.buildForm();
       },
       error => {
         this.errorMsg = error;
@@ -299,7 +314,17 @@ export class MantenimientoUsuariosComponent implements OnInit {
       }
     );
 
+  }
 
+  buildForm() {
+    console.log(this.selectedPerfil);
+
+    this.form = this.fb.group({
+      txtNombre: ['', Validators.required],
+      txtApellido: ['', Validators.required],
+      txtLogin: [{ value: '', disabled: !this.hiddenButtonDelete }, Validators.required],
+      cmbPerfil: [this.selectedPerfil, Validators.required]
+    });
   }
 
   cloneRegistro(c: ITB_GEN_USUARIOS): ITB_GEN_USUARIOS {
@@ -374,6 +399,48 @@ export class MantenimientoUsuariosComponent implements OnInit {
         this.setFocus(this.saveField.nativeElement);
         break;
     }
+  }
+
+  save() {
+    //this.messageService.add({ severity: 'error', summary: 'Error Message', detail: 'Validation failed' });
+    //this.form.setValue({ txtNombre: 'xxx' });
+
+
+    this.form.controls.cmbPerfil.setValue(this.selectedPerfil);
+
+
+    
+
+    this.hiddenButtonDelete = !this.hiddenButtonDelete;
+
+    //this.form.controls.txtLogin.disable(this.hiddenButtonDelete)
+    /*
+    this.form.setValue({
+      txtNombre: 'xxx',
+      txtApellido: 'yyy'
+    });
+
+    this.form.controls.txtNombre.setValue('abc');
+
+    this.usuario = {
+      nombre: "string",
+      apellido: "string"
+    }
+
+
+    console.log(this.usuario);
+
+    this.form.setValue({
+      txtNombre: this.usuario.nombre,
+      txtApellido: this.usuario.apellido
+    });
+    */
+
+    //this.form = Object.assign({}, this.usuario);
+
+    //this.form.controls.txtNombre.setValue({
+    //  txtNombre: 'abc'
+    //});
   }
 
   /*

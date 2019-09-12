@@ -25,6 +25,7 @@ import { FavoritosComponent } from './components/general/favoritos/favoritos.com
 import { MantenimientoPerfilComponent } from './components/general/mantenimiento-perfil/mantenimiento-perfil.component';
 import { PermisosComponent } from './components/general/permisos/permisos.component';
 import { ConfirmationService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 
 //import { ConfirmationService } from 'primeng/api';
 //import { ConfirmationService } from 'primeng/components/common/api';
@@ -58,7 +59,8 @@ import { ConfirmationService } from 'primeng/api';
     LoginService,
     EncrDecrService,
     MantenimientoPerfilService,
-    ConfirmationService
+    ConfirmationService,
+    MessageService
   ],
   bootstrap: [AppComponent]
 })
