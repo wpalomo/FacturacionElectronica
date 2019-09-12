@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Renderer2, ElementRef } from '@angular/core';
 import { LazyLoadEvent, Message } from 'primeng/components/common/api';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 
@@ -321,30 +321,17 @@ export class MantenimientoUsuariosComponent implements OnInit {
     console.log(this.selectedPerfil);
 
     this.form = this.fb.group({
-      txtNombre: ['', Validators.required],
-      txtApellido: ['', Validators.required],
-      txtLogin: ['', Validators.required],
+      txtNombre: ['', [Validators.required, Validators.maxLength(100)]],
+      txtApellido: ['', [Validators.required, Validators.maxLength(100)]],
+      txtLogin: ['', [Validators.required, Validators.maxLength(50)]],
       cmbPerfil: [this.selectedPerfil, Validators.required],
-      txtEmail: ['', Validators.email],
-      txtClave: ['', Validators.required],
-      txtConfirmarClave: ['', Validators.required],
+      txtEmail: ['', [Validators.email, Validators.maxLength(50)]],
+      txtClave: ['', [Validators.required, Validators.maxLength(50)]],
+      txtConfirmarClave: ['', [Validators.required, Validators.maxLength(50)]],
       cmbEstado: [this.selectedEstado, Validators.required],
-      txtCambiarClave: [''],
-      txtConfirmarCambiarClave: ['']
-
-      /*
-      txtNombre: ['', Validators.required],
-      txtApellido: ['', Validators.required],
-      txtLogin: ['', Validators.required],
-      cmbPerfil: [this.selectedPerfil, Validators.required],
-      txtEmail: ['', Validators.email],
-      txtClave: ['', Validators.required],
-      txtConfirmarClave: ['', Validators.required],
-      cmbEstado: ['', Validators.required],
-      txtCambiarClave: [''],
-      txtConfirmarCambiarClave: ['']
-      */
-    });
+      txtCambiarClave: ['', Validators.maxLength(50)],
+      txtConfirmarCambiarClave: ['', Validators.maxLength(50)]
+    }, { validator: this.MustMatch('txtClave', 'txtConfirmarClave') });
   }
 
   setValidators() {
@@ -480,6 +467,203 @@ export class MantenimientoUsuariosComponent implements OnInit {
     //  txtNombre: 'abc'
     //});
   }
+
+  onSubmit() {
+    if (!this.validateForm()) {
+      return;
+    }
+
+    if (this.form.valid) {
+      //alert('grabando');
+
+      this.usuario.id_usuario = 0;
+      this.usuario.login = this.form.get('txtLogin').value;
+      this.usuario.clave = this.form.get('txtClave').value;
+      this.usuario.nombre = this.form.get('txtNombre').value;
+      this.usuario.apellido = this.form.get('txtApellido').value;
+      this.usuario.email = this.form.get('txtEmail').value;
+      this.usuario.cambiar_clave = false;
+
+      /*
+      this.usuario = {
+        id_usuario: 0,
+        //id_perfil: number;
+        login: this.form.get('txtLogin').value,
+        clave: this.form.get('txtClave').value,
+        nombre: this.form.get('txtNombre').value,
+        apellido: this.form.get('txtApellido').value,
+        email: this.form.get('txtEmail').value,
+        //estado_usuario: string;
+ 
+        //descripcion_estado_usuario: string;
+        //fecha_ingreso: string;
+        //id_usuario_ingreso: number;
+        //fecha_actualizacion: string;
+        //id_usuario_actualizacion: number;
+        //fecha_anulacion: string;
+        //id_usuario_anulacion: number;
+        cambiar_clave: false
+        //clave_nueva
+      }
+      */
+      console.log(this.usuario);
+    }
+  }
+
+  validateForm() {
+    let ok = true;
+
+    if (this.form.controls['txtNombre'].invalid) {
+      if (this.form.controls['txtNombre'].errors.required) {
+        this.showErrorMessage('Mensaje de Error en Nombre', 'El campo Nombre es obligatorio', 'txtNombre');
+      }
+
+      if (this.form.controls['txtNombre'].errors.maxlength) {
+        this.showErrorMessage('Mensaje de Error en Nombre', 'La longitud del campo no puede ser mayor a 100 caracteres', 'txtNombre');
+      }
+      ok = false;
+    }
+
+    if (this.form.controls['txtApellido'].invalid) {
+      if (this.form.get('txtApellido').errors.required) {
+        this.showErrorMessage('Mensaje de Error en Apellido', 'El campo Apellido es obligatorio', 'txtApellido');
+      }
+
+      if (this.form.get('txtApellido').errors.maxlength) {
+        this.showErrorMessage('Mensaje de Error en Apellido', 'La longitud del campo no puede ser mayor a 100 caracteres', 'txtApellido');
+      }
+      ok = false;
+    }
+
+    if (this.form.controls['txtLogin'].invalid) {
+      if (this.form.controls.txtLogin.errors.required) {
+        this.showErrorMessage('Mensaje de Error en Login', 'El campo Login es obligatorio', 'txtLogin');
+      }
+
+      if (this.form.controls.txtLogin.errors.maxlength) {
+        this.showErrorMessage('Mensaje de Error en Login', 'La longitud del campo no puede ser mayor a 50 caracteres', 'txtLogin');
+      }
+      ok = false;
+    }
+
+    if (this.form.controls['cmbPerfil'].invalid) {
+      this.showErrorMessage('Mensaje de Error en Perfil', 'Debe seleccionar un Perfil', 'cmbPerfil');
+      ok = false;
+    }
+
+    if (this.form.controls['txtEmail'].invalid) {
+      if (this.form.controls['txtEmail'].errors.email) {
+        this.showErrorMessage('Mensaje de Error en Email', 'El formato del Email es incorrecto', 'txtEmail');
+      }
+
+      if (this.form.controls['txtEmail'].errors.maxlength) {
+        this.showErrorMessage('Mensaje de Error en Email', 'La longitud del campo no puede ser mayor a 50 caracteres', 'txtEmail');
+      }
+      ok = false;
+    }
+
+    if (this.form.controls['txtClave'].invalid) {
+      if (this.form.controls['txtClave'].errors.required) {
+        this.showErrorMessage('Mensaje de Error en Clave', 'El campo Clave es obligatorio', 'txtClave');
+      }
+
+      if (this.form.controls['txtClave'].errors.maxlength) {
+        this.showErrorMessage('Mensaje de Error en Clave', 'La longitud del campo no puede ser mayor a 50 caracteres', 'txtClave');
+      }
+      ok = false;
+    }
+
+    if (this.form.controls['txtConfirmarClave'].invalid) {
+      if (this.form.controls.txtConfirmarClave.errors.required) {
+        this.showErrorMessage('Mensaje de Error en Confirmar Clave', 'El campo Confirmar Clave es obligatorio', 'txtConfirmarClave');
+      }
+
+      if (this.form.controls['txtConfirmarClave'].errors.maxlength) {
+        this.showErrorMessage('Mensaje de Error en Confirmar Clave', 'La longitud del campo no puede ser mayor a 50 caracteres', 'txtConfirmarClave');
+      }
+      ok = false;
+    }
+
+    if (this.form.controls['cmbEstado'].invalid) {
+      this.showErrorMessage('Mensaje de Error', 'Debe seleccionar un Estado', 'cmbEstado');
+      ok = false;
+    }
+
+    if (this.tipoOperacion == 'I') {
+
+      //"userForm.get(['passwords','password']).value != userForm.get(['passwords','confirm_password']).value && userForm.get(['passwords','confirm_password']).value != null"
+
+      //alert(this.form.controls.txtConfirmarClave.errors.mustMatch);
+
+      if (this.form.controls['txtConfirmarClave'].invalid) {
+        if (this.form.controls.txtConfirmarClave.errors.mustMatch) {
+          this.showErrorMessage('Mensaje de Error en Confirmar Clave', 'Las Claves no coinciden', 'txtConfirmarClave');
+          ok = false;
+        }
+      }
+
+
+
+      /*
+      if (this.form.get('txtClave').value != this.form.get('txtConfirmarClave').value && this.form.get('txtConfirmarClave').value != null) {
+        alert('error en claves');
+        this.form.controls.txtClave.markAsDirty();
+        this.form.controls.txtConfirmarClave.markAsDirty();
+      }
+
+      if (this.form.controls.txtClave.value !== this.form.controls.txtConfirmarClave.value) {
+        this.showErrorMessage('Mensaje de Error', 'Las Claves no coinciden', 'txtClave');
+        this.showErrorMessage('Mensaje de Error', 'Las Claves no coinciden', 'txtConfirmarClave');
+        this.form.controls.txtClave.markAsDirty();
+        ok = false;
+      }
+      */
+    }
+
+    return ok;
+  }
+
+  showErrorMessage(summary: string, detail: string, field: string) {
+    this.messageService.add({ severity: 'error', summary: summary, detail: detail });
+    this.form.get(field).markAsDirty();
+  }
+
+  MustMatch(controlName: string, matchingControlName: string) {
+    return (formGroup: FormGroup) => {
+      const control = formGroup.controls[controlName];
+      const matchingControl = formGroup.controls[matchingControlName];
+
+      if (matchingControl.errors && !matchingControl.errors.mustMatch) {
+        // return if another validator has already found an error on the matchingControl
+        return;
+      }
+
+      // set error on matchingControl if validation fails
+      if (control.value !== matchingControl.value) {
+        matchingControl.setErrors({ mustMatch: true });
+      } else {
+        matchingControl.setErrors(null);
+        //matchingControl.setErrors({ mustMatch: false });
+      }
+    }
+  }
+
+  /*
+  passwordConfirming(c: AbstractControl) {
+
+    if (c.get('txtConfirmarClave').errors && !c.get('txtConfirmarClave').errors.passwordConfirming) {
+      // return if another validator has already found an error on the matchingControl
+      return;
+    }
+
+    if (c.get('txtClave').value !== c.get('txtConfirmarClave').value) {
+      //return { invalid: true };
+      c.get('txtConfirmarClave').setErrors({ mustMatch: true });
+    } else {
+      c.get('txtConfirmarClave').setErrors(null);
+    }
+  }
+*/
 
   /*
   onKeydown(event, elm: HTMLInputElement) {

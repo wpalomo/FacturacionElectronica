@@ -103,12 +103,10 @@
 <p-toast [style]="{marginTop: '80px'}" styleClass="custom-toast" key="custom" position="bottom-center"></p-toast>
 -->
 
-
-<p-dialog header="Mantenimiento de Usuarios" [(visible)]="displayDialog" [responsive]="true" showEffect="fade"
-  [modal]="true" [contentStyle]="{'max-height':'65vh', width: '500px'}" focusOnShow="false"
-  (onShow)="setFocus(txtNombre1)">
-
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+<form [formGroup]="form">
+  <p-dialog header="Mantenimiento de Usuarios" [(visible)]="displayDialog" [responsive]="true" showEffect="fade"
+    [modal]="true" [contentStyle]="{'max-height':'65vh', width: '500px'}" focusOnShow="false"
+    (onShow)="setFocus(txtNombre1)">
 
     <div class="p-grid">
       <div class="p-col-3">
@@ -217,11 +215,13 @@
       <div class="ui-dialog-buttonpane ui-helper-clearfix">
         <button type="button" pButton icon="pi pi-times" (click)="delete()" label="Eliminar"
           [(hidden)]="hiddenButtonDelete" [class]="'ui-button-danger'"></button>
-        <button type="button" pButton icon="pi pi-check" (click)="save()" label="Grabar" #btnSave></button>
-        <button pButton type="submit" label="Aceptar" [disabled]="!form.valid" class="btn btn-block"></button>
+        <button type="button" pButton icon="pi pi-check" (click)="onSubmit()" label="Grabar" #btnSave></button>
+        <!--<button type="submit" pButton icon="pi pi-check" label="Grabar" #btnSave></button>-->
+        <!--<button pButton type="submit" label="Aceptar" [disabled]="!form.valid" class="btn btn-block"></button>-->
       </div>
     </p-footer>
 
-  </form>
 
-</p-dialog>
+
+  </p-dialog>
+</form>
