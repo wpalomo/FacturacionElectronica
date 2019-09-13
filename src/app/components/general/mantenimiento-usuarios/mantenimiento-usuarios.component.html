@@ -225,3 +225,23 @@
 
   </p-dialog>
 </form>
+
+<app-mensaje-generico *ngIf="displayMensaje" [title]="title" [tipoMensaje]="tipoMensaje" [errorMsg]="errorMsg"
+  (displayChange)="onDialogClose($event, 'F')">
+</app-mensaje-generico>
+
+<p-dialog [(visible)]="displayWait" [modal]="true" [closable]="false" styleClass="my-dialog">
+  <p-header>
+    Procesando
+  </p-header>
+
+  <div class="p-grid">
+    <div class="p-col"></div>
+    <div class="p-col">
+      <p-progressSpinner [style]="{width: '50px', height: '50px'}" strokeWidth="8" fill="#EEEEEE"
+        animationDuration=".5s">
+      </p-progressSpinner>
+    </div>
+    <div class="p-col"></div>
+  </div>
+</p-dialog>

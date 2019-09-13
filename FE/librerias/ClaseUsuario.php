@@ -143,7 +143,7 @@ class ClaseUsuario {
         $cambio_clave = mssql_real_escape_string($usuario['cambio_clave']);
 
         $query = "
-            EXEC SP_GEN_PERFILES
+            EXEC SP_GEN_USUARIOS
             @in_id_perfil = '$id_perfil',
             @in_login = '$login',
             @in_clave = '$clave',  
@@ -153,7 +153,7 @@ class ClaseUsuario {
             @in_estado_usuario = '$estado_usuario',
             @in_operacion = 'I'
         ";
-
+        
         $parametros = array(
             'query' => $query
         );
@@ -176,7 +176,7 @@ class ClaseUsuario {
         $cambio_clave = mssql_real_escape_string($usuario['cambio_clave']);
 
         $query = "
-            EXEC SP_GEN_PERFILES
+            EXEC SP_GEN_USUARIOS
             @in_id_usuario = '$id_usuario',
             @in_id_perfil = '$id_perfil',
             @in_clave = '$clave',  
@@ -203,7 +203,7 @@ class ClaseUsuario {
         $id_usuario = mssql_real_escape_string($usuario['id_usuario']);
 
         $query = "
-            EXEC SP_GEN_PERFILES
+            EXEC SP_GEN_USUARIOS
             @in_id_usuario = '$id_usuario',
             @in_operacion = 'D'
         ";

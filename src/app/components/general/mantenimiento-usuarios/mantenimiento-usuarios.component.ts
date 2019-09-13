@@ -245,14 +245,54 @@ export class MantenimientoUsuariosComponent implements OnInit {
   }
 
   modificarRegistro(usuario: ITB_GEN_USUARIOS) {
+    this.form.reset();
     //this.txtCambiarClave = '';
     //this.txtConfirmarCambiarClave = '';
     this.tipoOperacion = 'U';
     this.nuevoRegistro = false;
     this.usuario = this.cloneRegistro(usuario);
+
+    console.log(this.usuario);
+
+    this.form.get('txtNombre').setValue(this.usuario.nombre);
+    this.form.get('txtApellido').setValue(this.usuario.apellido);
+    this.form.get('txtLogin').setValue(this.usuario.login);
+    this.form.get('cmbPerfil').setValue(this.usuario.id_perfil);
+    this.form.get('txtEmail').setValue(this.usuario.email);
+    //this.form.get('txtClave').setValue(this.usuario.)
+    //this.form.get('txtConfirmarClave').setValue()
+    this.form.get('cmbEstado').setValue(this.usuario.estado_usuario);
+    this.form.get('txtCambiarClave').setValue('');
+    this.form.get('txtConfirmarCambiarClave').setValue('');
+
     this.displayDialog = true;
     this.hiddenButtonDelete = false;
     this.selectedEstado = { label: usuario.descripcion_estado_usuario, value: usuario.estado_usuario }
+  }
+
+  myPromise() {
+    return new Promise((resolve, reject) => {
+      const error = false; // only to mimic an error
+      if (!error) {
+        //resolve(1);
+        resolve('devolver resolve');
+      } else {
+        //reject(new Error(error));
+        //reject(new Error('Custom error occurred'));
+        reject('Custom error occurred');
+      }
+    });
+  }
+
+  myPromise2() {
+    return new Promise((resolve, reject) => {
+      console.log('in myPromise2');
+      let x = this.cargarPerfiles();
+      if (x == 99) {
+        resolve('ok');
+      }
+
+    });
   }
 
   showDialogToAdd() {
@@ -276,35 +316,141 @@ export class MantenimientoUsuariosComponent implements OnInit {
     //});
 
     // TODO: manejar los errores al cargar los perfiles, ya que cuando dio un error no se presento el error en angular.
+
+    /*
+    const getUser = function (login) {
+      return new Promise(function (resolve, reject) {
+        // async stuff, like fetching users from server, returning a response
+        if (response.status === 200) {
+          resolve(response.data);
+        } else {
+          reject('No user');
+        }
+      });
+    };
+  
+    getUser(login)
+      .then(function (user) {
+        console.log(user);
+      })
+      */
+
+    /*
+  let i = 4;
+  let promise = new Promise(function (resolve, reject) {
+    console.log('inside a promise');
+    if (i === 3) {
+      resolve('todo ok');
+    } else {
+      reject('buuuu');
+    }
+  });
+
+  promise
+    .then(
+      function (value) {
+        console.log("success");
+      },
+      function (reason) {
+        console.log("error ", reason);
+      }
+    );
+
+
+  const asincronia = (list) => {
+    //declaracion de la promesa.
+    let promise = new Promise((resolve, reject) => {
+      //se valida que el parametro list sea un arreglo
+      //y no este vacio
+      if (list instanceof Array && list.length > 0) {
+        let suma = list.map(valor => Math.pow(valor, 2));
+        resolve(suma);
+      }
+      //si no se cumple la condicion se manda un error.
+      else {
+        let error = new Error("Error de ejecución . . . :( ");
+        reject(error);
+      }
+    });
+    return promise;
+  };
+  //========== Consiguiendo la respuesta correcta ==========//
+  asincronia([2, 3, 4, 5])
+    .then(respuesta => console.log(respuesta))
+    .catch(error => console.error(error));
+
+  //========== Consiguiendo el error ==========//
+  asincronia([])
+    .then(respuesta => console.log(respuesta))
+    .catch(error => console.error(error));
+
+
+  this.myPromise()
+    .then(response => console.log(response))
+    .then(response => console.log('000000000'))
+    .then(response => console.log('111111111'))
+    .catch(
+      error => console.log(error)
+      //error => console.error(error)
+    );
+
+*/
+
+    this.tipoOperacion = 'I';
+
+    this.nuevoRegistro = true;
+    this.displayDialog = true;
+    this.hiddenButtonDelete = true;
+    this.usuario = {};
+    this.selectedEstado = { label: "ACTIVO", value: "A" };
+
+    //this.cargarPerfiles();
+
+    console.log('in showDialogToAdd');
+    this.myPromise2()
+      .then(response => {
+        console.log('in then');
+        this.selectedPerfil = { label: 'ADMINISTRADOR', value: 1 };
+
+        this.buildForm();
+        this.setValidators();
+      })
+
+    //this.selectedPerfil = { label: 'ADMINISTRADOR', value: 1 };
+
+    //this.buildForm();
+    //this.setValidators();
+
+    /*
     const postData = new FormData();
     postData.append('estado_perfil', 'A');
     postData.append('action', 'getPerfilesxEstado');
     //this.txtConfirmarClave = '';
-
-
+  
+  
     this.mantenimientoPerfilService.getPerfilesxEstado(postData).subscribe(
       data => {
         this.perfiles = data;
         console.log(data);
         console.log(data[0].id_perfil);
         console.log(data[0].descripcion_perfil);
-
+  
         this.perfilesActivos = [];
         data.forEach(d => {
           console.log(d.id_perfil);
-
+  
           this.perfilesActivos.push({ label: d.descripcion_perfil, value: d.id_perfil });
         });
-
+  
         this.selectedPerfil = { label: data[1].descripcion_perfil, value: data[1].id_perfil };
-
+  
         this.tipoOperacion = 'I';
         this.nuevoRegistro = true;
         this.displayDialog = true;
         this.hiddenButtonDelete = true;
         this.usuario = {};
         this.selectedEstado = { label: "ACTIVO", value: "A" };
-
+  
         this.buildForm();
         this.setValidators();
       },
@@ -314,11 +460,16 @@ export class MantenimientoUsuariosComponent implements OnInit {
         this.tipoMensaje = 'ERROR';
       }
     );
-
+      */
   }
 
+
+
   buildForm() {
+    console.log('in buildForm');
+    console.log('buildForm: ' + this.selectedPerfil);
     console.log(this.selectedPerfil);
+    console.log(this.perfilesActivos);
 
     this.form = this.fb.group({
       txtNombre: ['', [Validators.required, Validators.maxLength(100)]],
@@ -332,6 +483,8 @@ export class MantenimientoUsuariosComponent implements OnInit {
       txtCambiarClave: ['', Validators.maxLength(50)],
       txtConfirmarCambiarClave: ['', Validators.maxLength(50)]
     }, { validator: this.MustMatch('txtClave', 'txtConfirmarClave') });
+
+    this.form.get('cmbPerfil').setValue(2);
   }
 
   setValidators() {
@@ -353,14 +506,14 @@ export class MantenimientoUsuariosComponent implements OnInit {
   }
 
   cloneRegistro(c: ITB_GEN_USUARIOS): ITB_GEN_USUARIOS {
-    const perfil = {};
+    const usuario = {};
     for (const prop in c) {
       if (c) {
-        perfil[prop] = c[prop];
+        usuario[prop] = c[prop];
       }
 
     }
-    return perfil;
+    return usuario;
   }
 
   setFocus(elm: HTMLInputElement) {
@@ -378,6 +531,16 @@ export class MantenimientoUsuariosComponent implements OnInit {
       //this.setFocus(elm);
       //let ht:HTMLInputElement = document.getElementById(field);
       //this.setFocus(ht);
+    }
+  }
+
+  onDialogClose(event, tipo) {
+    //alert('close dialog');
+    this.displayMensaje = event;
+    //this.setFocus(this.nameField.nativeElement);
+    if (tipo === 'F') {
+      //this.setFocus(elm);
+      //this.setFocus(this.nameField.nativeElement);
     }
   }
 
@@ -426,6 +589,56 @@ export class MantenimientoUsuariosComponent implements OnInit {
     }
   }
 
+  cargarPerfiles() {
+    console.log('in cargarPerfiles');
+    const postData = new FormData();
+    postData.append('estado_perfil', 'A');
+    postData.append('action', 'getPerfilesxEstado');
+
+    this.displayWait = true;
+
+    this.mantenimientoPerfilService.getPerfilesxEstado(postData).subscribe(
+      data => {
+        this.displayWait = false;
+        this.perfiles = data;
+        console.log(data);
+        console.log(data[0].id_perfil);
+        console.log(data[0].descripcion_perfil);
+
+        this.perfilesActivos = [];
+        data.forEach(d => {
+          console.log(d.id_perfil);
+
+          this.perfilesActivos.push({ label: d.descripcion_perfil, value: d.id_perfil });
+        });
+
+        if (this.tipoOperacion == 'I') {
+          this.selectedPerfil = { label: data[1].descripcion_perfil, value: data[1].id_perfil };
+        }
+
+        console.log('after then');
+
+        //this.tipoOperacion = 'I';
+        //this.nuevoRegistro = true;
+        //this.displayDialog = true;
+        //this.hiddenButtonDelete = true;
+        //this.usuario = {};
+        //this.selectedEstado = { label: "ACTIVO", value: "A" };
+
+        this.buildForm();
+        //this.setValidators();
+      },
+      error => {
+        this.displayWait = false;
+        this.errorMsg = error;
+        this.displayMensaje = true;
+        this.tipoMensaje = 'ERROR';
+      }
+    );
+
+    return 99;
+  }
+
   save() {
     //this.messageService.add({ severity: 'error', summary: 'Error Message', detail: 'Validation failed' });
     //this.form.setValue({ txtNombre: 'xxx' });
@@ -444,17 +657,17 @@ export class MantenimientoUsuariosComponent implements OnInit {
       txtNombre: 'xxx',
       txtApellido: 'yyy'
     });
-
+  
     this.form.controls.txtNombre.setValue('abc');
-
+  
     this.usuario = {
       nombre: "string",
       apellido: "string"
     }
-
-
+  
+  
     console.log(this.usuario);
-
+  
     this.form.setValue({
       txtNombre: this.usuario.nombre,
       txtApellido: this.usuario.apellido
@@ -501,7 +714,7 @@ export class MantenimientoUsuariosComponent implements OnInit {
         apellido: this.form.get('txtApellido').value,
         email: this.form.get('txtEmail').value,
         //estado_usuario: string;
- 
+   
         //descripcion_estado_usuario: string;
         //fecha_ingreso: string;
         //id_usuario_ingreso: number;
@@ -519,6 +732,8 @@ export class MantenimientoUsuariosComponent implements OnInit {
   }
 
   callService() {
+    // TODO: Verificar el manejo de transacciones, en el mantenimiento de usuarios en el insert forzar un error en el sp en el segundo insert y verificar que se haga un rollback de todo, actualmente se inserta en la primera tabla a pesar de que hay un error en le segundo insert.
+
     const postData = new FormData();
     let action: string;
 
@@ -550,7 +765,7 @@ export class MantenimientoUsuariosComponent implements OnInit {
         this.displayDialog = false;
 
         this.inicializarPantalla();
-        
+
       },
       error => {
         this.displayWait = false;
@@ -664,7 +879,7 @@ export class MantenimientoUsuariosComponent implements OnInit {
         this.form.controls.txtClave.markAsDirty();
         this.form.controls.txtConfirmarClave.markAsDirty();
       }
-
+  
       if (this.form.controls.txtClave.value !== this.form.controls.txtConfirmarClave.value) {
         this.showErrorMessage('Mensaje de Error', 'Las Claves no coinciden', 'txtClave');
         this.showErrorMessage('Mensaje de Error', 'Las Claves no coinciden', 'txtConfirmarClave');
