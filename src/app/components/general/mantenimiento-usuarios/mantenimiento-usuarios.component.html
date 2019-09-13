@@ -95,78 +95,6 @@
 <p-confirmDialog [style]="{width: '30vw'}" acceptLabel="Si"></p-confirmDialog>
 
 
-<<<<<<< HEAD
-
-<p-toast [style]="{marginTop: '80px'}" position="top-left" key="tl"></p-toast>
-
-<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
-
-<p-toast [style]="{marginTop: '80px'}" styleClass="custom-toast" key="custom" position="bottom-center"></p-toast>
--->
-
-
-<p-dialog header="Mantenimiento de Usuarios" [(visible)]="displayDialog" [responsive]="true" showEffect="fade"
-  [modal]="true" [contentStyle]="{'max-height':'65vh', width: '500px'}" focusOnShow="false"
-  (onShow)="setFocus(txtNombre1)">
-
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-
-    <div class="p-grid">
-      <div class="p-col-3">
-        <label for="nombre">Nombre</label>
-      </div>
-      <div class="p-col-9">
-        <input pInputText id="nombre" oninput="this.value = this.value.toUpperCase()" (click)="$event.target.select()"
-          (keydown)="onKeydown($event)" formControlName="txtNombre" #txtNombre1 />
-      </div>
-
-      <div class="p-col-3">
-        <label for="apellido">Apellido</label>
-      </div>
-      <div class="p-col-9">
-        <input pInputText id="apellido" oninput="this.value = this.value.toUpperCase()" (click)="$event.target.select()"
-          (keydown)="onKeydown($event)" formControlName="txtApellido" #txtApellido1 />
-      </div>
-
-      <div class="p-col-3">
-        <label for="login">Login</label>
-      </div>
-      <div class="p-col-9">
-        <fieldset [disabled]="!hiddenButtonDelete">
-          <input pInputText id="login" oninput="this.value = this.value.toUpperCase()" (click)="$event.target.select()"
-            (keydown)="onKeydown($event)" formControlName="txtLogin" #txtLogin1 />
-        </fieldset>
-
-      </div>
-
-      <div class="p-col-3">
-        <div class="first">Perfil</div>
-      </div>
-      <div class="p-col-9">
-        <p-dropdown id="cmbPerfil1" [options]="perfilesActivos" placeholder="Seleccione un perfil" optionLabel="label"
-          appendTo="body" [style]="{'width':'90%'}" (onChange)="onChange($event)" formControlName="cmbPerfil">
-        </p-dropdown>
-      </div>
-
-      <div class="p-col-3">
-        <label for="email">Email</label>
-      </div>
-      <div class="p-col-9">
-        <input pInputText type="email" id="email" (click)="$event.target.select()" (keydown)="onKeydown($event)"
-          formControlName="txtEmail" #txtEmail1 />
-      </div>
-
-      <div class="p-col-12" *ngIf="tipoOperacion=='I'">
-        <div class="p-grid">
-          <div class="p-col-3">
-            <label for="clave">Clave</label>
-          </div>
-          <div class="p-col-9">
-            <input pPassword type="password" id="clave" (click)="$event.target.select()" (keydown)="onKeydown($event)"
-              [feedback]="false" (keydown)="onKeydown($event)" formControlName="txtClave" #txtClave1 />
-          </div>
-
-=======
 
 <p-toast [style]="{marginTop: '80px'}" position="top-left" key="tl"></p-toast>
 
@@ -235,7 +163,6 @@
               [feedback]="false" (keydown)="onKeydown($event)" formControlName="txtClave" #txtClave1 />
           </div>
 
->>>>>>> abf757820f98d521741f755bad02fb16b97ff4fb
           <div class="p-col-3">
             <label for="confirmarClave">Confirmar Clave</label>
           </div>
@@ -288,16 +215,6 @@
       <div class="ui-dialog-buttonpane ui-helper-clearfix">
         <button type="button" pButton icon="pi pi-times" (click)="delete()" label="Eliminar"
           [(hidden)]="hiddenButtonDelete" [class]="'ui-button-danger'"></button>
-<<<<<<< HEAD
-        <button type="button" pButton icon="pi pi-check" (click)="save()" label="Grabar" #btnSave></button>
-        <button pButton type="submit" label="Aceptar" [disabled]="!form.valid" class="btn btn-block"></button>
-      </div>
-    </p-footer>
-
-  </form>
-
-</p-dialog>
-=======
         <button type="button" pButton icon="pi pi-check" (click)="onSubmit()" label="Grabar" #btnSave></button>
         <!--<button type="submit" pButton icon="pi pi-check" label="Grabar" #btnSave></button>-->
         <!--<button pButton type="submit" label="Aceptar" [disabled]="!form.valid" class="btn btn-block"></button>-->
@@ -308,4 +225,3 @@
 
   </p-dialog>
 </form>
->>>>>>> abf757820f98d521741f755bad02fb16b97ff4fb

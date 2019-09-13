@@ -474,15 +474,22 @@ export class MantenimientoUsuariosComponent implements OnInit {
     }
 
     if (this.form.valid) {
+      let auxPerfil = this.form.get('cmbPerfil').value;
+      let auxEstado = this.form.get('cmbEstado').value;
       //alert('grabando');
 
       this.usuario.id_usuario = 0;
+      this.usuario.id_perfil = auxPerfil.value
       this.usuario.login = this.form.get('txtLogin').value;
       this.usuario.clave = this.form.get('txtClave').value;
       this.usuario.nombre = this.form.get('txtNombre').value;
       this.usuario.apellido = this.form.get('txtApellido').value;
       this.usuario.email = this.form.get('txtEmail').value;
+      this.usuario.estado_usuario = auxEstado.value;
       this.usuario.cambiar_clave = false;
+
+
+
 
       /*
       this.usuario = {
@@ -507,7 +514,54 @@ export class MantenimientoUsuariosComponent implements OnInit {
       }
       */
       console.log(this.usuario);
+      this.callService();
     }
+  }
+
+  callService() {
+    const postData = new FormData();
+    let action: string;
+
+    this.displayWait = true;
+
+    switch (this.tipoOperacion) {
+      case 'I':
+        action = 'insert';
+        break;
+      case 'U':
+        action = 'update';
+        break;
+      case 'D':
+        action = 'delete';
+        break;
+    }
+
+    postData.append('usuario', JSON.stringify(this.usuario));
+    postData.append('action', action);
+
+    this.mantenimientoUsuarioService.insert(postData).subscribe(
+      data => {
+        this.displayWait = false;
+        this.tipoMensaje = 'OK';
+
+        this.displayMensaje = true;
+        this.errorMsg = data.mensaje;
+
+        this.displayDialog = false;
+
+        this.inicializarPantalla();
+        
+      },
+      error => {
+        this.displayWait = false;
+        this.errorMsg = error;
+        console.log(this.errorMsg);
+
+        //this.displayWait = false;
+        this.displayMensaje = true;
+        this.tipoMensaje = 'ERROR';
+      }
+    );
   }
 
   validateForm() {
