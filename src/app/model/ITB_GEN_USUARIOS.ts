@@ -1,6 +1,7 @@
 interface ITB_GEN_USUARIOS {
     id_usuario?: number;
     id_perfil?: number;
+    descripcion_perfil?: string;
     login?: string;
     clave?: string;
     nombre?: string;

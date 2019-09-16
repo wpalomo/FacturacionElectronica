@@ -90,6 +90,7 @@ export class MantenimientoUsuariosComponent implements OnInit {
 
   ngOnInit() {
     this.inicializarPantalla();
+    this.cargarPerfiles();
     this.buildForm();
 
 
@@ -315,20 +316,24 @@ export class MantenimientoUsuariosComponent implements OnInit {
 
     console.log(this.usuario);
 
+    this.selectedEstado = { label: usuario.descripcion_estado_usuario, value: usuario.estado_usuario };
+    this.selectedPerfil = { label: usuario.descripcion_perfil, value: usuario.id_perfil };
+
     this.form.get('txtNombre').setValue(this.usuario.nombre);
     this.form.get('txtApellido').setValue(this.usuario.apellido);
     this.form.get('txtLogin').setValue(this.usuario.login);
-    this.form.get('cmbPerfil').setValue(this.usuario.id_perfil);
+    this.form.get('cmbPerfil').setValue(this.selectedPerfil);
     this.form.get('txtEmail').setValue(this.usuario.email);
     //this.form.get('txtClave').setValue(this.usuario.)
     //this.form.get('txtConfirmarClave').setValue()
-    this.form.get('cmbEstado').setValue(this.usuario.estado_usuario);
+    this.form.get('cmbEstado').setValue(this.selectedEstado);
     this.form.get('txtCambiarClave').setValue('');
     this.form.get('txtConfirmarCambiarClave').setValue('');
 
     this.displayDialog = true;
     this.hiddenButtonDelete = false;
-    this.selectedEstado = { label: usuario.descripcion_estado_usuario, value: usuario.estado_usuario }
+    this.setValidators();
+    //this.selectedEstado = { label: usuario.descripcion_estado_usuario, value: usuario.estado_usuario }
   }
 
   myPromise() {
@@ -458,15 +463,20 @@ export class MantenimientoUsuariosComponent implements OnInit {
 */
 
     console.log('add');
-    this.cargarPerfiles();
+    //this.cargarPerfiles();
+    //this.buildForm();
+    this.form.reset();
     this.tipoOperacion = 'I';
     this.nuevoRegistro = true;
     this.displayDialog = true;
     this.hiddenButtonDelete = true;
     this.usuario = {};
     this.selectedEstado = { label: "ACTIVO", value: "A" };
-    this.selectedPerfil = { label: this.perfilesActivos[3].label, value: this.perfilesActivos[3].value };
-    console.log(this.selectedPerfil);
+    this.selectedPerfil = { label: this.perfilesActivos[0].label, value: this.perfilesActivos[0].value };
+    //console.log(this.selectedPerfil);
+
+    this.form.get('cmbEstado').setValue(this.selectedEstado);
+    //this.form.get('cmbPerfil').setValue(this.selectedPerfil);
     this.form.get('cmbPerfil').setValue(this.selectedPerfil);
 
 
@@ -547,31 +557,42 @@ export class MantenimientoUsuariosComponent implements OnInit {
       txtLogin: ['', [Validators.required, Validators.maxLength(50)]],
       cmbPerfil: [this.selectedPerfil, Validators.required],
       txtEmail: ['', [Validators.email, Validators.maxLength(50)]],
-      txtClave: ['', [Validators.required, Validators.maxLength(50)]],
-      txtConfirmarClave: ['', [Validators.required, Validators.maxLength(50)]],
+      txtClave: ['', Validators.maxLength(50)],
+      txtConfirmarClave: ['', Validators.maxLength(50)],
+      //txtClave: ['', [Validators.required, Validators.maxLength(50)]],
+      //txtConfirmarClave: ['', [Validators.required, Validators.maxLength(50)]],
       cmbEstado: [this.selectedEstado, Validators.required],
       txtCambiarClave: ['', Validators.maxLength(50)],
       txtConfirmarCambiarClave: ['', Validators.maxLength(50)]
-    }, { validator: this.MustMatch('txtClave', 'txtConfirmarClave') });
+    }, {
+      validator: this.MustMatch('txtClave', 'txtConfirmarClave'),
+      validator2: this.MustMatch('txtCambiarClave', 'txtConfirmarCambiarClave')
+    });
 
     //this.form.get('cmbPerfil').setValue(2);
   }
 
   setValidators() {
     if (this.tipoOperacion == 'I') {
-      let txtCambiarClaveControl = this.form.get('txtCambiarClave');
-      let txtConfirmarCambiarClaveControl = this.form.get('txtConfirmarCambiarClave');
+      this.form.get('txtClave').setValidators([Validators.required]);
+      this.form.get('txtClave').updateValueAndValidity();
 
-      txtCambiarClaveControl.setValidators(null);
-      txtConfirmarCambiarClaveControl.setValidators(null);
+      this.form.get('txtConfirmarClave').setValidators([Validators.required]);
+      this.form.get('txtConfirmarClave').updateValueAndValidity();
+
+      this.form.get('txtCambiarClave').setValidators(null);
+      this.form.get('txtCambiarClave').updateValueAndValidity();
+
+      this.form.get('txtConfirmarCambiarClave').setValidators(null);
+      this.form.get('txtConfirmarCambiarClave').updateValueAndValidity();
     }
 
     if (this.tipoOperacion == 'U') {
-      let txtClaveControl = this.form.get('txtClave');
-      let txtConfirmarClaveControl = this.form.get('txtConfirmarClave');
+      this.form.get('txtClave').setValidators(null);
+      this.form.get('txtClave').updateValueAndValidity();
 
-      txtClaveControl.setValidators(null);
-      txtConfirmarClaveControl.setValidators(null);
+      this.form.get('txtConfirmarClave').setValidators(null);
+      this.form.get('txtConfirmarClave').updateValueAndValidity();
     }
   }
 
@@ -764,7 +785,7 @@ export class MantenimientoUsuariosComponent implements OnInit {
       let auxEstado = this.form.get('cmbEstado').value;
       //alert('grabando');
 
-      this.usuario.id_usuario = 0;
+      //this.usuario.id_usuario = 0;
       this.usuario.id_perfil = auxPerfil.value
       this.usuario.login = this.form.get('txtLogin').value;
       this.usuario.clave = this.form.get('txtClave').value;
@@ -919,26 +940,28 @@ export class MantenimientoUsuariosComponent implements OnInit {
       ok = false;
     }
 
-    if (this.form.controls['txtClave'].invalid) {
-      if (this.form.controls['txtClave'].errors.required) {
-        this.showErrorMessage('Mensaje de Error en Clave', 'El campo Clave es obligatorio', 'txtClave');
+    if (this.tipoOperacion == 'I') {
+      if (this.form.controls['txtClave'].invalid) {
+        if (this.form.controls['txtClave'].errors.required) {
+          this.showErrorMessage('Mensaje de Error en Clave', 'El campo Clave es obligatorio', 'txtClave');
+        }
+
+        if (this.form.controls['txtClave'].errors.maxlength) {
+          this.showErrorMessage('Mensaje de Error en Clave', 'La longitud del campo no puede ser mayor a 50 caracteres', 'txtClave');
+        }
+        ok = false;
       }
 
-      if (this.form.controls['txtClave'].errors.maxlength) {
-        this.showErrorMessage('Mensaje de Error en Clave', 'La longitud del campo no puede ser mayor a 50 caracteres', 'txtClave');
-      }
-      ok = false;
-    }
+      if (this.form.controls['txtConfirmarClave'].invalid) {
+        if (this.form.controls.txtConfirmarClave.errors.required) {
+          this.showErrorMessage('Mensaje de Error en Confirmar Clave', 'El campo Confirmar Clave es obligatorio', 'txtConfirmarClave');
+        }
 
-    if (this.form.controls['txtConfirmarClave'].invalid) {
-      if (this.form.controls.txtConfirmarClave.errors.required) {
-        this.showErrorMessage('Mensaje de Error en Confirmar Clave', 'El campo Confirmar Clave es obligatorio', 'txtConfirmarClave');
+        if (this.form.controls['txtConfirmarClave'].errors.maxlength) {
+          this.showErrorMessage('Mensaje de Error en Confirmar Clave', 'La longitud del campo no puede ser mayor a 50 caracteres', 'txtConfirmarClave');
+        }
+        ok = false;
       }
-
-      if (this.form.controls['txtConfirmarClave'].errors.maxlength) {
-        this.showErrorMessage('Mensaje de Error en Confirmar Clave', 'La longitud del campo no puede ser mayor a 50 caracteres', 'txtConfirmarClave');
-      }
-      ok = false;
     }
 
     if (this.form.controls['cmbEstado'].invalid) {
@@ -961,6 +984,7 @@ export class MantenimientoUsuariosComponent implements OnInit {
 
 
 
+
       /*
       if (this.form.get('txtClave').value != this.form.get('txtConfirmarClave').value && this.form.get('txtConfirmarClave').value != null) {
         alert('error en claves');
@@ -973,6 +997,37 @@ export class MantenimientoUsuariosComponent implements OnInit {
         this.showErrorMessage('Mensaje de Error', 'Las Claves no coinciden', 'txtConfirmarClave');
         this.form.controls.txtClave.markAsDirty();
         ok = false;
+      }
+      */
+    }
+
+    if (this.tipoOperacion == 'U') {
+
+      if (this.form.controls['txtConfirmarCambiarClave'].invalid) {
+        if (this.form.controls.txtConfirmarCambiarClave.errors.mustMatch) {
+          this.showErrorMessage('Mensaje de Error en Confirmar Clave', 'Las Claves no coinciden', 'txtConfirmarCambiarClave');
+          ok = false;
+        }
+      }
+
+      /*
+      if ((this.form.get('txtCambiarClave').value != '') || (this.form.get('txtConfirmarCambiarClave').value != '')) {
+        this.MustMatch('txtCambiarClave', 'txtConfirmarCambiarClave');
+        this.form.get('txtCambiarClave').updateValueAndValidity();
+        this.form.get('txtConfirmarCambiarClave').updateValueAndValidity();
+      } else {
+        this.form.get('txtCambiarClave').setValidators(null);
+        this.form.get('txtCambiarClave').updateValueAndValidity();
+
+        this.form.get('txtConfirmarCambiarClave').setValidators(null);
+        this.form.get('txtConfirmarCambiarClave').updateValueAndValidity();
+      }
+
+      if (this.form.controls['txtConfirmarCambiarClave'].invalid) {
+        if (this.form.controls.txtConfirmarCambiarClave.errors.mustMatch) {
+          this.showErrorMessage('Mensaje de Error en Confirmar Clave', 'Las Claves no coinciden', 'txtConfirmarCambiarClave');
+          ok = false;
+        }
       }
       */
     }
