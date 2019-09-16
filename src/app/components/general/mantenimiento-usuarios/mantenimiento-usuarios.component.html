@@ -140,8 +140,9 @@
         <div class="first">Perfil</div>
       </div>
       <div class="p-col-9">
-        <p-dropdown id="cmbPerfil1" [options]="perfilesActivos" placeholder="Seleccione un perfil" optionLabel="label"
-          appendTo="body" [style]="{'width':'90%'}" (onChange)="onChange($event)" formControlName="cmbPerfil">
+        <p-dropdown id="cmbPerfil1" [options]="perfilesActivos" placeholder="Seleccione un perfil"
+          optionLabel="label" appendTo="body" [style]="{'width':'90%'}" (onChange)="onChange($event)"
+          formControlName="cmbPerfil">
         </p-dropdown>
       </div>
 
@@ -214,7 +215,7 @@
     <p-footer>
       <div class="ui-dialog-buttonpane ui-helper-clearfix">
         <button type="button" pButton icon="pi pi-times" (click)="delete()" label="Eliminar"
-          [(hidden)]="hiddenButtonDelete" [class]="'ui-button-danger'"></button>
+          [(hidden)]="!hiddenButtonDelete" [class]="'ui-button-danger'"></button>
         <button type="button" pButton icon="pi pi-check" (click)="onSubmit()" label="Grabar" #btnSave></button>
         <!--<button type="submit" pButton icon="pi pi-check" label="Grabar" #btnSave></button>-->
         <!--<button pButton type="submit" label="Aceptar" [disabled]="!form.valid" class="btn btn-block"></button>-->

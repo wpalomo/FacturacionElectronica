@@ -11,6 +11,7 @@ import { EstadoService } from '../../../services/estado/estado.service';
 import ITB_GEN_USUARIOS from '../../../model/ITB_GEN_USUARIOS';
 import ITB_GEN_PERFILES from '../../../model/ITB_GEN_PERFILES';
 import IEstados from '../../../model/IEstados';
+import ICombo from '../../../model/ICombo';
 import { Dropdown } from 'primeng/dropdown';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
@@ -52,6 +53,7 @@ export class MantenimientoUsuariosComponent implements OnInit {
   estados: IEstados[];
   estadosActivos: IEstados[];
   perfilesActivos: IEstados[];
+  perfilesActivos2$: Observable<ICombo[]>;
   grades: IEstados[];
   errorMsg;
   displayMensaje: boolean;
@@ -60,7 +62,7 @@ export class MantenimientoUsuariosComponent implements OnInit {
   selectedEstadoFilter: any;
   selectedMultipleEstadoFilter: any;
   selectedEstado: any;
-  selectedPerfil: any;
+  selectedPerfil: ICombo;
   tipoOperacion: string = "";
   auxEvent: LazyLoadEvent;
   //txtDescripcion: string;
@@ -89,6 +91,65 @@ export class MantenimientoUsuariosComponent implements OnInit {
   ngOnInit() {
     this.inicializarPantalla();
     this.buildForm();
+
+
+    /**/
+    //console.log('in nginit');
+    //const postData = new FormData();
+    //postData.append('estado_perfil', 'A');
+    //postData.append('action', 'getPerfilesxEstado');
+
+    //this.displayWait = true;
+
+    //this.perfilesActivos2$ = this.mantenimientoPerfilService.getPerfilesCombos;
+
+    //this.mantenimientoPerfilService.getPerfilesxEstadoToCombo(postData).subscribe(
+    //  data => {
+    //    this.displayWait = false;
+    //    //this.perfiles = data;
+    //    console.log(data);
+    //    //console.log(data[0].id_perfil);
+    //    //console.log(data[0].descripcion_perfil);
+
+    //    //this.perfilesActivos = [];
+    //    //data.forEach(d => {
+    //    //  console.log(d.id_perfil);
+
+    //    //  this.perfilesActivos.push({ label: d.descripcion_perfil, value: d.id_perfil });
+    //    //});
+
+    //    //if (this.tipoOperacion == 'I') {
+    //    //  this.selectedPerfil = { label: data[1].descripcion_perfil, value: data[1].id_perfil };
+    //    //}
+
+    //    //console.log('after then');
+
+    //    //this.tipoOperacion = 'I';
+    //    //this.nuevoRegistro = true;
+    //    //this.displayDialog = true;
+    //    //this.hiddenButtonDelete = true;
+    //    //this.usuario = {};
+    //    //this.selectedEstado = { label: "ACTIVO", value: "A" };
+
+    //    //this.buildForm();
+    //    //this.setValidators();
+    //    this.form.get('cmbPerfil').setValue({ label: "DD", value: "28" });
+    //  },
+    //  error => {
+    //    this.displayWait = false;
+    //    this.errorMsg = error;
+    //    this.displayMensaje = true;
+    //    this.tipoMensaje = 'ERROR';
+    //  }
+    //);
+
+    //console.log(this.perfilesActivos2$);
+
+    ////this.mantenimientoPerfilService.getPerfilesxEstado(postData).subscribe(
+
+    ////this.perfilesActivos2$ = this.mantenimientoPerfilService.getPerfilesxEstadoToCombo(postData);
+
+    /**/
 
     this.cols = [
       /*
@@ -396,30 +457,39 @@ export class MantenimientoUsuariosComponent implements OnInit {
 
 */
 
+    console.log('add');
+    this.cargarPerfiles();
     this.tipoOperacion = 'I';
-
     this.nuevoRegistro = true;
     this.displayDialog = true;
     this.hiddenButtonDelete = true;
     this.usuario = {};
     this.selectedEstado = { label: "ACTIVO", value: "A" };
+    this.selectedPerfil = { label: this.perfilesActivos[3].label, value: this.perfilesActivos[3].value };
+    console.log(this.selectedPerfil);
+    this.form.get('cmbPerfil').setValue(this.selectedPerfil);
+
 
     //this.cargarPerfiles();
 
-    console.log('in showDialogToAdd');
-    this.myPromise2()
-      .then(response => {
-        console.log('in then');
-        this.selectedPerfil = { label: 'ADMINISTRADOR', value: 1 };
-
-        this.buildForm();
-        this.setValidators();
-      })
+    //console.log('in showDialogToAdd');
+    //this.myPromise2()
+    //  .then(response => {
+    //    console.log('in then');
+    //    this.selectedPerfil = { label: 'ADMINISTRADOR', value: 1 };
+    //
+    ///        this.buildForm();
+    //        this.setValidators();
+    //      })
 
     //this.selectedPerfil = { label: 'ADMINISTRADOR', value: 1 };
 
     //this.buildForm();
-    //this.setValidators();
+    this.setValidators();
+    //this.form.get('txtNombre').setValue('JPablos')
+    //this.form.get('cmbPerfil').setValue(this.selectedPerfil);
+    //this.selectedPerfil = { label: 'ADMINISTRADOR', value: '1' };
+    //this.form.get('cmbPerfil').setValue(this.selectedPerfil);
 
     /*
     const postData = new FormData();
@@ -484,7 +554,7 @@ export class MantenimientoUsuariosComponent implements OnInit {
       txtConfirmarCambiarClave: ['', Validators.maxLength(50)]
     }, { validator: this.MustMatch('txtClave', 'txtConfirmarClave') });
 
-    this.form.get('cmbPerfil').setValue(2);
+    //this.form.get('cmbPerfil').setValue(2);
   }
 
   setValidators() {
@@ -616,7 +686,10 @@ export class MantenimientoUsuariosComponent implements OnInit {
           this.selectedPerfil = { label: data[1].descripcion_perfil, value: data[1].id_perfil };
         }
 
+        this.selectedPerfil = { label: this.perfilesActivos[3].label, value: this.perfilesActivos[3].value };
+
         console.log('after then');
+        console.log(this.selectedPerfil);
 
         //this.tipoOperacion = 'I';
         //this.nuevoRegistro = true;
@@ -625,7 +698,7 @@ export class MantenimientoUsuariosComponent implements OnInit {
         //this.usuario = {};
         //this.selectedEstado = { label: "ACTIVO", value: "A" };
 
-        this.buildForm();
+        //this.buildForm();
         //this.setValidators();
       },
       error => {
@@ -729,6 +802,21 @@ export class MantenimientoUsuariosComponent implements OnInit {
       console.log(this.usuario);
       this.callService();
     }
+  }
+
+  delete() {
+    //alert('delete');
+    console.log(this.perfilesActivos);
+    console.log(this.perfilesActivos2$);
+    console.log(this.form.get('cmbPerfil').value);
+    console.log(this.selectedPerfil);
+
+    //this.form.get('cmbPerfil').setValue("7");
+    this.form.get('cmbPerfil').setValue({ label: "DD", value: "28" });
+    console.log(this.perfilesActivos);
+    console.log(this.perfilesActivos2$);
+    console.log(this.form.get('cmbPerfil').value);
+    console.log(this.selectedPerfil);
   }
 
   callService() {
