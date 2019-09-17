@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Renderer2, ElementRef } from '@angular/core';
 import { LazyLoadEvent, Message } from 'primeng/components/common/api';
-import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 
@@ -543,7 +543,33 @@ export class MantenimientoUsuariosComponent implements OnInit {
       */
   }
 
+  matchValues(
+    matchTo: string // name of the control to match to
+  ): (AbstractControl) => ValidationErrors | null {
+    return (control: AbstractControl): ValidationErrors | null => {
+      return !!control.parent &&
+        !!control.parent.value &&
+        control.value === control.parent.controls[matchTo].value
+        ? null
+        : { isMatching: false };
+    };
+  }
 
+  customValidator(form: FormGroup): { [key: string]: boolean } {
+    console.log('in custom validator');
+    //const name = form.controls['OperationAreas'];
+    //
+    //    if (name != undefined) {
+    //        const value = name.value;
+    //
+    //        if (value != null && value == 'Custom') {
+    //            return { 'invalidCustom': true };
+    //        }
+    //
+    //        return null;
+    //    }
+    return null;
+  }
 
   buildForm() {
     console.log('in buildForm');
@@ -558,16 +584,18 @@ export class MantenimientoUsuariosComponent implements OnInit {
       cmbPerfil: [this.selectedPerfil, Validators.required],
       txtEmail: ['', [Validators.email, Validators.maxLength(50)]],
       txtClave: ['', Validators.maxLength(50)],
-      txtConfirmarClave: ['', Validators.maxLength(50)],
+      txtConfirmarClave: ['', [Validators.maxLength(50)], this.customValidator],
       //txtClave: ['', [Validators.required, Validators.maxLength(50)]],
       //txtConfirmarClave: ['', [Validators.required, Validators.maxLength(50)]],
       cmbEstado: [this.selectedEstado, Validators.required],
       txtCambiarClave: ['', Validators.maxLength(50)],
-      txtConfirmarCambiarClave: ['', Validators.maxLength(50)]
-    }, {
-      validator: this.MustMatch('txtClave', 'txtConfirmarClave'),
-      validator2: this.MustMatch('txtCambiarClave', 'txtConfirmarCambiarClave')
-    });
+      txtConfirmarCambiarClave: ['', [Validators.maxLength(50),]]
+    }
+      //, {
+      //  //validator: this.MustMatch('txtClave', 'txtConfirmarClave')
+      //  validator: this.checkPasswords
+      //}
+    );
 
     //this.form.get('cmbPerfil').setValue(2);
   }
@@ -975,6 +1003,7 @@ export class MantenimientoUsuariosComponent implements OnInit {
 
       //alert(this.form.controls.txtConfirmarClave.errors.mustMatch);
 
+
       if (this.form.controls['txtConfirmarClave'].invalid) {
         if (this.form.controls.txtConfirmarClave.errors.mustMatch) {
           this.showErrorMessage('Mensaje de Error en Confirmar Clave', 'Las Claves no coinciden', 'txtConfirmarClave');
@@ -1042,6 +1071,7 @@ export class MantenimientoUsuariosComponent implements OnInit {
 
   MustMatch(controlName: string, matchingControlName: string) {
     return (formGroup: FormGroup) => {
+      console.log('en MustMatch');
       const control = formGroup.controls[controlName];
       const matchingControl = formGroup.controls[matchingControlName];
 
@@ -1059,6 +1089,16 @@ export class MantenimientoUsuariosComponent implements OnInit {
       }
     }
   }
+
+  /*
+  checkPasswords(group: FormGroup) { // here we have the 'passwords' group
+    console.log('in checkPasswords');
+    let pass = group.controls.txtClave.value
+    let confirmPass = group.controls.txtConfirmarClave.value;
+
+    return pass === confirmPass ? null : { mustMatch: true }
+  }
+  */
 
   /*
   passwordConfirming(c: AbstractControl) {
