@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Renderer2, ElementRef } from '@angular/core';
 import { LazyLoadEvent, Message } from 'primeng/components/common/api';
-import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 
@@ -77,6 +77,36 @@ export class MantenimientoUsuariosComponent implements OnInit {
   totalRecords$: Observable<number>;
 
   form: FormGroup;
+
+  static passwordMatch(group: FormGroup) {
+    const password = group.get('txtClave').value;
+    const confirm = group.get('txtConfirmarClave').value;
+    return password === confirm ? null : { matchingError: true };
+  }
+
+  static customValidator(form: FormGroup): { [key: string]: boolean } {
+    console.log('in custom validator');
+
+    //console.log(form);
+
+    //console.log(form.controls['txtClave'].value);
+    //console.log(form.controls['txtConfirmarClave'].value);
+
+    console.log(form.controls.txtClave.value);
+
+    //const name = form.controls['OperationAreas'];
+    //
+    //    if (name != undefined) {
+    //        const value = name.value;
+    //
+    //        if (value != null && value == 'Custom') {
+    //            return { 'invalidCustom': true };
+    //        }
+    //
+    //        return null;
+    //    }
+    return null;
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -554,23 +584,23 @@ export class MantenimientoUsuariosComponent implements OnInit {
         : { isMatching: false };
     };
   }
-
-  customValidator(form: FormGroup): { [key: string]: boolean } {
-    console.log('in custom validator');
-    //const name = form.controls['OperationAreas'];
-    //
-    //    if (name != undefined) {
-    //        const value = name.value;
-    //
-    //        if (value != null && value == 'Custom') {
-    //            return { 'invalidCustom': true };
-    //        }
-    //
-    //        return null;
-    //    }
-    return null;
-  }
-
+  /*
+    customValidator(form: FormGroup): { [key: string]: boolean } {
+      console.log('in custom validator');
+      //const name = form.controls['OperationAreas'];
+      //
+      //    if (name != undefined) {
+      //        const value = name.value;
+      //
+      //        if (value != null && value == 'Custom') {
+      //            return { 'invalidCustom': true };
+      //        }
+      //
+      //        return null;
+      //    }
+      return null;
+    }
+  */
   buildForm() {
     console.log('in buildForm');
     console.log('buildForm: ' + this.selectedPerfil);
@@ -584,7 +614,7 @@ export class MantenimientoUsuariosComponent implements OnInit {
       cmbPerfil: [this.selectedPerfil, Validators.required],
       txtEmail: ['', [Validators.email, Validators.maxLength(50)]],
       txtClave: ['', Validators.maxLength(50)],
-      txtConfirmarClave: ['', [Validators.maxLength(50)], this.customValidator],
+      txtConfirmarClave: ['', [Validators.maxLength(50), this.ageRangeValidator(1, 3)]],
       //txtClave: ['', [Validators.required, Validators.maxLength(50)]],
       //txtConfirmarClave: ['', [Validators.required, Validators.maxLength(50)]],
       cmbEstado: [this.selectedEstado, Validators.required],
@@ -1088,6 +1118,24 @@ export class MantenimientoUsuariosComponent implements OnInit {
         //matchingControl.setErrors({ mustMatch: false });
       }
     }
+  }
+
+  checkIfMatchingPasswords(control: AbstractControl): ValidationErrors | null {
+    //console.log('in checkIfMatchingPasswords');
+    //if (!this.form) {
+    //  return null;
+    //}
+    return control.root.get('txtClave').value === control.value ? null : { notSame: true };
+  }
+
+  ageRangeValidator(min: number, max: number): ValidatorFn {
+    console.log('in ageRangeValidator');
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+      if (control.value !== undefined && (isNaN(control.value) || control.value < min || control.value > max)) {
+        return { 'ageRange': true };
+      }
+      return null;
+    };
   }
 
   /*
