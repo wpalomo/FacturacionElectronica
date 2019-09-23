@@ -153,7 +153,7 @@ class ClaseUsuario {
             @in_estado_usuario = '$estado_usuario',
             @in_operacion = 'I'
         ";
-        
+
         $parametros = array(
             'query' => $query
         );
@@ -185,7 +185,7 @@ class ClaseUsuario {
             @in_email = '$email',
             @in_estado_usuario = '$estado_usuario',
             @in_cambio_clave = '$cambio_clave',             
-            @in_operacion = 'I'
+            @in_operacion = 'U'
         ";
 
         $parametros = array(

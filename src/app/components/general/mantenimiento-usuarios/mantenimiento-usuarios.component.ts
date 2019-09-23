@@ -15,6 +15,8 @@ import ICombo from '../../../model/ICombo';
 import { Dropdown } from 'primeng/dropdown';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
+import { MustMatch } from '../../../validators/validator';
+
 @Component({
   selector: 'app-mantenimiento-usuarios',
   templateUrl: './mantenimiento-usuarios.component.html',
@@ -332,6 +334,10 @@ export class MantenimientoUsuariosComponent implements OnInit {
 
   }
 
+  onChange(event) {
+
+  }
+
   reset() {
     this.first = 0;
   }
@@ -620,11 +626,10 @@ export class MantenimientoUsuariosComponent implements OnInit {
       cmbEstado: [this.selectedEstado, Validators.required],
       txtCambiarClave: ['', Validators.maxLength(50)],
       txtConfirmarCambiarClave: ['', [Validators.maxLength(50),]]
-    }
-      //, {
-      //  //validator: this.MustMatch('txtClave', 'txtConfirmarClave')
+    }, {
+      validator: [MustMatch('txtClave', 'txtConfirmarClave'), MustMatch('txtCambiarClave', 'txtConfirmarCambiarClave')]
       //  validator: this.checkPasswords
-      //}
+    }
     );
 
     //this.form.get('cmbPerfil').setValue(2);
@@ -1099,6 +1104,7 @@ export class MantenimientoUsuariosComponent implements OnInit {
     this.form.get(field).markAsDirty();
   }
 
+  /*
   MustMatch(controlName: string, matchingControlName: string) {
     return (formGroup: FormGroup) => {
       console.log('en MustMatch');
@@ -1119,7 +1125,7 @@ export class MantenimientoUsuariosComponent implements OnInit {
       }
     }
   }
-
+*/
   checkIfMatchingPasswords(control: AbstractControl): ValidationErrors | null {
     //console.log('in checkIfMatchingPasswords');
     //if (!this.form) {
