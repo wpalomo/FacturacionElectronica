@@ -1,5 +1,5 @@
 <?php
-
+// TODO: poner validaciones para los datos que llegan, no olvidar codificar la clave.
 include_once 'config.inc.php';
 include_once 'ClaseBaseDatos.php';
 include_once 'ClaseJson.php';
@@ -173,7 +173,7 @@ class ClaseUsuario {
         $apellido = mssql_real_escape_string($usuario['apellido']);
         $email = mssql_real_escape_string($usuario['email']);
         $estado_usuario = mssql_real_escape_string($usuario['estado_usuario']);
-        $cambio_clave = mssql_real_escape_string($usuario['cambio_clave']);
+        $cambiar_clave = mssql_real_escape_string($usuario['cambiar_clave']);
 
         $query = "
             EXEC SP_GEN_USUARIOS
@@ -184,7 +184,7 @@ class ClaseUsuario {
             @in_apellido = '$apellido',
             @in_email = '$email',
             @in_estado_usuario = '$estado_usuario',
-            @in_cambio_clave = '$cambio_clave',             
+            @in_cambiar_clave = '$cambiar_clave',             
             @in_operacion = 'U'
         ";
 

@@ -858,7 +858,13 @@ export class MantenimientoUsuariosComponent implements OnInit {
       this.usuario.estado_usuario = auxEstado.value;
       this.usuario.cambiar_clave = false;
 
-
+      if (this.tipoOperacion == 'U') {
+        if (this.form.controls.txtCambiarClave.value != '') {
+          this.usuario.cambiar_clave = true;
+          this.usuario.clave = this.form.get('txtCambiarClave').value;
+          this.usuario.clave_nueva = this.form.get('txtConfirmarCambiarClave').value;
+        }
+      }
 
 
       /*
@@ -889,6 +895,7 @@ export class MantenimientoUsuariosComponent implements OnInit {
   }
 
   delete() {
+    /*
     //alert('delete');
     console.log(this.perfilesActivos);
     console.log(this.perfilesActivos2$);
@@ -901,6 +908,24 @@ export class MantenimientoUsuariosComponent implements OnInit {
     console.log(this.perfilesActivos2$);
     console.log(this.form.get('cmbPerfil').value);
     console.log(this.selectedPerfil);
+    */
+
+    this.confirmationService.confirm({
+      message: 'Esta seguro que desea eliminar este registro ?',
+      header: 'Confirmacion',
+      icon: 'pi pi-info-circle',
+      accept: () => {
+        //alert('accpet');
+        console.log(this.usuario);
+        //this.msgs = [{ severity: 'info', summary: 'Confirmed', detail: 'Record deleted' }];
+        this.tipoOperacion = 'D';
+        this.callService();
+      },
+      reject: () => {
+        //alert('regect');
+        //this.msgs = [{ severity: 'info', summary: 'Rejected', detail: 'You have rejected' }];
+      }
+    });
   }
 
   callService() {
