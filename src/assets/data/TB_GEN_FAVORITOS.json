@@ -1,0 +1,20 @@
+{
+    "data": [
+        {
+            "id_menu_favoritos": 50,
+            "id_menu": 5,
+            "nombre_menu": "Cambio de Clave",
+            "acceso": "S",
+            "estado_menu_favoritos": "A",
+            "descripcion_estado_menu_favoritos": "ACTIVO"
+        },
+        {
+            "id_menu_favoritos": 51,
+            "id_menu": 6,
+            "nombre_menu": "Favoritos",
+            "acceso": "S",
+            "estado_menu_favoritos": "A",
+            "descripcion_estado_menu_favoritos": "ACTIVO"
+        }
+    ]
+}
