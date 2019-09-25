@@ -2,7 +2,7 @@
 
 <div class="center-login mt-4">
   <p-panel header="Favoritos" styleClass="my-panel">
-    <p-table [columns]="cols" [value]="cars" [(selection)]="selectedCars3" dataKey="vin">
+    <p-table [columns]="cols" [value]="favoritos" [(selection)]="selectedFavoritos" dataKey="id_menu_favoritos">
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th style="width: 3em">
@@ -23,13 +23,10 @@
           </td>
         </tr>
       </ng-template>
-      <ng-template pTemplate="summary">
-        <ul>
-          <li *ngFor="let car of selectedCars3" style="text-align: left">
-            {{car.vin + ' - ' + car.brand + ' - ' + car.year + ' - ' + car.color}}
-          </li>
-        </ul>
-      </ng-template>
     </p-table>
+
+    <div class="mt-3">
+      <button pButton type="submit" label="Aceptar" class="btn btn-block"></button>
+    </div>
   </p-panel>
 </div>

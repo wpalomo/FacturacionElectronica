@@ -15,6 +15,14 @@
             "acceso": "S",
             "estado_menu_favoritos": "A",
             "descripcion_estado_menu_favoritos": "ACTIVO"
+        },
+        {
+            "id_menu_favoritos": 1,
+            "id_menu": 4,
+            "nombre_menu": "Mantenimiento de Usuarios",
+            "acceso": "N",
+            "estado_menu_favoritos": "A",
+            "descripcion_estado_menu_favoritos": "ACTIVO"
         }
     ]
 }
