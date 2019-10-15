@@ -13,8 +13,8 @@ switch ($action) {
     case 'getMenuFavoritos':
         getMenuFavoritos();
         break;
-    case 'insert':
-        insert();
+    case 'updateMenuFavoritos':
+        updateMenuFavoritos();
         break;
 }
 
@@ -33,16 +33,12 @@ function getMenuFavoritos() {
     echo $data;
 }
 
-function insert() {
+function updateMenuFavoritos() {
     if (isset($_POST['json'])) {
-        $parametros = array(
-            'usuario' => $_POST['usuario'],
-            'tipo' => $tipo
-        );
 
-        $objetoUsuario = new ClaseUsuario();
+        $objetoMenuFavoritos = new ClaseMenuFavoritos();
 
-        $result = $objetoUsuario->insert($parametros);
+        $result = $objetoMenuFavoritos->updateMenuFavoritos($_POST['json']);
 
         $data = ClaseJson::getJson($result);
     } else {

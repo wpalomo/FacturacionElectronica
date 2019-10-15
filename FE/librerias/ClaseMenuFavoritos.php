@@ -30,9 +30,9 @@ class ClaseMenuFavoritos {
         return $result;
     }
 
-    public function insert($json) {
-
+    public function updateMenuFavoritos($json) {
         $ob = json_decode($json);
+
         if ($ob != null) {
             $query = "
                 EXEC SP_GEN_MENU_FAVORITOS
@@ -47,6 +47,8 @@ class ClaseMenuFavoritos {
             $result = ClaseBaseDatos::query($parametros);
 
             return $result;
+        } else {
+            return ClaseJson::getMessageJson(false, 'Error en el envio de información en el archivo JSON');
         }
     }
 

@@ -18,6 +18,7 @@ export class FavoritosComponent implements OnInit {
   cols: any[];
   id_usuario: any;
   errorMsg;
+  displayWait: boolean;
 
   constructor(
     private loginService: LoginService,
@@ -78,7 +79,7 @@ export class FavoritosComponent implements OnInit {
         console.log(data);
         this.favoritos = data;
 
-        this.selectedFavoritos = this.favoritos.filter(favorito => favorito.acceso == 'S');
+        this.selectedFavoritos = this.favoritos.filter(favorito => favorito.estado_menu_favoritos == 'A');
       },
       error => {
         //this.displayWait = false;
@@ -112,4 +113,92 @@ export class FavoritosComponent implements OnInit {
     //this.selectedFavoritos.id_menu_favoritos = 2;
   }
 
+  onClickBtnFavoritos(selectedFavoritos) {
+    const postData = new FormData();
+    postData.append('json', JSON.stringify(this.favoritos));
+    postData.append('action', 'updateMenuFavoritos');
+
+    this.displayWait = true;
+
+    this.menuFavoritosService.updateMenuFavoritos(postData).subscribe(
+      data => {
+        this.displayWait = false;
+        //this.tipoMensaje = 'OK';
+        //this.displayMensaje = true;
+        this.errorMsg = data.mensaje;
+        // alert(data.mensaje);
+        this.updateMenuGeneral();
+      },
+      error => {
+        this.displayWait = false;
+        this.errorMsg = error;
+        console.log(this.errorMsg);
+
+        //this.displayWait = false;
+        //this.displayMensaje = true;
+        //this.tipoMensaje = 'ERROR';
+      }
+    );
+
+
+
+  }
+
+  onRowSelect(event) {
+    //this.messageService.add({ severity: 'info', summary: 'Car Selected', detail: 'Vin: ' + event.data.vin });
+    //alert('onRowSelect');
+    //console.log(event.data);
+    //this.favoritos.findIndex(x => {
+    //  x.id_menu_favoritos == event.data.id_menu_favoritos
+    //});
+
+    this.favoritos.forEach(d => {
+      if (d.id_menu_favoritos === event.data.id_menu_favoritos) {
+        d.estado_menu_favoritos = 'A'
+      }
+    });
+  }
+
+  onRowUnselect(event) {
+    //this.messageService.add({ severity: 'info', summary: 'Car Unselected', detail: 'Vin: ' + event.data.vin });
+    //alert('onRowUnselect');
+    this.favoritos.forEach(d => {
+      if (d.id_menu_favoritos === event.data.id_menu_favoritos) {
+        d.estado_menu_favoritos = 'I'
+      }
+    });
+  }
+
+  onHeaderCheckboxToggle(event) {
+    this.favoritos.forEach(d => {
+      console.log(d.acceso);
+
+      console.log(event.checked);
+
+      d.estado_menu_favoritos = (event.checked === true ? 'A' : 'I');
+
+      //this.perfilesActivos.push({ label: d.descripcion_perfil, value: d.id_perfil });
+    });
+  }
+
+  updateMenuGeneral() {
+    const postData2 = new FormData();
+
+    postData2.append('id_usuario', this.id_usuario.toString());
+    postData2.append('action', 'getMenuUsuario');
+
+    this.loginService.getMenu(postData2).subscribe(
+      data2 => {
+        //alert('99');
+        console.log('99');
+        console.log(data2);
+      }, error => {
+        this.errorMsg = error;
+        console.log(this.errorMsg);
+
+        this.displayWait = false;
+        //this.displayError = true;
+      }
+    );
+  }
 }

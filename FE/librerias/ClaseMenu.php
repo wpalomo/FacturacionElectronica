@@ -126,8 +126,49 @@ class ClaseMenu {
         }
     }
 
+    function getMenuFavoritos2() {
+        $query = "
+            EXEC SP_GEN_MENU_FAVORITOS
+            @in_id_usuario = '$this->id_usuario',                                
+            @in_operacion = 'QF2'               
+        ";
+
+        $parametros = array(
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        if ($result['error'] == 'N') {
+            $tree = array();
+            $data = $result['data'];
+
+            foreach ($data as $key => $rows) {
+                $leaf = true;
+                $expanded = false;
+
+                $arr = array(
+                    'id_menu' => $rows['id_menu'],
+                    'id_menu_padre' => $rows['id_menu_padre'],
+                    'text' => $rows['nombre_menu'],
+                    'tipo' => $rows['tipo'],
+                    'iconCls' => trim($rows['icono']),
+                    //'mn_clase' => trim($rows['mn_clase']),
+                    'routerLink' => trim($rows['ruta']),
+                    'leaf' => $leaf,
+                    'expanded' => $expanded,
+                );
+
+                array_push($tree, $arr);
+            }
+
+            $data = json_encode($tree);
+            return $data;
+        }
+    }
+
     public function getMenuUsuario() {
-        $dataMenuFavoritos = $this->getMenuFavoritos();
+        $dataMenuFavoritos = $this->getMenuFavoritos2();
         $dataMenuFavoritos = json_decode($dataMenuFavoritos, true);
 
         $dataMenu = $this->getMenu();
