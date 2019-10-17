@@ -49,3 +49,7 @@
     <div class="p-col"></div>
   </div>
 </p-dialog>
+
+<app-mensaje-generico *ngIf="displayMensaje" [title]="title" [tipoMensaje]="tipoMensaje" [errorMsg]="errorMsg"
+  (displayChange)="onDialogClose($event, '')">
+</app-mensaje-generico>

@@ -19,6 +19,9 @@ export class FavoritosComponent implements OnInit {
   id_usuario: any;
   errorMsg;
   displayWait: boolean;
+  displayMensaje: boolean;
+  tipoMensaje: string;
+  title: string = 'Menu Favoritos';
 
   constructor(
     private loginService: LoginService,
@@ -38,35 +41,37 @@ export class FavoritosComponent implements OnInit {
     postData.append('id_usuario', this.id_usuario);
     postData.append('action', 'getMenuFavoritos');
 
-    this.menuFavoritosService.getFavoritos().subscribe(
-      data => {
-        this.favoritos = data;
-        console.log(this.favoritos);
-        console.log('despues');
-        console.log(this.favoritos[0]);
 
-        let selected: ITB_GEN_FAVORITOS[] = this.favoritos.filter(favorito => favorito.acceso == 'S');
+    //this.menuFavoritosService.getFavoritos().subscribe(
+    //  data => {
+    //    this.favoritos = data;
+    //    console.log(this.favoritos);
+    //    console.log('despues');
+    //    console.log(this.favoritos[0]);
 
-        this.selectedFavoritos = this.favoritos.filter(favorito => favorito.acceso == 'S');
+    //    let selected: ITB_GEN_FAVORITOS[] = this.favoritos.filter(favorito => favorito.acceso == 'S');
 
-        /*
-        console.log(selected);
+    //    this.selectedFavoritos = this.favoritos.filter(favorito => favorito.acceso == 'S');
 
-        for (let i = 0; i < this.favoritos.length; i++) {
-          console.log(this.favoritos[i].acceso);
-          this.selectedFavoritos.push(this.favoritos[i]);
-          //var currentNumber = numbers[i];
-          //if (currentNumber > 10) {
-          //  greaterTen.push(currentNumber)
-          //}
-        }
-        */
-        //this.selectedFavoritos = [selected];
-        //this.selectedFavoritos.push({
-        //  "id_menu_favoritos": 1
-        //});
-      }
-    );
+    //    /*
+    //    console.log(selected);
+
+    //    for (let i = 0; i < this.favoritos.length; i++) {
+    //      console.log(this.favoritos[i].acceso);
+    //      this.selectedFavoritos.push(this.favoritos[i]);
+    //      //var currentNumber = numbers[i];
+    //      //if (currentNumber > 10) {
+    //      //  greaterTen.push(currentNumber)
+    //      //}
+    //    }
+    //    */
+    //    //this.selectedFavoritos = [selected];
+    //    //this.selectedFavoritos.push({
+    //    //  "id_menu_favoritos": 1
+    //    //});
+    //  }
+    //);
+
 
     this.menuFavoritosService.getMenuFavoritos(postData).subscribe(
       data => {
@@ -87,8 +92,8 @@ export class FavoritosComponent implements OnInit {
         //console.log(this.errorMsg);
 
         //this.displayWait = false;
-        //this.displayMensaje = true;
-        //this.tipoMensaje = 'ERROR';
+        this.displayMensaje = true;
+        this.tipoMensaje = 'ERROR';
       }
     );
 
@@ -127,6 +132,11 @@ export class FavoritosComponent implements OnInit {
         //this.displayMensaje = true;
         this.errorMsg = data.mensaje;
         // alert(data.mensaje);
+
+        this.tipoMensaje = 'OK';
+
+        this.displayMensaje = true;
+
         this.updateMenuGeneral();
       },
       error => {
@@ -183,22 +193,36 @@ export class FavoritosComponent implements OnInit {
 
   updateMenuGeneral() {
     const postData2 = new FormData();
+    //this.displayMensaje = false;
 
     postData2.append('id_usuario', this.id_usuario.toString());
     postData2.append('action', 'getMenuUsuario');
 
     this.loginService.getMenu(postData2).subscribe(
-      data2 => {
+      data => {
         //alert('99');
         console.log('99');
-        console.log(data2);
+        console.log(data);
+
       }, error => {
         this.errorMsg = error;
         console.log(this.errorMsg);
 
         this.displayWait = false;
+        this.displayMensaje = true;
+        this.tipoMensaje = 'ERROR';
         //this.displayError = true;
       }
     );
+  }
+
+  onDialogClose(event, tipo) {
+    //alert('close dialog');
+    this.displayMensaje = event;
+    //this.setFocus(this.nameField.nativeElement);
+    //if (tipo === 'F') {
+    //this.setFocus(elm);
+    //  this.setFocus(this.nameField.nativeElement);
+    //}
   }
 }
