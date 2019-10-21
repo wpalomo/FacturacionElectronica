@@ -1,3 +1,15 @@
-<p>
-  permisos works!
-</p>
+<div class="center-login mt-4">
+  <p-panel header="Permisos" styleClass="my-panel">
+    <div class="p-grid">
+      <div class="p-col-3">
+        <div class="first">Perfil</div>
+      </div>
+      <div class="p-col-9">
+        <p-dropdown id="cmbPerfil1" [options]="perfilesActivos" placeholder="Seleccione un perfil" optionLabel="label"
+          appendTo="body" [style]="{'width':'90%'}" (onChange)="onChange($event)" [(ngModel)]="selectedPerfil"
+          #cmbPerfil1>
+        </p-dropdown>
+      </div>
+    </div>
+  </p-panel>
+</div>

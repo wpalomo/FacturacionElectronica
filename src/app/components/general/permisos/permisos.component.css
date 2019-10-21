@@ -1,0 +1,39 @@
+:host>>>.my-panel .ui-panel-titlebar {
+    background: #428bca;
+    color: white
+}
+
+.center-login {
+    width: 500px;
+    margin: 0 auto;
+    /*margin-top: 30;
+    margin-left: auto;
+    margin-right: auto;*/
+}
+
+@media only screen and (max-width: 600px) {
+    .center-login {
+        width: 100%;
+        margin: auto;
+
+        /*position: absolute;
+        margin: auto;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100px;
+        height: 100px;
+        background-color: #ccc;
+        border-radius: 3px;*/
+
+        /*margin-top: 30;
+        margin-left: auto;
+        margin-right: auto;*/
+    }
+}
+
+
+.ui-inputtext {
+    width: 100%
+}
