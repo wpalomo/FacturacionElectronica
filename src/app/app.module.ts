@@ -26,6 +26,7 @@ import { MantenimientoPerfilComponent } from './components/general/mantenimiento
 import { PermisosComponent } from './components/general/permisos/permisos.component';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
+import { MenuService } from './services/menu/menu.service';
 
 //import { ConfirmationService } from 'primeng/api';
 //import { ConfirmationService } from 'primeng/components/common/api';
@@ -60,7 +61,8 @@ import { MessageService } from 'primeng/api';
     EncrDecrService,
     MantenimientoPerfilService,
     ConfirmationService,
-    MessageService
+    MessageService,
+    MenuService
   ],
   bootstrap: [AppComponent]
 })

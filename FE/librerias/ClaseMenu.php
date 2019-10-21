@@ -212,6 +212,70 @@ class ClaseMenu {
         return json_encode($menu);
     }
 
+    //obtiene el menu optimizado para la opcion de permisos
+    public function getMenuPermiso() {
+        $query = "
+            EXEC SP_GEN_MENU
+            @in_id_usuario = '$this->id_usuario',	     	     
+            @in_operacion = 'QMU'
+        ";
+
+        $parametros = array(
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+        //print_r($result);
+        if ($result['error'] == 'N') {
+            $tree = array();
+
+            $data = $result['data'];
+
+            //print_r($data);
+
+            foreach ($data as $key => $rows) {
+                $leaf = true;
+                $expanded = false;
+                if ($rows['tipo'] == 'P') {
+                    $leaf = false;
+                }
+
+                $arr = array(
+                    'id_menu' => $rows['id_menu'],
+                    'id_menu_padre' => $rows['id_menu_padre'],
+                    'text' => $rows['nombre_menu'],
+                    //'nombre_menu' => $rows['nombre_menu'],
+                    'tipo' => $rows['tipo'],
+                    'iconCls' => trim($rows['icono']),
+                    //'MN_ICONO' => trim($rows['MN_ICONO']),
+                    //'mn_clase' => trim($rows['mn_clase']),
+                    'routerLink' => trim($rows['ruta']),
+                    'leaf' => $leaf,
+                    'expanded' => $expanded,
+                );
+
+                if (($rows['tipo'] == 'P')) {
+                    //$arr = $arr + array('children' => array());
+                }
+
+                $this->adj_tree($tree, $arr);
+            }
+            $nodes = $tree[1];
+
+            //$nodes = $this->str_replace_once('"children"', "data", $nodes);
+            //$nodes = str_replace("c", "children", $nodes);
+            //echo $nodes;
+            //return json_encode($nodes);
+
+            $aux = 1;
+            $nodes = json_encode($nodes);
+            //$nodes = str_replace("children", "data", $nodes, $aux);
+            $nodes = $this->str_replace_once("children", "data", $nodes);
+
+            return $nodes;
+        }
+    }
+
     private function str_replace_once($str_pattern, $str_replacement, $string) {
 
         if (strpos($string, $str_pattern) !== false) {

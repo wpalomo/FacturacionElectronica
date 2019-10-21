@@ -27,6 +27,7 @@ import { PasswordModule } from 'primeng/password';
 import { FieldsetModule } from 'primeng/fieldset';
 import { AccordionModule } from 'primeng/accordion';
 import { ToastModule } from 'primeng/toast';
+import {TreeModule} from 'primeng/tree';
 
 @NgModule({
     imports: [
@@ -56,7 +57,8 @@ import { ToastModule } from 'primeng/toast';
         PasswordModule,
         FieldsetModule,
         AccordionModule,
-        ToastModule
+        ToastModule,
+        TreeModule
     ],
     exports: [
         PanelModule,
@@ -85,7 +87,8 @@ import { ToastModule } from 'primeng/toast';
         PasswordModule,
         FieldsetModule,
         AccordionModule,
-        ToastModule
+        ToastModule,
+        TreeModule
     ],
 })
 export class PrimeNGModule { }

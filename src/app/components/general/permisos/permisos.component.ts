@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MantenimientoPerfilService } from '../../../services/mantenimiento-perfil/mantenimiento-perfil.service';
+import { MenuService } from '../../../services/menu/menu.service';
 import IEstados from 'src/app/model/IEstados';
 import ICombo from 'src/app/model/ICombo';
+import { TreeNode } from 'primeng/api';
 
 @Component({
   selector: 'app-permisos',
@@ -20,12 +22,21 @@ export class PermisosComponent implements OnInit {
   perfilesActivos: IEstados[];
   selectedPerfil: ICombo;
 
+  checkboxSelectionTree: TreeNode[];
+  selectMultiplePlaces: TreeNode;
+
   constructor(
     private mantenimientoPerfilService: MantenimientoPerfilService,
+    private menuService: MenuService,
   ) { }
 
   ngOnInit() {
     this.cargarPerfiles();
+    this.menuService.getTouristPlaces().subscribe((data: any) => {
+      console.log(data);
+      this.checkboxSelectionTree = data
+      this.expandAll();
+    });
   }
 
   cargarPerfiles() {
@@ -82,5 +93,20 @@ export class PermisosComponent implements OnInit {
     );
 
     return 99;
+  }
+
+  expandAll() {
+    this.checkboxSelectionTree.forEach(node => {
+      this.expandRecursive(node, true);
+    });
+  }
+
+  private expandRecursive(node: TreeNode, isExpand: boolean) {
+    node.expanded = isExpand;
+    if (node.children) {
+      node.children.forEach(childNode => {
+        this.expandRecursive(childNode, isExpand);
+      });
+    }
   }
 }

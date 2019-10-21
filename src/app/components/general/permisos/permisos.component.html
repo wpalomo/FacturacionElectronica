@@ -1,15 +1,34 @@
 <div class="center-login mt-4">
   <p-panel header="Permisos" styleClass="my-panel">
-    <div class="p-grid">
-      <div class="p-col-3">
-        <div class="first">Perfil</div>
+    <p-card>
+      <div class="p-grid">
+        <div class="p-col-3">
+          <div class="first">Perfil</div>
+        </div>
+        <div class="p-col-9">
+          <p-dropdown id="cmbPerfil1" [options]="perfilesActivos" placeholder="Seleccione un perfil" optionLabel="label"
+            appendTo="body" [style]="{'width':'100%'}" (onChange)="onChange($event)" [(ngModel)]="selectedPerfil"
+            #cmbPerfil1>
+          </p-dropdown>
+        </div>
       </div>
-      <div class="p-col-9">
-        <p-dropdown id="cmbPerfil1" [options]="perfilesActivos" placeholder="Seleccione un perfil" optionLabel="label"
-          appendTo="body" [style]="{'width':'90%'}" (onChange)="onChange($event)" [(ngModel)]="selectedPerfil"
-          #cmbPerfil1>
-        </p-dropdown>
-      </div>
-    </div>
+
+      <!--
+      <hr>
+
+      <p-tree [value]="checkboxSelectionTree" selectionMode="checkbox" [(selection)]="selectMultiplePlaces"
+        (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)"
+        [style]="{'width':'100%','overflow':'auto'}"></p-tree>-->
+    </p-card>
+
+    <hr>
+
+    <p-card>
+      <p-tree [value]="checkboxSelectionTree" selectionMode="checkbox" [(selection)]="selectMultiplePlaces"
+        (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)"
+        [style]="{'width':'100%','overflow':'auto'}"></p-tree>
+    </p-card>
+
+    <hr>
   </p-panel>
 </div>
