@@ -24,11 +24,16 @@
     <hr>
 
     <p-card>
-      <p-tree [value]="checkboxSelectionTree" selectionMode="checkbox" [(selection)]="selectMultiplePlaces"
+      <p-tree [value]="checkboxSelectionTree" selectionMode="checkbox" [(selection)]="selectedFiles"
         (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)"
         [style]="{'width':'100%','overflow':'auto'}"></p-tree>
     </p-card>
 
     <hr>
+
+    <div class="mt-3">
+      <button pButton type="button" label="Aceptar" class="btn btn-block"
+        (click)="onClickBtnPerfil(selectedFiles)"></button>
+    </div>
   </p-panel>
 </div>

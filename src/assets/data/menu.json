@@ -1,130 +1,65 @@
 {
     "data": [
         {
-            "label": "Asia",
-            "data": "Documents Folder",
-            "expandedIcon": "fa-folder-open",
-            "collapsedIcon": "fa-folder",
+            "data": "2",
+            "label": "Modulo General",
+            "id_menu_padre": "1",
+            "expandedIcon": "fa fa-folder-open",
+            "collapsedIcon": "fa fa-folder",
+            "tipo": "P",
             "children": [
                 {
-                    "label": "India",
-                    "data": "Work Folder",
-                    "expandedIcon": "fa-folder-open",
-                    "collapsedIcon": "fa-folder",
+                    "data": "3",
+                    "label": "Usuarios",
+                    "id_menu_padre": "2",
+                    "expandedIcon": "fa fa-folder-open",
+                    "collapsedIcon": "fa fa-folder",
+                    "tipo": "P",
                     "children": [
                         {
-                            "label": "Goa",
-                            "icon": "fa-file-word-o",
-                            "data": "Beaches& Old Goa colonial architecture"
+                            "data": "4",
+                            "label": "Mantenimiento de Usuarios",
+                            "id_menu_padre": "3",
+                            "tipo": "O",
+                            "icon": "fa fa-users"
                         },
                         {
-                            "label": "Mumbai",
-                            "icon": "fa-file-word-o",
-                            "data": "Shopping,Bollywood"
+                            "data": "5",
+                            "label": "Cambio de Clave",
+                            "id_menu_padre": "3",
+                            "tipo": "O",
+                            "icon": "fa fa-unlock-alt"
                         },
                         {
-                            "label": "Hyderabad",
-                            "icon": "fa-file-word-o",
-                            "data": "Golconda Fort"
+                            "data": "6",
+                            "label": "Favoritos",
+                            "id_menu_padre": "3",
+                            "tipo": "O",
+                            "icon": "fa fa-star"
                         }
                     ]
                 },
                 {
-                    "label": "Singapore",
-                    "data": "Home Folder",
-                    "expandedIcon": "fa-folder-open",
-                    "collapsedIcon": "fa-folder",
+                    "data": "7",
+                    "label": "Seguridades",
+                    "id_menu_padre": "2",
+                    "expandedIcon": "fa fa-folder-open",
+                    "collapsedIcon": "fa fa-folder",
+                    "tipo": "P",
                     "children": [
                         {
-                            "label": "Woodlands",
-                            "icon": "fa-file-word-o",
-                            "data": "Parks,Sea food"
-                        }
-                    ]
-                },
-                {
-                    "label": "Indonesia",
-                    "data": "Pictures Folder",
-                    "expandedIcon": "fa-folder-open",
-                    "collapsedIcon": "fa-folder",
-                    "children": [
-                        {
-                            "label": "Bali",
-                            "icon": "fa-file-image-o",
-                            "data": "Kuta,Surfing,beaches"
+                            "data": "8",
+                            "label": "Mantenimiento de Perfil",
+                            "id_menu_padre": "7",
+                            "tipo": "O",
+                            "icon": "fa fa-address-card"
                         },
                         {
-                            "label": "Lombok",
-                            "icon": "fa-file-image-o",
-                            "data": "Gilli Islands,Beaches and Diving"
-                        },
-                        {
-                            "label": "Batam",
-                            "icon": "fa-file-image-o",
-                            "data": "Beaches,resorts and night life"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "label": "Australia",
-            "data": "Continent",
-            "expandedIcon": "fa-folder-open",
-            "collapsedIcon": "fa-folder",
-            "children": [
-                {
-                    "label": "Sydney",
-                    "icon": "fa-file-image-o",
-                    "data": "Sydney opera house"
-                },
-                {
-                    "label": "Perth",
-                    "icon": "fa-file-image-o",
-                    "data": "Beaches,kings park"
-                },
-                {
-                    "label": "Brisbane",
-                    "icon": "fa-file-image-o",
-                    "data": "South Bank Museums"
-                }
-            ]
-        },
-        {
-            "label": "Europe",
-            "data": "Continent",
-            "expandedIcon": "fa-folder-open",
-            "collapsedIcon": "fa-folder",
-            "children": [
-                {
-                    "label": "Germany",
-                    "data": "Country",
-                    "children": [
-                        {
-                            "label": "Hamburg",
-                            "icon": "fa-file-video-o",
-                            "data": "Berlin wall,Brandenburg gate"
-                        },
-                        {
-                            "label": "Berlin",
-                            "icon": "fa-file-video-o",
-                            "data": "Canals & Art"
-                        }
-                    ]
-                },
-                {
-                    "label": "UK",
-                    "data": "Country",
-                    "children": [
-                        {
-                            "label": "London",
-                            "icon": "fa-file-video-o",
-                            "data": "Buckingham palace"
-                        },
-                        {
-                            "label": "Oxford",
-                            "icon": "fa-file-video-o",
-                            "data": "Museums and Punting"
+                            "data": "9",
+                            "label": "Permisos",
+                            "id_menu_padre": "7",
+                            "tipo": "O",
+                            "icon": "fa fa-key"
                         }
                     ]
                 }

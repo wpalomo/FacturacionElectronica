@@ -25,6 +25,9 @@ export class PermisosComponent implements OnInit {
   checkboxSelectionTree: TreeNode[];
   selectMultiplePlaces: TreeNode;
 
+  dataArray: string[] = [];
+  selectedFiles: TreeNode[] = [];
+
   constructor(
     private mantenimientoPerfilService: MantenimientoPerfilService,
     private menuService: MenuService,
@@ -36,6 +39,17 @@ export class PermisosComponent implements OnInit {
       console.log(data);
       this.checkboxSelectionTree = data
       this.expandAll();
+
+      this.selectedFiles = [
+        {
+          data: "4",
+          label: "Mantenimiento de Usuarios",
+          icon: "fa fa-users"
+        }
+      ]
+
+      //this.dataArray = ["4", "6"];
+      //this.checkNode(this.checkboxSelectionTree, this.dataArray);
     });
   }
 
@@ -95,10 +109,26 @@ export class PermisosComponent implements OnInit {
     return 99;
   }
 
+  onClickBtnPerfil(selectMultiplePlaces) {
+    console.log(selectMultiplePlaces);
+    //console.log(JSON.stringify(selectMultiplePlaces));
+    selectMultiplePlaces.forEach(node => {
+      console.log(node.label, node.data);
+    });
+  }
+
   expandAll() {
     this.checkboxSelectionTree.forEach(node => {
       this.expandRecursive(node, true);
     });
+  }
+
+  nodeSelect(event) {
+    //event.node = selected node
+  }
+
+  nodeUnselect(event) {
+
   }
 
   private expandRecursive(node: TreeNode, isExpand: boolean) {
@@ -109,4 +139,86 @@ export class PermisosComponent implements OnInit {
       });
     }
   }
+
+  checkNode(nodes: TreeNode[], str: string[]) {
+    console.log('in check node');
+    for (let i = 0; i < nodes.length; i++) {
+      if (!nodes[i].leaf) {
+        for (let j = 0; j < nodes[i].children.length; j++) {
+          if (str.includes(nodes[i].children[j].data)) {
+            if (!this.selectedFiles.includes(nodes[i].children[j])) {
+              this.selectedFiles.push(nodes[i].children[j]);
+            }
+          }
+        }
+      } else {
+        if (str.includes(nodes[i].data)) {
+          if (!this.selectedFiles.includes(nodes[i])) {
+            this.selectedFiles.push(nodes[i]);
+          }
+        }
+      }
+      if (nodes[i].leaf) {
+        continue;
+      } else {
+        this.checkNode(nodes[i].children, str);
+        const count = nodes[i].children.length;
+        let c = 0;
+        for (let j = 0; j < nodes[i].children.length; j++) {
+          if (this.selectedFiles.includes(nodes[i].children[j])) {
+            c++;
+          }
+          if (nodes[i].children[j].partialSelected) {
+            nodes[i].partialSelected = true;
+          }
+        }
+        if (c === 0) { } else if (c === count) {
+          nodes[i].partialSelected = false;
+          if (!this.selectedFiles.includes(nodes[i])) {
+            this.selectedFiles.push(nodes[i]);
+            console.log(this.selectedFiles);
+          }
+        } else {
+          nodes[i].partialSelected = true;
+        }
+      }
+    }
+  }
 }
+/*  checkNode(nodes: TreeNode[], str: string[]) {
+    for (let i = 0; i < nodes.length; i++) {
+      if (!nodes[i].leaf && nodes[i].children[0].leaf) {
+        for (let j = 0; j < nodes[i].children.length; j++) {
+          if (str.includes(nodes[i].children[j].data)) {
+            if (!this.selectedFiles.includes(nodes[i].children[j])) {
+              this.selectedFiles.push(nodes[i].children[j]);
+            }
+          }
+        }
+      }
+      if (nodes[i].leaf) {
+        return;
+      }
+      this.checkNode(nodes[i].children, str);
+      let count = nodes[i].children.length;
+      let c = 0;
+      for (let j = 0; j < nodes[i].children.length; j++) {
+        if (this.selectedFiles.includes(nodes[i].children[j])) {
+          c++;
+        }
+        if (nodes[i].children[j].partialSelected) nodes[i].partialSelected = true;
+      }
+      if (c == 0) { }
+      else if (c == count) {
+        nodes[i].partialSelected = false;
+        if (!this.selectedFiles.includes(nodes[i])) {
+          this.selectedFiles.push(nodes[i]);
+        }
+      }
+      else {
+        nodes[i].partialSelected = true;
+      }
+    }
+  }
+}
+*/
