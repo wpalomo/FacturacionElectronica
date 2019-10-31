@@ -7,7 +7,7 @@ header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token, X-EXAM
 include_once 'librerias/ClaseMenu.php';
 
 $action = isset($_GET['action']) ? $_GET['action'] : (isset($_POST['action']) ? $_POST['action'] : null);
-$action = 'getMenuPermiso';
+//$action = 'getMenuPermiso';
 
 switch ($action) {
     case 'getMenu':
@@ -25,19 +25,17 @@ switch ($action) {
 }
 
 function getMenu() {
-    //if (isset($_POST['id_usuario'])) {
-    //$objetoMenu = new ClaseMenu($_POST['id_usuario']);
-    $objetoMenu = new ClaseMenu(1);
-    $result = $objetoMenu->getMenu();
+    if (isset($_POST['id_usuario'])) {
+        $objetoMenu = new ClaseMenu($_POST['id_usuario']);
+        //$objetoMenu = new ClaseMenu(1);
+        $result = $objetoMenu->getMenu();
 
-    if ($result['error'] == 'N') {
-        //$data = ClaseJson::getJson($result);
+        if ($result['error'] == 'N') {
+            //$data = ClaseJson::getJson($result);
+        }
+    } else {
+        $data = ClaseJson::getMessageJson(false, 'Los campos Login o Clave estan vacios');
     }
-
-
-//    } else {
-//        $data = ClaseJson::getMessageJson(false, 'Los campos Login o Clave estan vacios');
-    //}
 
     echo $result;
 }

@@ -40,16 +40,16 @@ export class PermisosComponent implements OnInit {
       this.checkboxSelectionTree = data
       this.expandAll();
 
-      this.selectedFiles = [
+      /*this.selectedFiles = [
         {
           data: "4",
           label: "Mantenimiento de Usuarios",
           icon: "fa fa-users"
         }
-      ]
+      ]*/
 
-      //this.dataArray = ["4", "6"];
-      //this.checkNode(this.checkboxSelectionTree, this.dataArray);
+      this.dataArray = ["4", "5", "6", "8", "9"];
+      this.checkNode(this.checkboxSelectionTree, this.dataArray);
     });
   }
 
