@@ -34,8 +34,6 @@ function getUsuarios() {
         'filters' => $_POST['filters'],
     );
 
-
-
     $objetoUsuario = new ClaseUsuario();
 
     $result = $objetoUsuario->getUsuarios($parametros);
