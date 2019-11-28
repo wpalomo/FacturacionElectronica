@@ -15,6 +15,7 @@ class ClaseProcesarDocumentos {
     public function getDocumentos($parametros) {
         $select = "
         SELECT f.cci_empresa, 
+        f.cno_empresa,
         f.cci_sucursal, 
         f.cci_cliente, 
         f.cno_cliprov,
