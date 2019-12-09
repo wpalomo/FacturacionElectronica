@@ -6,7 +6,8 @@ define("_ODBC", "SISOEMP");
 define("_BASE", "FacturacionElectronica");
 define("_USUARIO", "sa");
 define("_CLAVE", "webpedidos*2013");
-define("_AMBIENTE_FE", "1");
+//define("_AMBIENTE_FE", "1");
+define("_ENTORNO", "PRUEBAS");
 //---------------------------------------
 //
 define("_SERVIDORI", "localhost");
