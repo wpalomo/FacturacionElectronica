@@ -2,12 +2,9 @@
 
 include_once 'librerias/header.php';
 include_once 'librerias/ClaseProcesarDocumentos.php';
+include_once 'librerias/ClaseValidaciones.php';
 
 $action = isset($_GET['action']) ? $_GET['action'] : (isset($_POST['action']) ? $_POST['action'] : null);
-
-$action = 'generarProcesoFE';
-
-
 
 switch ($action) {
     case 'getDocumentos':
@@ -37,19 +34,28 @@ function getDocumentos() {
 }
 
 function generarProcesoFE() {
-    echo 'generarProcesoFE';
-    $json = '{"cci_empresa": "008", "nci_documento": "10010016111", "opcion": "P"}';
+    //echo 'generarProcesoFE';
+    //$json = '[{"cci_empresa": "008", "nci_documento": "10010015467", "ambiente": "1", "opcion": "P"}]';
+    $json = $_POST['json'];
 
-    var_dump(json_decode($json));
 
+    //var_dump(json_decode($json));
     //if (isset($_POST['json'])) {
     if (isset($json)) {
+        $objetoProcesoFE = new ClaseProcesarDocumentos();
+
         $documentos = json_decode($json, true);
 
-        print_r($documentos);
+        //print_r($documentos);
+        $result = '';
 
         foreach ($documentos as $key => $value) {
-            echo $value;
+            //echo 'xxx';
+            //echo $key;
+            //echo $value['cci_empresa'];
+            if (!is_array($result)) {
+                $result = $objetoProcesoFE->generarXml($value);
+            }
         }
     } else {
         $data = ClaseJson::getMessageJson(false, 'Error en el envio de información');

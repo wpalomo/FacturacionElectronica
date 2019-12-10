@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    </head>
+    <body>        
+
+        <script>
+            $(function () {
+                let url = 'http://localhost/FE/procesarDocumentos.php'
+                let action = 'generarProcesoFE';
+                let json = '[{"cci_empresa": "008", "cci_sucursal": "GLO", "cci_tipocmpr": "FAC", "nci_documento": "10010017359", "ambiente": "1", "opcion": "P"}]';
+
+                $.post(url, {
+                    action: action,
+                    json: json
+                }, function (result) {
+                    //alert('successfully posted key1=value1&key2=value2 to foo.php');
+                    //alert(result);
+                    document.write(result);
+                });
+
+            });
+
+
+        </script>
+
+    </body>
+</html>

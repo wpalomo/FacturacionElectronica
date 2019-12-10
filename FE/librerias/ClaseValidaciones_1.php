@@ -56,14 +56,14 @@ class ClaseValidaciones {
     }
 
     private function crear($ruta) {        
-        //echo 'VERIFICANDO RUTA: ' . $ruta . '<br>';
+        echo 'VERIFICANDO RUTA: ' . $ruta . '<br>';
         if (!is_dir($ruta)) {
             if (!mkdir($ruta, 0777, true)) {
                 echo 'Error al crear el directorio: ' . $ruta;
             }
         }
 
-        //echo '<hr>';
+        echo '<hr>';
     }
 
 }
