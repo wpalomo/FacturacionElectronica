@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<factura xmlns:ns2="http://www.w3.org/2000/09/xmldsig#" id="comprobante" version="2.1.0">
+  <infoTributaria>
+    <ambiente>1</ambiente>
+    <tipoEmision>1</tipoEmision>
+    <razonSocial>GLOBALTEX S.A.</razonSocial>
+    <ruc>0992656735001</ruc>
+    <claveAcceso>2811201901099265673500110010010000173591234567819</claveAcceso>
+    <codDoc>01</codDoc>
+    <estab>001</estab>
+    <ptoEmi>001</ptoEmi>
+    <secuencial>000017359</secuencial>
+    <dirMatriz>LUQUE 517 Y BOYACA</dirMatriz>
+  </infoTributaria>
+  <infoFactura>
+    <fechaEmision>28/11/2019</fechaEmision>
+    <dirEstablecimiento>LUQUE 517 Y BOYACA</dirEstablecimiento>
+    <obligadoContabilidad>SI</obligadoContabilidad>
+    <tipoIdentificacionComprador>04</tipoIdentificacionComprador>
+    <guiaRemision>001-001-000018485</guiaRemision>
+    <razonSocialComprador>MIL COLORES CIA. LTDA.</razonSocialComprador>
+    <identificacionComprador>1791410114001</identificacionComprador>
+    <direccionComprador>LAS AVELLANAS E2-25 Y JUNCAL BODEGAS COMERCIALES AVELLANAS,</direccionComprador>
+    <totalSinImpuestos>2128.75</totalSinImpuestos>
+    <totalDescuento>.00</totalDescuento>
+    <totalConImpuestos>
+      <totalImpuesto>
+        <codigo>2</codigo>
+        <codigoPorcentaje>2</codigoPorcentaje>
+        <baseImponible>2128.75</baseImponible>
+        <tarifa>12</tarifa>
+        <valor>255.45</valor>
+      </totalImpuesto>
+    </totalConImpuestos>
+    <propina>0</propina>
+    <importeTotal>2384.20</importeTotal>
+    <moneda>DOLAR</moneda>
+    <pagos>
+      <pago>
+        <formaPago>20</formaPago>
+        <total>2384.20</total>
+      </pago>
+    </pagos>
+  </infoFactura>
+  <detalles>
+    <detalle>
+      <codigoPrincipal>0400104013</codigoPrincipal>
+      <descripcion>B.LLANO S-27 N PAPIRO ECRU 144-HILOS</descripcion>
+      <cantidad>400.00</cantidad>
+      <precioUnitario>2.5000</precioUnitario>
+      <descuento>.00</descuento>
+      <precioTotalSinImpuesto>1000.00</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>2</codigoPorcentaje>
+          <tarifa>12</tarifa>
+          <baseImponible>1000.00</baseImponible>
+          <valor>120.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>0400103967</codigoPrincipal>
+      <descripcion>B.LLANO S-101 L CHATEAU GREY 144-HILOS</descripcion>
+      <cantidad>150.00</cantidad>
+      <precioUnitario>2.5000</precioUnitario>
+      <descuento>.00</descuento>
+      <precioTotalSinImpuesto>375.00</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>2</codigoPorcentaje>
+          <tarifa>12</tarifa>
+          <baseImponible>375.00</baseImponible>
+          <valor>45.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>0400104005</codigoPrincipal>
+      <descripcion>B.LLANO S-225 M AQUA 12-5410 144-HILOS</descripcion>
+      <cantidad>150.00</cantidad>
+      <precioUnitario>2.5000</precioUnitario>
+      <descuento>.00</descuento>
+      <precioTotalSinImpuesto>375.00</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>2</codigoPorcentaje>
+          <tarifa>12</tarifa>
+          <baseImponible>375.00</baseImponible>
+          <valor>45.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>0400104084</codigoPrincipal>
+      <descripcion>B.LLANO S-197 O PERFECT BLUE 144-HILOS</descripcion>
+      <cantidad>151.50</cantidad>
+      <precioUnitario>2.5000</precioUnitario>
+      <descuento>.00</descuento>
+      <precioTotalSinImpuesto>378.75</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>2</codigoPorcentaje>
+          <tarifa>12</tarifa>
+          <baseImponible>378.75</baseImponible>
+          <valor>45.45</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+  </detalles>
+  <infoAdicional>
+    <campoAdicional nombre="Dirección">LAS AVELLANAS E2-25 Y JUNCAL BODEGAS COMERCIALES AVELLANAS,</campoAdicional>
+    <campoAdicional nombre="Teléfono">3465379/2224509</campoAdicional>
+    <campoAdicional nombre="Email">compras.invel@mil-colores.com</campoAdicional>
+  </infoAdicional>
+</factura>

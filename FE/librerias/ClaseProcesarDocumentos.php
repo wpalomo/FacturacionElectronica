@@ -5,6 +5,13 @@ include_once 'ClaseBaseDatos.php';
 include_once 'ClaseJson.php';
 include_once 'funciones.php';
 include_once 'ClaseGenerarXml.php';
+include_once 'ClaseFirmarFE.php';
+include_once 'ClaseEnviarFE.php';
+include_once 'ClaseAutorizarFE.php';
+include_once 'ClaseGeneraPdfFactura.php';
+include_once 'ClaseGeneraPdfNC.php';
+include_once 'ClaseGeneraPdfRetencion.php';
+include_once 'ClaseGeneraPdfGuia.php';
 
 /**
  * Description of ClaseProcesarDocumentos
@@ -214,110 +221,330 @@ class ClaseProcesarDocumentos {
                 if (($this->getDataDocumentos($parametros['cci_empresa'], $parametros['nci_documento'], $parametros['cci_tipocmpr'], 'P')) == 'S') {
                     return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarXml()');
                 } else {
+                    if (count($this->dataDocumentos) > 0) {
+                        switch ($parametros['cci_tipocmpr']) {
+                            case 'FAC':
+                                $this->codDoc = '01';
+
+                                $resultPagos = $this->getPagosFactura($parametros['cci_empresa'], $parametros['cci_sucursal'], $parametros['nci_documento']);
+
+                                if ($resultPagos == 'S') {
+                                    return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarXml()-3');
+                                } else {
+                                    $dataPagos = $resultPagos;
+                                }
+
+                                $resultDetalle = $this->getDetalleFactura($parametros['cci_empresa'], $parametros['cci_sucursal'], $parametros['nci_documento']);
+
+                                if ($resultDetalle == 'S') {
+                                    return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarXml()-4');
+                                } else {
+                                    $dataDetalle = $resultDetalle;
+                                }
+
+                                $result = $objetoGenerarXml->generaXmlFactura($this->dataEmpresas, $this->dataDocumentos, $dataPagos, $dataDetalle);
+                                if ($result == 'S') {
+                                    return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $objetoGenerarXml->getErrorDB() . ' - ClaseProcesoFE - generarXml()-5');
+                                }
+
+
+                                $resultActualizar = $this->actualizarEstadoDocumento($objetoGenerarXml->getDataLog());
+                                if ($resultActualizar == 'S') {
+                                    return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarXml()-6');
+                                }
+
+                                break;
+                            case 'NC':
+                                $this->codDoc = '04';
+
+                                $resultDetalle = $this->getDetalleNC($parametros['cci_empresa'], $parametros['cci_sucursal'], $parametros['nci_documento']);
+
+                                if ($resultDetalle == 'S') {
+                                    return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarXml()-7');
+                                } else {
+                                    $dataDetalle = $resultDetalle;
+                                }
+
+                                $result = $objetoGenerarXml->generaXmlNC($this->dataEmpresas, $this->dataDocumentos, $dataDetalle);
+                                if ($result == 'S') {
+                                    return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $objetoGenerarXml->getErrorDB() . ' - ClaseProcesoFE - generarXml()-8');
+                                }
+
+                                $resultActualizar = $this->actualizarEstadoDocumento($objetoGenerarXml->getDataLog());
+                                if ($resultActualizar == 'S') {
+                                    return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarXml()-9');
+                                }
+                                break;
+                            case 'RET':
+                                $this->codDoc = '07';
+
+                                $resultDetalle = $this->getDetalleRetencion($parametros['cci_empresa'], $parametros['cci_sucursal'], $parametros['nci_documento']);
+
+                                if ($resultDetalle == 'S') {
+                                    return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarXml()-10');
+                                } else {
+                                    $dataDetalle = $resultDetalle;
+                                }
+
+                                $result = $objetoGenerarXml->generaXmlRetencion($this->dataEmpresas, $this->dataDocumentos, $dataDetalle);
+                                if ($result == 'S') {
+                                    return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $objetoGenerarXml->getErrorDB() . ' - ClaseProcesoFE - generarXml()-11');
+                                }
+
+                                $resultActualizar = $this->actualizarEstadoDocumento($objetoGenerarXml->getDataLog());
+                                if ($resultActualizar == 'S') {
+                                    return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarXml()-12');
+                                }
+                                break;
+                            case 'GUI':
+                                $this->codDoc = '06';
+
+                                $resultDetalle = $this->getDetalleGuia($parametros['cci_empresa'], $parametros['cci_sucursal'], $parametros['nci_documento']);
+
+                                if ($resultDetalle == 'S') {
+                                    return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarXml()-13');
+                                } else {
+                                    $dataDetalle = $resultDetalle;
+                                }
+
+                                $result = $objetoGenerarXml->generarXmlGuia($this->dataEmpresas, $this->dataDocumentos, $dataDetalle);
+                                if ($result == 'S') {
+                                    return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $objetoGenerarXml->getErrorDB() . ' - ClaseProcesoFE - generarXml()-14');
+                                }
+
+                                $resultActualizar = $this->actualizarEstadoDocumento($objetoGenerarXml->getDataLog());
+                                if ($resultActualizar == 'S') {
+                                    return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarXml()-15');
+                                }
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public function firmarFE($parametros) {
+        $objetoFirmarFE = new ClaseFirmarFE();
+        $error = 'N';
+
+        if (($error = $this->getEmpresas($parametros['cci_empresa'], 'QF')) == 'S') {
+            return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - firmarFE()');
+        } else {
+
+            if (($this->getDataDocumentos($parametros['cci_empresa'], $parametros['nci_documento'], $parametros['cci_tipocmpr'], 'G')) == 'S') {
+                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - firmarFE()');
+            } else {
+                if (count($this->dataDocumentos) > 0) {
+                    $objetoFirmarFE->firmar($this->dataEmpresas, $this->dataDocumentos, $parametros['cci_tipocmpr']);
+
+                    $resultActualizar = $this->actualizarEstadoDocumento($objetoFirmarFE->getDataLog());
+                    if ($resultActualizar == 'S') {
+                        return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - firmarFE()');
+                    }
+                }
+            }
+        }
+    }
+
+    public function enviarFE($parametros) {
+        $objetoEnviarFE = new ClaseEnviarFE();
+
+        if (($error = $this->getEmpresas($parametros['cci_empresa'], 'QE')) == 'S') {
+            return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - enviarFE()');
+        } else {
+            if (($this->getDataDocumentos($parametros['cci_empresa'], $parametros['nci_documento'], $parametros['cci_tipocmpr'], 'F')) == 'S') {
+                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - enviarFE()');
+            } else {
+                if (count($this->dataDocumentos) > 0) {
+                    $objetoEnviarFE->enviar($this->dataEmpresas, $this->dataDocumentos, $parametros['cci_tipocmpr']);
+
+                    $resultActualizar = $this->actualizarEstadoDocumento($objetoEnviarFE->getDataLog());
+                    if ($result == 'S') {
+                        return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - enviarFE()');
+                    }
+                }
+            }
+        }
+    }
+
+    public function autorizarFE($parametros) {
+        $objetoAutorizarFE = new ClaseAutorizarFE();
+
+        if (($error = $this->getEmpresas($parametros['cci_empresa'], 'QA')) == 'S') {
+            return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - autorizarFE()');
+        } else {
+            if (($this->getDataDocumentos($parametros['cci_empresa'], $parametros['nci_documento'], $parametros['cci_tipocmpr'], 'E')) == 'S') {
+                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - autorizarFE()');
+            } else {
+                if (count($this->dataDocumentos) > 0) {
+                    $objetoAutorizarFE->autorizar($this->dataEmpresas, $this->dataDocumentos, $parametros['cci_tipocmpr']);
+
+                    $resultActualizar = $this->actualizarEstadoDocumento($objetoAutorizarFE->getDataLog());
+                    if ($result == 'S') {
+                        return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - autorizarFE()');
+                    }
+                }
+            }
+        }
+    }
+
+    public function generarPDF($parametros) {
+        if (($error = $this->getEmpresas($parametros['cci_empresa'], 'QGR')) == 'S') {
+            return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarPDF()-1');
+        } else {
+            if (($this->getDocumentosPDF($parametros['cci_empresa'], $parametros['cci_tipocmpr'], $parametros['nci_documento'])) == 'S') {
+                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarPDF()-2');
+            } else {
+                if (count($this->dataDocumentos) > 0) {
+                    $resultCabecera = $this->consultaDocumentosFE($this->dataDocumentos['CCI_EMPRESA'], $this->dataDocumentos['CCI_SUCURSAL'], $this->dataDocumentos['CCI_CLAVE_ACCESO'], $parametros['cci_tipocmpr'], 'C');
+                    if ($resultCabecera == 'S') {
+                        return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarPDF()-3');
+                    } else {
+                        $dataCabecera = $resultCabecera[0];
+                    }
+
+                    $resultDetalle = $this->consultaDocumentosFE($this->dataDocumentos['CCI_EMPRESA'], $this->dataDocumentos['CCI_SUCURSAL'], $this->dataDocumentos['CCI_CLAVE_ACCESO'], $parametros['cci_tipocmpr'], 'D');
+                    if ($resultDetalle == 'S') {
+                        return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarPDF()-4');
+                    } else {
+                        $dataDetalle = $resultDetalle;
+                    }
+
+                    if ($valueTipos == 'FAC') {
+                        $resultPagos = $this->consultaDocumentosFE($this->dataDocumentos['CCI_EMPRESA'], $this->dataDocumentos['CCI_SUCURSAL'], $this->dataDocumentos['CCI_CLAVE_ACCESO'], $parametros['cci_tipocmpr'], 'P');
+
+                        if ($resultPagos == 'S') {
+                            return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarPDF()-5');
+                        } else {
+                            $dataPagos = $resultPagos;
+                        }
+
+                        $resultVencimientos = $this->consultaDocumentosFE($this->dataDocumentos['CCI_EMPRESA'], $this->dataDocumentos['CCI_SUCURSAL'], $this->dataDocumentos['CCI_CLAVE_ACCESO'], $parametros['cci_tipocmpr'], 'V');
+
+                        if ($resultVencimientos == 'S') {
+                            return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarPDF()-5');
+                        } else {
+                            $dataVencimientos = $resultVencimientos;
+                        }
+                    }
+
                     switch ($parametros['cci_tipocmpr']) {
                         case 'FAC':
-                            $this->codDoc = '01';
-
-                            $resultPagos = $this->getPagosFactura($parametros['cci_empresa'], $parametros['cci_sucursal'], $parametros['nci_documento']);
-
-                            if ($resultPagos == 'S') {
-                                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarXml()-3');
-                            } else {
-                                $dataPagos = $resultPagos;
-                            }
-
-                            $resultDetalle = $this->getDetalleFactura($parametros['cci_empresa'], $parametros['cci_sucursal'], $parametros['nci_documento']);
-
-                            if ($resultDetalle == 'S') {
-                                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarXml()-4');
-                            } else {
-                                $dataDetalle = $resultDetalle;
-                            }
-
-                            echo '<hr>';
-                            print_r($this->dataEmpresas);
-                            echo '<hr>';
-                            print_r($this->dataDocumentos);
-                            echo '<hr>';
-                            print_r($dataPagos);
-                            echo '<hr>';
-                            print_r($dataDetalle);
-                            echo '<hr>';
-
-                            $result = $objetoGenerarXml->generaXmlFactura($this->dataEmpresas, $this->dataDocumentos, $dataPagos, $dataDetalle);
-                            if ($result == 'S') {
-                                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $objetoGenerarXml->getErrorDB() . ' - ClaseProcesoFE - generarXml()-5');
-                            }
-
-                            $resultActualizar = $this->actualizarEstadoDocumento($objetoGenerarXml->getDataLog());
-                            if ($resultActualizar == 'S') {
-                                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarXml()-6');
-                            }
-
+                            $objetoGeneraPdf = new ClaseGeneraPdfFactura('FAC', $dataCabecera, $dataDetalle, $dataPagos, $dataVencimientos);
+                            $objetoGeneraPdf->generaPdf();
                             break;
                         case 'NC':
-                            $this->codDoc = '04';
-
-                            $resultDetalle = $this->getDetalleNC($valueDocumentos['CCI_EMPRESA'], $valueDocumentos['CCI_SUCURSAL'], $valueDocumentos['NCI_DOCUMENTO']);
-
-                            if ($resultDetalle == 'S') {
-                                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarXml()-7');
-                            } else {
-                                $dataDetalle = $resultDetalle;
-                            }
-
-                            $result = $objetoGenerarXml->generaXmlNC($valueEmpresa, $valueDocumentos, $dataDetalle);
-                            if ($result == 'S') {
-                                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $objetoGenerarXml->getErrorDB() . ' - ClaseProcesoFE - generarXml()-8');
-                            }
-
-                            $resultActualizar = $this->actualizarEstadoDocumento($objetoGenerarXml->getDataLog());
-                            if ($resultActualizar == 'S') {
-                                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarXml()-9');
-                            }
+                            $objetoGeneraPdf = new ClaseGeneraPdfNC('NC', $dataCabecera, $dataDetalle, '', '');
+                            $objetoGeneraPdf->generaPdf();
                             break;
                         case 'RET':
-                            $this->codDoc = '07';
-
-                            $resultDetalle = $this->getDetalleRetencion($valueDocumentos['CCI_EMPRESA'], $valueDocumentos['CCI_SUCURSAL'], $valueDocumentos['NCI_DOCUMENTO']);
-
-                            if ($resultDetalle == 'S') {
-                                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarXml()-10');
-                            } else {
-                                $dataDetalle = $resultDetalle;
-                            }
-
-                            $result = $objetoGenerarXml->generaXmlRetencion($valueEmpresa, $valueDocumentos, $dataDetalle);
-                            if ($result == 'S') {
-                                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $objetoGenerarXml->getErrorDB() . ' - ClaseProcesoFE - generarXml()-11');
-                            }
-
-                            $resultActualizar = $this->actualizarEstadoDocumento($objetoGenerarXml->getDataLog());
-                            if ($resultActualizar == 'S') {
-                                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarXml()-12');
-                            }
+                            $objetoGeneraPdf = new ClaseGeneraPdfRetencion('RET', $dataCabecera, $dataDetalle, '', '');
+                            $objetoGeneraPdf->generaPdf();
                             break;
                         case 'GUI':
-                            $this->codDoc = '06';
-
-                            $resultDetalle = $this->getDetalleGuia($valueDocumentos['CCI_EMPRESA'], $valueDocumentos['CCI_SUCURSAL'], $valueDocumentos['NCI_DOCUMENTO']);
-
-                            if ($resultDetalle == 'S') {
-                                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarXml()-13');
-                            } else {
-                                $dataDetalle = $resultDetalle;
-                            }
-
-                            $result = $objetoGenerarXml->generarXmlGuia($valueEmpresa, $valueDocumentos, $dataDetalle);
-                            if ($result == 'S') {
-                                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $objetoGenerarXml->getErrorDB() . ' - ClaseProcesoFE - generarXml()-14');
-                            }
-
-                            $resultActualizar = $this->actualizarEstadoDocumento($objetoGenerarXml->getDataLog());
-                            if ($resultActualizar == 'S') {
-                                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarXml()-15');
-                            }
+                            $objetoGeneraPdf = new ClaseGeneraPdfGuia('GUI', $dataCabecera, $dataDetalle, '', '');
+                            $objetoGeneraPdf->generaPdf();
                             break;
+                    }
+
+                    if (file_exists($dataCabecera['CCI_RUTA_PDF_COMPLETA'])) {
+                        $resultActualizarRuta = $this->actualizarRutaDocumentosLog($dataCabecera['CCI_EMPRESA'], $dataCabecera['CCI_SUCURSAL'], $dataCabecera['NCI_DOCUMENTO'], $dataCabecera['CCI_RUTA_XML_COMPLETA'], $dataCabecera['CCI_RUTA_PDF_COMPLETA'], $dataCabecera['CES_FE']);
+
+                        if ($resultActualizarRuta == 'S') {
+                            return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarPDF()-6');
+                        } else {
+                            $dataDetalle = $resultDetalle;
+                        }
+
+                        $resultActualizarGenerarPDF = $this->actualizarGenerarPDF($dataCabecera['CCI_EMPRESA'], $parametros['cci_tipocmpr'], $dataCabecera['NCI_DOCUMENTO'], $dataCabecera['CES_FE'], 'N');
+                        if ($resultActualizarGenerarPDF == 'S') {
+                            return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarPDF()-8');
+                        }
+
+                        $resultActualizarEnviarMail = $this->actualizarEnviarMail($dataCabecera['CCI_EMPRESA'], $parametros['cci_tipocmpr'], $dataCabecera['NCI_DOCUMENTO'], $dataCabecera['CES_FE'], 'S');
+                        if ($resultActualizarEnviarMail == 'S') {
+                            return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarPDF()-7');
+                        }
+                    } else {
+                        echo ' - error al grabar el archivo' . '<br>';
+                    }
+                }
+            }
+        }
+    }
+
+    public function generarPDFResumido($parametros) {
+        if (($error = $this->getEmpresas($parametros['cci_empresa'], 'QGR')) == 'S') {
+            return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarPDF()-1');
+        } else {
+            //el resumido por el momento solo es para factura y nota de credito
+            if ($parametros['cci_tipocmpr'] == 'FAC' || $parametros['cci_tipocmpr'] == 'NC' || $parametros['cci_tipocmpr'] == 'GUI') {
+                if (($this->getDocumentosPDF($parametros['cci_empresa'], $parametros['cci_tipocmpr'], $parametros['nci_documento'])) == 'S') {
+                    return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarPDF()-2');
+                } else {
+                    if (count($this->dataDocumentos) > 0) {
+                        $resultCabecera = $this->consultaDocumentosFE($this->dataDocumentos['CCI_EMPRESA'], $this->dataDocumentos['CCI_SUCURSAL'], $this->dataDocumentos['CCI_CLAVE_ACCESO'], $parametros['cci_tipocmpr'], 'C');
+                        if ($resultCabecera == 'S') {
+                            return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarPDF()-3');
+                        } else {
+                            $dataCabecera = $resultCabecera[0];
+                        }
+
+                        $dataCabecera['CCI_RUTA_PDF_COMPLETA'] = $dataCabecera['CCI_RUTA_PDF_RESUMIDO_COMPLETA'];
+
+                        $resultDetalle = $this->consultaDocumentosFE($this->dataDocumentos['CCI_EMPRESA'], $this->dataDocumentos['CCI_SUCURSAL'], $this->dataDocumentos['CCI_CLAVE_ACCESO'], $parametros['cci_tipocmpr'], 'DR');
+                        if ($resultDetalle == 'S') {
+                            return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarPDF()-4');
+                        } else {
+                            $dataDetalle = $resultDetalle;
+                        }
+
+                        if (count($dataDetalle) > 0) {
+                            if ($valueTipos == 'FAC') {
+                                $resultPagos = $this->consultaDocumentosFE($this->dataDocumentos['CCI_EMPRESA'], $this->dataDocumentos['CCI_SUCURSAL'], $this->dataDocumentos['CCI_CLAVE_ACCESO'], $parametros['cci_tipocmpr'], 'P');
+
+                                if ($resultPagos == 'S') {
+                                    return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarPDF()-5');
+                                } else {
+                                    $dataPagos = $resultPagos;
+                                }
+
+                                $resultVencimientos = $this->consultaDocumentosFE($this->dataDocumentos['CCI_EMPRESA'], $this->dataDocumentos['CCI_SUCURSAL'], $this->dataDocumentos['CCI_CLAVE_ACCESO'], $parametros['cci_tipocmpr'], 'V');
+
+                                if ($resultVencimientos == 'S') {
+                                    return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarPDF()-5');
+                                } else {
+                                    $dataVencimientos = $resultVencimientos;
+                                }
+                            }
+
+                            switch ($parametros['cci_tipocmpr']) {
+                                case 'FAC':
+                                    echo 'xxxxxxxxxxxxxxxxx';
+                                    $objetoGeneraPdf = new ClaseGeneraPdfFactura('FAC', $dataCabecera, $dataDetalle, $dataPagos, $dataVencimientos);
+                                    $objetoGeneraPdf->generaPdf();
+                                    break;
+                                case 'NC':
+                                    $objetoGeneraPdf = new ClaseGeneraPdfNC('NC', $dataCabecera, $dataDetalle, '', '');
+                                    $objetoGeneraPdf->generaPdf();
+                                    break;
+                                case 'RET':
+                                    $objetoGeneraPdf = new ClaseGeneraPdfRetencion('RET', $dataCabecera, $dataDetalle, '', '');
+                                    $objetoGeneraPdf->generaPdf();
+                                    break;
+                                case 'GUI':
+                                    $objetoGeneraPdf = new ClaseGeneraPdfGuia('GUI', $dataCabecera, $dataDetalle, '', '');
+                                    $objetoGeneraPdf->generaPdf();
+                                    break;
+                            }
+
+                            if (file_exists($dataCabecera['CCI_RUTA_PDF_COMPLETA'])) {
+                                echo 'PDF-RESUMIDO ';
+                            } else {
+                                echo ' - error al grabar el archivo' . '<br>';
+                            }
+                        }
                     }
                 }
             }
@@ -343,16 +570,12 @@ class ClaseProcesarDocumentos {
             $this->errorDB = ClaseJson::getJson($result);
             return 'S';
         } else {
-            $this->dataEmpresas = $result['data'];
+            $this->dataEmpresas = $result['data'][0];
         }
     }
 
     private function getDataDocumentos($cci_empresa, $nci_documento, $tipoDoc, $estadoFE) {
         $operacion = '';
-
-        if ($this->nci_documento == '') {
-            $cadena = "@IN_NCI_DOCUMENTO = NULL, ";
-        }
 
         switch ($tipoDoc) {
             case 'FAC':
@@ -399,7 +622,51 @@ class ClaseProcesarDocumentos {
             $this->errorDB = ClaseJson::getJson($result);
             return 'S';
         } else {
-            $this->dataDocumentos = $result['data'];
+            $this->dataDocumentos = $result['data'][0];
+        }
+    }
+
+    private function getDocumentosPDF($cci_empresa, $cci_tipocmpr, $nci_documento) {
+        $operacion = '';
+//        $cadena = "@IN_NCI_DOCUMENTO = '$this->nci_documento', ";
+//
+//        if ($this->nci_documento == '') {
+//            $cadena = "@IN_NCI_DOCUMENTO = NULL, ";
+//        }
+
+        switch ($cci_tipocmpr) {
+            case 'FAC':
+                $operacion = 'QFD';
+                break;
+            case 'NC':
+                $operacion = 'QND';
+                break;
+            case 'RET':
+                $operacion = 'QRD';
+                break;
+            case 'GUI':
+                $operacion = 'QGD';
+                break;
+        }
+
+        $query = "
+            EXEC BIZ_FAC..SP_FE_DOCUMENTOS_PROCESAR
+            @IN_CCI_EMPRESA = '$cci_empresa',
+            @IN_NCI_DOCUMENTO = '$nci_documento',
+            @IN_OPERACION = '$operacion'
+        ";
+
+        $parametros = array(
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        if ($result['error'] != 'N') {
+            $this->errorDB = ClaseJson::getJson($result);
+            return 'S';
+        } else {
+            $this->dataDocumentos = $result['data'][0];
         }
     }
 
@@ -449,6 +716,194 @@ class ClaseProcesarDocumentos {
         } else {
             return $result['data'];
         }
+    }
+
+    private function getDetalleNC($cci_empresa, $cci_sucursal, $nci_documento) {
+        $query = "
+            EXEC BIZ_FAC..SP_FE_DETALLE_DOCUMENTOS
+            @IN_CCI_EMPRESA = '$cci_empresa',  
+            @IN_CCI_SUCURSAL = '$cci_sucursal',    
+            --@IN_CCI_TIPOCMPR = 'NC',
+            @IN_NCI_DOCUMENTO = '$nci_documento',
+            @IN_OPERACION = 'QDN'
+        ";
+
+        $parametros = array(
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        if ($result['error'] != 'N') {
+            $this->errorDB = ClaseJson::getJson($result);
+            return 'S';
+        } else {
+            return $result['data'];
+        }
+    }
+
+    private function getDetalleRetencion($cci_empresa, $cci_sucursal, $nci_documento) {
+        $query = "
+            EXEC BIZ_FAC..SP_FE_DETALLE_DOCUMENTOS
+            @IN_CCI_EMPRESA = '$cci_empresa',  
+            @IN_CCI_SUCURSAL = '$cci_sucursal',                
+            @IN_NCI_DOCUMENTO = '$nci_documento',
+            @IN_OPERACION = 'QDR'
+        ";
+
+        $parametros = array(
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        if ($result['error'] != 'N') {
+            $this->errorDB = ClaseJson::getJson($result);
+            return 'S';
+        } else {
+            return $result['data'];
+        }
+    }
+
+    private function getDetalleGuia($cci_empresa, $cci_sucursal, $nci_documento) {
+        $query = "
+            EXEC BIZ_FAC..SP_FE_DETALLE_DOCUMENTOS
+            @IN_CCI_EMPRESA = '$cci_empresa',  
+            @IN_CCI_SUCURSAL = '$cci_sucursal',                
+            @IN_NCI_DOCUMENTO = '$nci_documento',
+            @IN_OPERACION = 'QDG'
+        ";
+
+        $parametros = array(
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        if ($result['error'] != 'N') {
+            $this->errorDB = ClaseJson::getJson($result);
+            return 'S';
+        } else {
+            return $result['data'];
+        }
+    }
+
+    public function actualizarEstadoDocumento($dataLog) {
+        $cci_empresa = $dataLog['CCI_EMPRESA'];
+        $cci_sucursal = $dataLog['CCI_SUCURSAL'];
+        $cci_cliente = $dataLog['CCI_CLIENTE'];
+        $cci_tipocmpr = $dataLog['CCI_TIPOCMPR'];
+        $nci_documento = $dataLog['NCI_DOCUMENTO'];
+        $claveAcceso = $dataLog['CCI_CLAVE_ACCESO'];
+        $proceso = $dataLog['CCI_PROCESO'];
+        $estado = $dataLog['CES_FE'];
+        $estadoWS = $dataLog['ESTADO_WS'];
+        $numeroAutorizacionWS = $dataLog['NUMERO_AUTORIZACION_WS'];
+        $fechaAutorizacionWS = $dataLog['FECHA_AUTORIZACION_WS'];
+        $ambienteWS = $dataLog['AMBIENTE_WS'];
+        $identificadorWS = $dataLog['IDENTIFICADOR_WS'];
+        $mensajeWS = $dataLog['MENSAJE_WS'];
+        $informacionAdicionalWS = utf8_decode($this->caracter($dataLog['INFORMACION_ADICIONAL_WS']));
+        $tipoWS = $dataLog['TIPO_WS'];
+
+        $query = "
+            EXEC BIZ_FAC..SP_FE_LOG
+            @IN_CCI_EMPRESA = '$cci_empresa',
+            @IN_CCI_SUCURSAL = '$cci_sucursal',
+            @IN_CCI_CLIENTE = '$cci_cliente',
+            @IN_CCI_TIPOCMPR = '$cci_tipocmpr', 
+            @IN_NCI_DOCUMENTO = '$nci_documento',
+            @IN_CCI_CLAVE_ACCESO = '$claveAcceso',
+            @IN_CCI_PROCESO = '$proceso',     
+            @IN_CES_FE = '$estado',
+            @ESTADO_WS = '$estadoWS',
+            @NUMERO_AUTORIZACION_WS = '$numeroAutorizacionWS',  
+            @FECHA_AUTORIZACION_WS = '$fechaAutorizacionWS',
+            @AMBIENTE_WS = '$ambienteWS',
+            @IDENTIFICADOR_WS = '$identificadorWS',
+            @MENSAJE_WS = '$mensajeWS',
+            @INFORMACION_ADICIONAL_WS = '$informacionAdicionalWS',
+            @TIPO_WS = '$tipoWS',   
+            @IN_OPERACION = 'UEL'
+        ";
+
+        $parametros = array(
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        if ($result['error'] != 'N') {
+            $this->errorDB = ClaseJson::getJson($result);
+            return 'S';
+        } else {
+            return $result['data'];
+        }
+    }
+
+    /**
+     * 
+     * @param type $cci_empresa: Codigo de la Empresa
+     * @param type $cci_sucursal: Codigo de la sucursal
+     * @param type $cci_clave_acceso: Codigo de la clave de acceso de facturacion electronica del documento
+     * @param type $tipo: tipo de documento: FAC-Factura, NC-Nota de Credito, RET-Retencion, GUI-Guia de Retencion 
+     * @param type $operacion: C-Informacion de Cabecera, D-Informacion de Detalle, P-Informacion de Pagos
+     * @return string
+     */
+    private function consultaDocumentosFE($cci_empresa, $cci_sucursal, $cci_clave_acceso, $tipo, $operacion) {
+        $query = "
+            EXEC BIZ_FAC..SP_FE_CONSULTA_DOCUMENTOS
+            @IN_CCI_EMPRESA = '$cci_empresa',
+            @IN_CCI_SUCURSAL = '$cci_sucursal',
+            @IN_CCI_CLAVE_ACCESO = '$cci_clave_acceso',    
+            @IN_TIPO = '$tipo',
+            @IN_OPERACION = '$operacion'
+        ";
+
+        $parametros = array(
+            'query' => $query
+        );
+
+        //echo $query;
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        if ($result['error'] != 'N') {
+            $this->errorDB = ClaseJson::getJson($result);
+            return 'S';
+        } else {
+            return $result['data'];
+        }
+    }
+
+    private function actualizarRutaDocumentosLog($cci_empresa, $cci_sucursal, $nci_documento, $cci_ruta_xml, $cci_ruta_pdf, $ces_fe) {
+        $query = "
+            EXEC BIZ_FAC..SP_FE_LOG
+            @IN_CCI_EMPRESA = '$cci_empresa',
+            @IN_CCI_SUCURSAL = '$cci_sucursal',
+            @IN_NCI_DOCUMENTO = '$nci_documento',    
+            @IN_CCI_RUTA_DOCUMENTO_XML = '$cci_ruta_xml',
+            @IN_CCI_RUTA_DOCUMENTO_PDF = '$cci_ruta_pdf',
+            @IN_CES_FE = '$ces_fe',
+            @IN_OPERACION = 'URD'                	
+        ";
+
+        $parametros = array(
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        if ($result['error'] != 'N') {
+            $this->errorDB = ClaseJson::getJson($result);
+            return 'S';
+        } else {
+            return $result['data'];
+        }
+    }
+
+    private function caracter($string) {
+        return str_replace("'", '', $string);
     }
 
 }

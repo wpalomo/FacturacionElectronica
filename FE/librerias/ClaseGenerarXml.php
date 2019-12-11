@@ -19,13 +19,7 @@ class ClaseGenerarXml {
         $this->codDoc = '01';
 
         echo '<hr>';
-        print_r($dataEmpresa);
-        echo '<hr>';
         print_r($dataDocumento);
-        echo '<hr>';
-        print_r($dataPagos);
-        echo '<hr>';
-        print_r($dataDetalle);
         echo '<hr>';
 
         $cci_empresa = $dataDocumento['CCI_EMPRESA'];
@@ -934,6 +928,8 @@ class ClaseGenerarXml {
             'INFORMACION_ADICIONAL_WS' => $informacionAdicionalWS,
             'TIPO_WS' => $tipoWS,
         );
+
+        print_r($this->dataLog);
     }
 
 }

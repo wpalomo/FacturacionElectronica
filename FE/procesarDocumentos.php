@@ -50,11 +50,34 @@ function generarProcesoFE() {
         $result = '';
 
         foreach ($documentos as $key => $value) {
-            //echo 'xxx';
-            //echo $key;
-            //echo $value['cci_empresa'];
             if (!is_array($result)) {
                 $result = $objetoProcesoFE->generarXml($value);
+            }
+
+            if (!is_array($result)) {
+                $result = $objetoProcesoFE->firmarFE($value);
+            }
+
+            if (!is_array($result)) {
+                $result = $objetoProcesoFE->enviarFE($value);
+            }
+
+            if (!is_array($result)) {
+                $result = $objetoProcesoFE->autorizarFE($value);
+            }
+
+            if (!is_array($result)) {
+                $result = $objetoProcesoFE->generarPDFResumido($value);
+            }
+
+//            if (!is_array($result)) {
+//                $result = $objetoProcesoFE->generarPDF($value);
+//            }
+
+            if (is_array($result)) {
+                echo $result['DESCRIPCION_ERROR'];
+            } else {
+                echo $result;
             }
         }
     } else {
