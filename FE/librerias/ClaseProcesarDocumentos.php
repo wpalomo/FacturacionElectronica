@@ -462,10 +462,10 @@ class ClaseProcesarDocumentos {
                             return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarPDF()-8');
                         }
 
-                        $resultActualizarEnviarMail = $this->actualizarEnviarMail($dataCabecera['CCI_EMPRESA'], $parametros['cci_tipocmpr'], $dataCabecera['NCI_DOCUMENTO'], $dataCabecera['CES_FE'], 'S');
-                        if ($resultActualizarEnviarMail == 'S') {
-                            return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarPDF()-7');
-                        }
+//                        $resultActualizarEnviarMail = $this->actualizarEnviarMail($dataCabecera['CCI_EMPRESA'], $parametros['cci_tipocmpr'], $dataCabecera['NCI_DOCUMENTO'], $dataCabecera['CES_FE'], 'S');
+//                        if ($resultActualizarEnviarMail == 'S') {
+//                            return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarPDF()-7');
+//                        }
                     } else {
                         echo ' - error al grabar el archivo' . '<br>';
                     }
@@ -521,7 +521,6 @@ class ClaseProcesarDocumentos {
 
                             switch ($parametros['cci_tipocmpr']) {
                                 case 'FAC':
-                                    echo 'xxxxxxxxxxxxxxxxx';
                                     $objetoGeneraPdf = new ClaseGeneraPdfFactura('FAC', $dataCabecera, $dataDetalle, $dataPagos, $dataVencimientos);
                                     $objetoGeneraPdf->generaPdf();
                                     break;
@@ -561,8 +560,6 @@ class ClaseProcesarDocumentos {
         $parametros = array(
             'query' => $query
         );
-
-        echo $query;
 
         $result = ClaseBaseDatos::query($parametros);
 
@@ -611,7 +608,7 @@ class ClaseProcesarDocumentos {
             @IN_CES_FE = '$estadoFE',    
             @IN_OPERACION = '$operacion'
         ";
-        echo $query;
+
         $parametros = array(
             'query' => $query
         );
@@ -902,8 +899,110 @@ class ClaseProcesarDocumentos {
         }
     }
 
+    private function actualizarGenerarPDF($cci_empresa, $cci_tipocmpr, $nci_documento, $ces_fe, $generar) {
+        $query = "
+            EXEC BIZ_FAC..SP_FE_DOCUMENTOS_PROCESAR
+            @IN_CCI_EMPRESA = '$cci_empresa',
+            --@IN_CCI_SUCURSAL = '$cci_sucursal',
+            @IN_CCI_TIPOCMPR = '$cci_tipocmpr',   
+            @IN_NCI_DOCUMENTO = '$nci_documento', 
+            @IN_CES_FE = '$ces_fe',    
+            @IN_GENERAR_PDF = '$generar',    
+            @IN_OPERACION = 'UPD'                	
+        ";
+        //echo $query;
+        $parametros = array(
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        if ($result['error'] != 'N') {
+            $this->errorDB = ClaseJson::getJson($result);
+            return 'S';
+        } else {
+            return $result['data'];
+        }
+    }
+
+    private function actualizarEnviarMail($cci_empresa, $cci_tipocmpr, $nci_documento, $ces_fe, $enviar) {
+        $query = "
+            EXEC BIZ_FAC..SP_FE_DOCUMENTOS_PROCESAR
+            @IN_CCI_EMPRESA = '$cci_empresa',
+            --@IN_CCI_SUCURSAL = '$cci_sucursal',
+            @IN_CCI_TIPOCMPR = '$cci_tipocmpr',   
+            @IN_NCI_DOCUMENTO = '$nci_documento', 
+            @IN_CES_FE = '$ces_fe',    
+            @IN_ENVIAR_MAIL = '$enviar',    
+            @IN_OPERACION = 'UEM'                	
+        ";
+
+        $parametros = array(
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        if ($result['error'] != 'N') {
+            $this->errorDB = ClaseJson::getJson($result);
+            return 'S';
+        } else {
+            return $result['data'];
+        }
+    }
+
     private function caracter($string) {
         return str_replace("'", '', $string);
+    }
+
+    public function habilitarDocumentoRechazado($cci_empresa, $cci_tipocmpr, $nci_documento, $ces_fe) {
+        $query = "
+            EXEC BIZ_FAC..SP_FE_DOCUMENTOS_PROCESAR
+            @IN_CCI_EMPRESA = '$cci_empresa',
+            --@IN_CCI_SUCURSAL = '$cci_sucursal',
+            @IN_CCI_TIPOCMPR = '$cci_tipocmpr',   
+            @IN_NCI_DOCUMENTO = '$nci_documento',                 
+            @IN_CES_FE = '$ces_fe',    
+            @IN_OPERACION = 'HDR'                	
+        ";
+        echo $query;
+        $parametros = array(
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        if ($result['error'] != 'N') {
+            $this->errorDB = ClaseJson::getJson($result);
+            return 'S';
+        } else {
+            return $result['data'];
+        }
+    }
+
+    public function actualizarGenerarPDF2($cci_empresa, $cci_tipocmpr, $nci_documento, $generar) {
+        $query = "
+            EXEC BIZ_FAC..SP_FE_DOCUMENTOS_PROCESAR
+            @IN_CCI_EMPRESA = '$cci_empresa',
+            --@IN_CCI_SUCURSAL = '$cci_sucursal',
+            @IN_CCI_TIPOCMPR = '$cci_tipocmpr',   
+            @IN_NCI_DOCUMENTO = '$nci_documento',                 
+            @IN_GENERAR_PDF = '$generar',    
+            @IN_OPERACION = 'UP2'                	
+        ";
+        echo $query;
+        $parametros = array(
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        if ($result['error'] != 'N') {
+            $this->errorDB = ClaseJson::getJson($result);
+            return 'S';
+        } else {
+            return $result['data'];
+        }
     }
 
 }
