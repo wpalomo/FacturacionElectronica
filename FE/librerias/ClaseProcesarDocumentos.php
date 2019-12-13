@@ -462,6 +462,10 @@ class ClaseProcesarDocumentos {
                             return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarPDF()-8');
                         }
 
+                        if (!copy($dataCabecera['CCI_RUTA_PDF_COMPLETA'], 'descargas/' . $this->dataDocumentos['CCI_CLAVE_ACCESO'] . '.pdf')) {
+                            echo "Error al copiar archivo...\n";
+                        }
+
 //                        $resultActualizarEnviarMail = $this->actualizarEnviarMail($dataCabecera['CCI_EMPRESA'], $parametros['cci_tipocmpr'], $dataCabecera['NCI_DOCUMENTO'], $dataCabecera['CES_FE'], 'S');
 //                        if ($resultActualizarEnviarMail == 'S') {
 //                            return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarPDF()-7');
@@ -540,6 +544,9 @@ class ClaseProcesarDocumentos {
 
                             if (file_exists($dataCabecera['CCI_RUTA_PDF_COMPLETA'])) {
                                 echo 'PDF-RESUMIDO ';
+                                if (!copy($dataCabecera['CCI_RUTA_PDF_COMPLETA'], 'descargas/' . $this->dataDocumentos['CCI_CLAVE_ACCESO'] . '.pdf')) {
+                                    echo "Error al copiar archivo...\n";
+                                }
                             } else {
                                 echo ' - error al grabar el archivo' . '<br>';
                             }
