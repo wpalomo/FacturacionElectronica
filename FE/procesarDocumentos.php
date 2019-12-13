@@ -108,15 +108,26 @@ function generarProcesoFE() {
                 }
             }
 
-            if ($value['mail']) {
-                $mail = $value['mail'];
-                
-                if (count($mail) > 0) {
-                    
+            if ($value['opcion'] == 'T' || $value['opcion'] == 'M') {
+                if ($value['opcion'] == 'T') {
+                    if (!is_array($result)) {
+                        $result = $objetoProcesoFE->enviarMail($value);
+                    }
                 }
 
-                //print_r($mail);
+
+                if ($value['opcion'] == 'M') {
+                    if ($value['mail']) {
+                        $mail = $value['mail'];
+
+                        if (count($mail) > 0) {
+                            
+                        }
+                    }
+                }
             }
+
+
 
 
             if (is_array($result)) {

@@ -557,6 +557,228 @@ class ClaseProcesarDocumentos {
         }
     }
 
+    public function enviarMail($parametros) {
+        $objetoMail = new ClaseMail();
+
+        $idListaCorreo = 1;
+
+        $resultDocumentosMail = $this->getDocumentosMail();
+        if ($resultDocumentosMail == 'S') {
+            //return $this->errorDB;
+            return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - enviarMail()');
+        } else {
+            $dataDocumentosMail = $resultDocumentosMail;
+        }
+
+        foreach ($dataDocumentosMail as $keyDoc => $valueDoc) {
+            $dest = '';
+
+            //$resultListaCorreo = $this->listaCorreosDefault($valueDoc['CCI_TIPOCMPR']);
+            $resultListaCorreo = $this->listaCorreosDefault($valueDoc['CCI_EMPRESA'], $valueDoc['CCI_SUCURSAL'], $valueDoc['CCI_TIPOCMPR']);
+            $imagen = $valueDoc['CCI_RUTA_LOGO'];
+
+            if ($resultListaCorreo == 'S') {
+                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - enviarMail()');
+            } else {
+                $dataListaCorreo = $resultListaCorreo;
+            }
+
+            echo 'ENVIANDO EMAIL: ' . $valueDoc['CCI_TIPOCMPR'] . ': ' . $valueDoc['CCI_EMPRESA'] . ' - ' . $valueDoc['NCI_DOCUMENTO'] . ' ';
+
+            //$asunto = utf8_decode('Comprobante Electrónico ' . $valueDoc['CCI_TIPOCMPR'] . ' ' . $valueDoc['NCI_DOCUMENTO_COMPLETO'] . ' ' . $valueDoc['CNO_CLIPROV']);
+            $asunto = utf8_decode('Comprobante Electrónico ' . $valueDoc['CCI_SUCURSAL'] . '-' . $valueDoc['CCI_TIPOCMPR'] . ' ' . $valueDoc['NCI_DOCUMENTO_COMPLETO'] . ' ' . $valueDoc['CNO_CLIPROV']);
+
+            $path_parts = pathinfo($valueDoc['CCI_RUTA_LOGO']);
+
+            $file = $path_parts['filename'] . '.' . $path_parts['extension'];
+            $rutaImagen = 'imagenes/' . $file;
+            $cid = 'cid:' . $path_parts['filename'];
+
+            $mensaje = '<table width="600" align="center">
+                            <tr>
+                                <td align="center">"Estimado(a) <b> ' . $valueDoc['CNO_CLIPROV'] . ' </b>"<br><br><br></td>                
+                            </tr>
+                            <tr>
+                                <td align="center">Adjunto el comprobante electrónico del documento <b>' . $valueDoc['CCI_TIPOCMPR'] . ' ' . $valueDoc['NCI_DOCUMENTO_COMPLETO'] . '</b><br><br><br> </td>                
+                            </tr>                            
+                            <tr>
+                                <td align="center">
+                                    <img src="' . $cid . '" height="100" width="297">
+                                </td>
+                            </tr>
+                        </table>
+                       ';
+
+            $mensaje = utf8_decode($mensaje);
+
+
+            $destinatarios = array(
+                array(
+                    'a' => 1,
+                    'mail' => $valueDoc['CTX_MAIL'],
+                    'nombre' => utf8_decode($valueDoc['CNO_CLIPROV'])
+                )
+            );
+
+            if ($valueDoc['CCI_TIPOCMPR'] == 'FAC' || $valueDoc['CCI_TIPOCMPR'] == 'NC') {
+                if ($valueDoc['CTX_MAIL_AUX1'] != '') {
+                    $dest1 = array(
+                        'a' => 1,
+                        'mail' => $valueDoc['CTX_MAIL_AUX1'],
+                        'nombre' => $valueDoc['CTX_MAIL_AUX1']
+                    );
+
+                    array_push($destinatarios, $dest1);
+                }
+
+                if ($valueDoc['CTX_MAIL_AUX2'] != '') {
+                    $dest2 = array(
+                        'a' => 1,
+                        'mail' => $valueDoc['CTX_MAIL_AUX2'],
+                        'nombre' => $valueDoc['CTX_MAIL_AUX2']
+                    );
+
+                    array_push($destinatarios, $dest2);
+                }
+            }
+
+            //por el momento solo se envia el correo del usuario que genero el documento en guias de remision
+            if ($valueDoc['CCI_TIPOCMPR'] == 'GUI') {
+                $usuariosArray = array(
+                    'a' => 1,
+                    'mail' => $valueDoc['CTX_MAIL_USUARIO'],
+                    'nombre' => utf8_decode($valueDoc['NOMBRE_USUARIO_MAIL'])
+                );
+
+                array_push($destinatarios, $usuariosArray);
+            }
+
+            foreach ($dataListaCorreo as $key => $value) {
+                if ($value['PARA']) {
+                    $dest = array(
+                        'a' => $value['PARA'],
+                        'mail' => $value['EMAIL'],
+                        'nombre' => utf8_decode($value['NOMBRE'])
+                    );
+                }
+
+                if ($value['CC']) {
+                    $dest = array(
+                        'cc' => $value['CC'],
+                        'mail' => $value['EMAIL'],
+                        'nombre' => utf8_decode($value['NOMBRE'])
+                    );
+                }
+
+                if ($value['CCO']) {
+                    $dest = array(
+                        'cco' => $value['CCO'],
+                        'mail' => $value['EMAIL'],
+                        'nombre' => utf8_decode($value['NOMBRE'])
+                    );
+                }
+
+                array_push($destinatarios, $dest);
+            }
+
+            $adjuntos = array(
+                array(
+                    'ruta' => $valueDoc['CCI_RUTA_DOCUMENTO_XML']
+                ),
+                array(
+                    'ruta' => $valueDoc['CCI_RUTA_DOCUMENTO_PDF']
+                )
+            );
+
+            if (file_exists($valueDoc['CCI_RUTA_DOCUMENTO_RESUMIDO_PDF'])) {
+                $adj = array(
+                    'ruta' => $valueDoc['CCI_RUTA_DOCUMENTO_RESUMIDO_PDF']
+                );
+
+                array_push($adjuntos, $adj);
+            }
+
+            $resp = $objetoMail->send($destinatarios, $asunto, $mensaje, $adjuntos, $rutaImagen, $path_parts['filename']);
+
+            echo $resp['error'] . ' - ' . $resp['mensaje'];
+
+            $resultIngresarMailLog = $this->ingresarMailLog($valueDoc['CCI_EMPRESA'], $valueDoc['CCI_TIPOCMPR'], $valueDoc['NCI_DOCUMENTO'], $valueDoc['CTX_MAIL'], $resp['enviado'], strip_tags($resp['mensaje']));
+
+            if ($resultIngresarMailLog == 'S') {
+                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - enviarMail()');
+            }
+
+            $resultActualizarEnviarMail = $this->actualizarEnviarMail($valueDoc['CCI_EMPRESA'], $valueDoc['CCI_TIPOCMPR'], $valueDoc['NCI_DOCUMENTO'], $valueDoc['CES_FE'], 'N');
+            if ($resultActualizarEnviarMail == 'S') {
+                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarPDF()');
+            }
+
+            //si hubo un error en el envio del mail (generalmente se da porque)
+            //la direccion del cliente no es valida, entonces se vuelve a enviar
+            //a todos menos al cliente, adicional se envia un archivo en donde
+            //esta la descripcion del error en el envio del mail
+
+
+            if ($resp['error'] == 'S' && $resp['enviado'] == 'N') {
+                $dataErrorMail = array(
+                    'CCI_EMPRESA' => $valueDoc['CCI_EMPRESA'],
+                    'CCI_CLIPROV' => $valueDoc['CCI_CLIPROV'],
+                    'CNO_CLIPROV' => $valueDoc['CNO_CLIPROV'],
+                    'CCI_TIPOCMPR' => $valueDoc['CCI_TIPOCMPR'],
+                    'NCI_DOCUMENTO' => $valueDoc['NCI_DOCUMENTO'],
+                    'CTX_MAIL' => $valueDoc['CTX_MAIL'],
+                    'MENSAJE' => strip_tags($resp['mensaje'])
+                );
+
+                if ($valueDoc['CTX_MAIL_AUX1'] != '') {
+                    if (($keyMail = array_search($valueDoc['CTX_MAIL_AUX1'], $destinatarios)) !== false) {
+                        unset($destinatarios[$keyMail]);
+                    }
+                }
+
+                if ($valueDoc['CTX_MAIL_AUX2'] != '') {
+                    if (($keyMail = array_search($valueDoc['CTX_MAIL_AUX2'], $destinatarios)) !== false) {
+                        unset($destinatarios[$keyMail]);
+                    }
+                }
+
+                unset($destinatarios[0]);
+
+                $resp = $objetoMail->send($destinatarios, $asunto, $mensaje, $adjuntos, $rutaImagen, $path_parts['filename']);
+
+                echo $resp['error'] . ' - ' . $resp['mensaje'];
+
+                $objetoGenerarExcel = new ClaseGenerarExcel();
+
+                $rutaExcel = $objetoGenerarExcel->generarExcelErroresMail($dataErrorMail);
+
+                if (file_exists($rutaExcel)) {
+                    echo '<br>ENVIANDO EMAIL ERRORES: ' . $valueDoc['CCI_TIPOCMPR'] . ' ';
+
+                    $asunto = utf8_decode('Errores en el envio de Mail en Facturación Electrónica ');
+
+                    $mensaje = 'Se adjunta un archivo en excel con errores que se presentaron al enviar el mail en el proceso de facturación electrónica. ';
+
+                    $mensaje = utf8_decode($mensaje);
+
+                    $adjuntos = array(
+                        array(
+                            'ruta' => $rutaExcel
+                        )
+                    );
+
+                    $resp = $objetoMail->send($destinatarios, $asunto, $mensaje, $adjuntos, '', '');
+
+                    echo $resp['error'] . ' - ' . $resp['mensaje'];
+                } else {
+                    echo 'no existe';
+                }
+            }
+
+            echo '<hr>';
+        }
+    }
+
     private function getEmpresas($cci_empresa, $operacion) {
         $query = "
             EXEC BIZ_FAC..SP_FE_PARAMETROS
@@ -960,6 +1182,26 @@ class ClaseProcesarDocumentos {
 
     private function caracter($string) {
         return str_replace("'", '', $string);
+    }
+
+    private function getDocumentosMail() {
+
+        $query = "
+            EXEC BIZ_FAC..SP_FE_MAIL                
+            @IN_OPERACION = 'DOC'                	
+        ";
+
+        $parametros = array(
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        if ($result['error'] != 'N') {
+            return $this->errorDB = ClaseJson::getJson($result);
+        } else {
+            return $dataListaCorreoDetalle = $result['data'];
+        }
     }
 
     public function habilitarDocumentoRechazado($cci_empresa, $cci_tipocmpr, $nci_documento, $ces_fe) {
