@@ -121,7 +121,37 @@ function generarProcesoFE() {
                         $mail = $value['mail'];
 
                         if (count($mail) > 0) {
-                            
+                            if ($value['ces_fe'] == 'P' || $value['ces_fe'] == 'R') {
+                                if ($value['ces_fe'] == 'R') {
+                                    if (!is_array($result)) {
+                                        $result = $objetoProcesoFE->habilitarDocumentoRechazado($value['cci_empresa'], $value['cci_tipocmpr'], $value['nci_documento'], 'P');
+                                    }
+                                }
+
+                                if (!is_array($result)) {
+                                    $result = $objetoProcesoFE->generarXml($value);
+                                }
+                            }
+
+                            if (!is_array($result)) {
+                                $result = $objetoProcesoFE->actualizarGenerarPDF2($value['cci_empresa'], $value['cci_tipocmpr'], $value['nci_documento'], 'S');
+                            }
+
+                            if (!is_array($result)) {
+                                $result = $objetoProcesoFE->generarPDFResumido($value);
+                            }
+
+                            if (!is_array($result)) {
+                                $result = $objetoProcesoFE->generarPDF($value);
+                            }
+
+                            if (!is_array($result)) {
+                                $result = $objetoProcesoFE->actualizarEnviarMail2($value['cci_empresa'], $value['cci_tipocmpr'], $value['nci_documento'], 'S');
+                            }
+
+                            if (!is_array($result)) {
+                                $result = $objetoProcesoFE->enviarMail($value);
+                            }
                         }
                     }
                 }
