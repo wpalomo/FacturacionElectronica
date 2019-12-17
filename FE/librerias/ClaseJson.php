@@ -41,10 +41,11 @@ class ClaseJson {
         return json_encode($result);
     }
 
-    public static function getMessageJson($success = false, $cadena = '') {
+    public static function getMessageJson($success = false, $cadena = '', $cadena2 = '') {
         $result = array(
             "success" => $success,
-            "mensaje" => $cadena
+            "mensaje" => $cadena,
+            "mensaje2" => $cadena2
         );
 
         return json_encode($result);

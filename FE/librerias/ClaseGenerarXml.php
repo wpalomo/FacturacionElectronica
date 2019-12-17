@@ -18,9 +18,9 @@ class ClaseGenerarXml {
     public function generaXmlFactura($dataEmpresa, $dataDocumento, $dataPagos, $dataDetalle) {
         $this->codDoc = '01';
 
-        echo '<hr>';
-        print_r($dataDocumento);
-        echo '<hr>';
+//        echo '<hr>';
+//        print_r($dataDocumento);
+//        echo '<hr>';
 
         $cci_empresa = $dataDocumento['CCI_EMPRESA'];
         $cci_sucursal = $dataDocumento['CCI_SUCURSAL'];
@@ -51,7 +51,7 @@ class ClaseGenerarXml {
 
         $rutaGenerados = $dataEmpresa['CCI_RUTA_GENERADOS'] . 'FAC\\';
 
-        echo '<span>GENERANDO XML FACTURA: ' . $cci_empresa . ' - ' . $nci_documento . '</span><br>';
+        //echo '<span>GENERANDO XML FACTURA: ' . $cci_empresa . ' - ' . $nci_documento . '</span><br>';
 
         $nombreArchivo = 'xml_' . $secuencial;
 
@@ -282,7 +282,7 @@ class ClaseGenerarXml {
             echo 'error al grabar el archivo';
         }
 
-        echo '<hr>';
+        //echo '<hr>';
     }
 
     public function generaXmlNC($dataEmpresa, $dataDocumento, $dataDetalle) {
@@ -929,7 +929,7 @@ class ClaseGenerarXml {
             'TIPO_WS' => $tipoWS,
         );
 
-        print_r($this->dataLog);
+        //print_r($this->dataLog);
     }
 
 }

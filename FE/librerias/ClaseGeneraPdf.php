@@ -32,7 +32,7 @@ class ClaseGeneraPdf {
         $this->datosPagos = $datosPagos;
         $this->dataVencimientos = $dataVencimientos;
 
-        echo '<span>GENERANDO PDF ' . $tipoReporte . ': ' . $this->datosCabecera['CCI_EMPRESA'] . ' - ' . $this->datosCabecera['NCI_DOCUMENTO'] . '</span><br>';
+        //echo '<span>GENERANDO PDF ' . $tipoReporte . ': ' . $this->datosCabecera['CCI_EMPRESA'] . ' - ' . $this->datosCabecera['NCI_DOCUMENTO'] . '</span><br>';
     }
 
     protected function generarLogo($x, $y, $w, $h) {
@@ -754,7 +754,7 @@ class ClaseGeneraPdf {
 
     protected function grabarPdf() {
         $this->pdf->Output($this->datosCabecera['CCI_RUTA_PDF_COMPLETA'], 'F');
-        echo '<hr>';
+        //echo '<hr>';
     }
 
     protected function myCell($w, $h, $t) {

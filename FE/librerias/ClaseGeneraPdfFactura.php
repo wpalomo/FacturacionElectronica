@@ -10,11 +10,11 @@ include_once 'ClaseGeneraPdf.php';
 class ClaseGeneraPdfFactura extends ClaseGeneraPdf {
 
     public function __construct($tipoReporte, $datosCabecera, $datosDetalle, $datosPagos, $dataVencimientos) {
-        echo $tipoReporte;
-        print_r($datosCabecera);
-        print_r($datosDetalle);
-        print_r($datosPagos);
-        print_r($dataVencimientos);
+        //echo $tipoReporte;
+        //print_r($datosCabecera);
+        //print_r($datosDetalle);
+        //print_r($datosPagos);
+        //print_r($dataVencimientos);
         parent::__construct($tipoReporte, $datosCabecera, $datosDetalle, $datosPagos, $dataVencimientos);
     }
 

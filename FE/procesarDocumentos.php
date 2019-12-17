@@ -4,6 +4,7 @@ include_once 'librerias/header.php';
 include_once 'librerias/ClaseProcesarDocumentos.php';
 include_once 'librerias/ClaseValidaciones.php';
 
+
 $action = isset($_GET['action']) ? $_GET['action'] : (isset($_POST['action']) ? $_POST['action'] : null);
 
 switch ($action) {
@@ -15,7 +16,7 @@ switch ($action) {
         break;
 }
 
-function getDocumentos() {
+function getDocumentos() {    
     $parametros = array(
         'start' => $_POST['start'],
         'limit' => $_POST['limit'],

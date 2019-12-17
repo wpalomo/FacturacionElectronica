@@ -160,9 +160,6 @@ class ClaseProcesarDocumentos {
         $queryTotalRegistros = $selectTotalRegistros . $where;
         $query = $select . $where . $order . $offset . $fetch;
 
-        //echo $queryTotalRegistros;
-        //echo $query;
-
         $parametros = array(
             'interfaz' => 'I',
             'query' => $queryTotalRegistros
@@ -463,15 +460,23 @@ class ClaseProcesarDocumentos {
                             return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarPDF()-8');
                         }
 
-                        if (!copy($dataCabecera['CCI_RUTA_PDF_COMPLETA'], 'descargas/' . $this->dataDocumentos['CCI_CLAVE_ACCESO'] . '.pdf')) {
-                            echo "Error al copiar archivo...\n";
-                        }
-
                         if ($parametros['opcion'] == 'T') {
                             $resultActualizarEnviarMail = $this->actualizarEnviarMail($dataCabecera['CCI_EMPRESA'], $parametros['cci_tipocmpr'], $dataCabecera['NCI_DOCUMENTO'], $dataCabecera['CES_FE'], 'S');
                             if ($resultActualizarEnviarMail == 'S') {
                                 return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarPDF()-7');
                             }
+                        }
+
+                        if (!copy($dataCabecera['CCI_RUTA_PDF_COMPLETA'], 'descargas/' . $this->dataDocumentos['CCI_CLAVE_ACCESO'] . '.pdf')) {
+                            //echo "Error al copiar archivo...\n";
+                            echo ClaseJson::getMessageJson(false, "Error al copiar el archivo " . $this->dataDocumentos['CCI_CLAVE_ACCESO'] . '.pdf');
+                        } else {
+                            //$this->errorDB = ClaseJson::getJson($result);
+                            $resumido = '';
+                            if (file_exists('descargas/' . $this->dataDocumentos['CCI_CLAVE_ACCESO'] . '_RESUMIDO.pdf')) {
+                                $resumido = $this->dataDocumentos['CCI_CLAVE_ACCESO'] . '_RESUMIDO.pdf';
+                            }
+                            echo ClaseJson::getMessageJson(true, $this->dataDocumentos['CCI_CLAVE_ACCESO'] . '.pdf', $resumido);
                         }
                     } else {
                         echo ' - error al grabar el archivo' . '<br>';
@@ -546,8 +551,8 @@ class ClaseProcesarDocumentos {
                             }
 
                             if (file_exists($dataCabecera['CCI_RUTA_PDF_COMPLETA'])) {
-                                echo 'PDF-RESUMIDO ';
-                                if (!copy($dataCabecera['CCI_RUTA_PDF_COMPLETA'], 'descargas/' . $this->dataDocumentos['CCI_CLAVE_ACCESO'] . '.pdf')) {
+                                //echo 'PDF-RESUMIDO ';
+                                if (!copy($dataCabecera['CCI_RUTA_PDF_COMPLETA'], 'descargas/' . $this->dataDocumentos['CCI_CLAVE_ACCESO'] . '_RESUMIDO.pdf')) {
                                     echo "Error al copiar archivo...\n";
                                 }
                             } else {
@@ -573,9 +578,9 @@ class ClaseProcesarDocumentos {
             $dataDocumentosMail = $resultDocumentosMail;
         }
 
-        echo '<hr>';
-        print_r($dataDocumentosMail);
-        echo '<hr>';
+        //echo '<hr>';
+        //print_r($dataDocumentosMail);
+        //echo '<hr>';
 
         foreach ($dataDocumentosMail as $keyDoc => $valueDoc) {
             $dest = '';
@@ -790,7 +795,7 @@ class ClaseProcesarDocumentos {
                  */
             }
 
-            echo '<hr>';
+            //echo '<hr>';
         }
     }
 
@@ -1537,7 +1542,7 @@ class ClaseProcesarDocumentos {
             @IN_CES_FE = '$ces_fe',    
             @IN_OPERACION = 'HDR'                	
         ";
-        echo $query;
+        //echo $query;
         $parametros = array(
             'query' => $query
         );
@@ -1562,7 +1567,7 @@ class ClaseProcesarDocumentos {
             @IN_GENERAR_PDF = '$generar',    
             @IN_OPERACION = 'UP2'                	
         ";
-        echo $query;
+        //echo $query;
         $parametros = array(
             'query' => $query
         );
