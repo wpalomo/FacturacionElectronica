@@ -274,8 +274,7 @@ class ClaseGenerarXml {
         $xml->xmlStandalone = true;
         $xml->saveXML();
         $xml->save($rutaGenerados . $claveAcceso . '.xml');
-
-        echo $rutaGenerados . $claveAcceso . '.xml';
+        
         if (file_exists($rutaGenerados . $claveAcceso . '.xml')) {
             $this->setDataLog($cci_empresa, $cci_sucursal, $cci_cliente, 'FAC', $nci_documento, $claveAcceso, 'GENERAR', 'G');
         } else {
