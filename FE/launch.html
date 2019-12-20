@@ -15,20 +15,43 @@ and open the template in the editor.
     <body>        
 
         <script>
+            //$(function () {
+            //    let url = 'http://localhost/FE/procesarDocumentos.php'
+            //    let action = 'generarProcesoFE';
+
+            //let json = '[{"cci_empresa": "008", "cci_sucursal": "GLO", "cci_tipocmpr": "FAC", "nci_documento": "10010017362", "ambiente": "1", "opcion": "P", "ces_fe": "G", "mail": [{}]}]';
+            //let json = '[{"cci_empresa": "008", "cci_sucursal": "GLO", "cci_tipocmpr": "FAC", "nci_documento": "10010017362", "ambiente": "1", "opcion": "P", "ces_fe": "R"}]';
+
+            //let json = '[{"cci_empresa": "008", "cci_sucursal": "GLO", "cci_tipocmpr": "FAC", "nci_documento": "10010017363", "ambiente": "1", "opcion": "P", "ces_fe": "P", "mail": [{"a": 1, "mail": "jpsanchez@inti-moda.com", "nombre": "Juan Sanchez"}, {"cc": "1", "mail": "udg2001@hotmail.com", "nombre": "JPabloS"}, {"cc": "1", "mail": "jpablos2011.2@gmail.com", "nombre": "Juan Pablo Sanchez"}]}]';
+
+
+            //    let json = '[{"cci_empresa":"008","cci_sucursal":"GLO","cci_tipocmpr":"FAC","nci_documento":"10010017161","ces_fe":"P","ambiente":"1","opcion":"P"}]';
+            //    $.post(url, {
+            //        action: action,
+            //        json: json
+            //    }, function (result) {
+            //alert('successfully posted key1=value1&key2=value2 to foo.php');
+            //alert(result);
+            //        document.write(result);
+            //window.open('descargas/2811201901099265673500110010010000173621234567815_G.pdf');
+            //    });
+
+            //});
+
             $(function () {
-                let url = 'http://localhost/FE/procesarDocumentos.php'
-                let action = 'generarProcesoFE';
+                let url = 'http://localhost/FE/procesarDocumentos.php';
+                let action = 'getMailsDocumento';
+                let cci_empresa = '009';
+                let cci_sucursal = 'TEX';
+                let cci_tipocmpr = 'RET';
+                let nci_documento = 10010005146;
 
-                //let json = '[{"cci_empresa": "008", "cci_sucursal": "GLO", "cci_tipocmpr": "FAC", "nci_documento": "10010017362", "ambiente": "1", "opcion": "P", "ces_fe": "G", "mail": [{}]}]';
-                //let json = '[{"cci_empresa": "008", "cci_sucursal": "GLO", "cci_tipocmpr": "FAC", "nci_documento": "10010017362", "ambiente": "1", "opcion": "P", "ces_fe": "R"}]';
-
-                //let json = '[{"cci_empresa": "008", "cci_sucursal": "GLO", "cci_tipocmpr": "FAC", "nci_documento": "10010017363", "ambiente": "1", "opcion": "P", "ces_fe": "P", "mail": [{"a": 1, "mail": "jpsanchez@inti-moda.com", "nombre": "Juan Sanchez"}, {"cc": "1", "mail": "udg2001@hotmail.com", "nombre": "JPabloS"}, {"cc": "1", "mail": "jpablos2011.2@gmail.com", "nombre": "Juan Pablo Sanchez"}]}]';
-
-
-                let json = '[{"cci_empresa":"008","cci_sucursal":"GLO","cci_tipocmpr":"FAC","nci_documento":"10010017161","ces_fe":"P","ambiente":"1","opcion":"P"}]';
                 $.post(url, {
                     action: action,
-                    json: json
+                    cci_empresa: cci_empresa,
+                    cci_sucursal: cci_sucursal,
+                    cci_tipocmpr: cci_tipocmpr,
+                    nci_documento: nci_documento
                 }, function (result) {
                     //alert('successfully posted key1=value1&key2=value2 to foo.php');
                     //alert(result);
@@ -36,8 +59,9 @@ and open the template in the editor.
                     //window.open('descargas/2811201901099265673500110010010000173621234567815_G.pdf');
                 });
 
-            });
 
+
+            });
 
         </script>
 

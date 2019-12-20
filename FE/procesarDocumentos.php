@@ -11,12 +11,15 @@ switch ($action) {
     case 'getDocumentos':
         getDocumentos();
         break;
+    case 'getMailsDocumento':
+        getMailsDocumento();
+        break;
     case 'generarProcesoFE':
         generarProcesoFE();
         break;
 }
 
-function getDocumentos() {    
+function getDocumentos() {
     $parametros = array(
         'start' => $_POST['start'],
         'limit' => $_POST['limit'],
@@ -28,6 +31,23 @@ function getDocumentos() {
     $objetoProcesarDocumentos = new ClaseProcesarDocumentos();
 
     $result = $objetoProcesarDocumentos->getDocumentos($parametros);
+
+    $data = ClaseJson::getJson($result);
+
+    echo $data;
+}
+
+function getMailsDocumento() {
+    $parametros = array(
+        'cci_empresa' => $_POST['cci_empresa'],
+        'cci_sucursal' => $_POST['cci_sucursal'],
+        'cci_tipocmpr' => $_POST['cci_tipocmpr'],
+        'nci_documento' => $_POST['nci_documento']
+    );
+
+    $objetoProcesarDocumentos = new ClaseProcesarDocumentos();
+
+    $result = $objetoProcesarDocumentos->getMailsDocumento($parametros);
 
     $data = ClaseJson::getJson($result);
 

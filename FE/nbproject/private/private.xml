@@ -7,10 +7,12 @@
             <file>file:/C:/xampp/htdocs/FE/librerias/config.inc.php</file>
             <file>file:/C:/xampp/htdocs/FE/librerias/ClaseProcesarDocumentos.php</file>
             <file>file:/C:/xampp/htdocs/FE/procesarDocumentos.php</file>
+            <file>file:/C:/xampp/htdocs/FE/librerias/ClaseMail.php</file>
             <file>file:/C:/xampp/htdocs/FE/librerias/ClaseJson.php</file>
             <file>file:/C:/xampp/htdocs/FE/librerias/ClaseGenerarXml.php</file>
             <file>file:/C:/xampp/htdocs/FE/launch.html</file>
             <file>file:/C:/xampp/htdocs/FE/librerias/ClaseGeneraPdf.php</file>
+            <file>file:/C:/xampp/htdocs/FE/librerias/ClaseUsuario.php</file>
             <file>file:/C:/xampp/htdocs/FE/librerias/ClaseBaseDatos.php</file>
         </group>
     </open-files>

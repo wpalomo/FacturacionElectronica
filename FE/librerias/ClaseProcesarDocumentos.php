@@ -1582,4 +1582,28 @@ class ClaseProcesarDocumentos {
         }
     }
 
+    public function getMailsDocumento($param) {
+        $cci_empresa = $param['cci_empresa'];
+        $cci_sucursal = $param['cci_sucursal'];
+        $cci_tipocmpr = $param['cci_tipocmpr'];
+        $nci_documento = $param['nci_documento'];
+
+        $query = "
+            EXEC BIZ_FAC..SP_FE_MAIL
+            @IN_CCI_EMPRESA = '$cci_empresa',
+            @IN_CCI_SUCURSAL  = '$cci_sucursal',
+            @IN_CCI_TIPOCMPR  = '$cci_tipocmpr',
+            @IN_NCI_DOCUMENTO = $nci_documento,
+            @IN_OPERACION = 'LCE'               	
+        ";
+        
+        $parametros = array(
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        return $result;
+    }
+
 }
