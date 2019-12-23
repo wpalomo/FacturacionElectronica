@@ -47,7 +47,8 @@ class ClaseProcesarDocumentos {
         f.ces_fe,
         f.descripcion_ces_fe,
         f.cci_clave_acceso,
-        f.ambiente
+        f.ambiente,
+        cast(0 as bit) as [check]
         FROM BIZ_FAC..VI_FAC_FE_DOCUMENTOS f ";
 
         $where = " WHERE cci_empresa != '' ";
