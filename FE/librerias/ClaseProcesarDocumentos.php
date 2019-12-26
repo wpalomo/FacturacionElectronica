@@ -37,6 +37,7 @@ class ClaseProcesarDocumentos {
         f.cci_sucursal, 
         f.cci_cliente, 
         f.cno_cliprov,
+        f.cno_cliprov_aux,
         f.dfm_fecha,
         f.cci_tipocmpr, 
         f.descripcion_cci_tipocmpr,
@@ -60,6 +61,8 @@ class ClaseProcesarDocumentos {
 
         $records = json_decode(stripslashes($parametros['filters']), true);
 
+        //print_r($records);
+
         foreach ($records as $k => $value) {
             $valor = '';
             $tmp = '';
@@ -80,6 +83,14 @@ class ClaseProcesarDocumentos {
                             break;
                         case 'contains':
                             $where = $where . " AND " . $k . " like '%$valor%' ";
+                            break;
+                        case 'containsAll':
+                            //$where = $where . " AND " . $k . " like '%$valor%' ";
+                            $pieces = explode(" ", $valor);
+                            for ($i = 0; $i < count($pieces); $i++) {
+                                $where .= " AND " . $k . " like '%$pieces[$i]%' ";
+                            }
+
                             break;
                         case 'equals':
                             if (is_array($tmp)) {
@@ -160,6 +171,8 @@ class ClaseProcesarDocumentos {
 
         $queryTotalRegistros = $selectTotalRegistros . $where;
         $query = $select . $where . $order . $offset . $fetch;
+
+        //echo $query;
 
         $parametros = array(
             'interfaz' => 'I',
@@ -1597,7 +1610,7 @@ class ClaseProcesarDocumentos {
             @IN_NCI_DOCUMENTO = $nci_documento,
             @IN_OPERACION = 'LCE'               	
         ";
-        
+
         $parametros = array(
             'query' => $query
         );
