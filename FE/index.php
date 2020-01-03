@@ -4,6 +4,23 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token, X-EXAMPLE-HEADER, authorization');
 
+date_default_timezone_set('America/Guayaquil');
+
+echo 'pruebas hora';
+echo '<hr>';
+$time = strtotime(date('dmY: H:i'));
+echo '<hr>';
+echo $time;
+$getMinute = date('i');
+echo '<hr>';
+echo $getMinute;
+
+if ($getMinute == '00' || $getMinute == '20' || $getMinute == '40') {
+    echo 'send mail';
+}
+
+die;
+
 $action = isset($_GET['action']) ? $_GET['action'] : (isset($_POST['action']) ? $_POST['action'] : null);
 
 $action = 'prueba1';
