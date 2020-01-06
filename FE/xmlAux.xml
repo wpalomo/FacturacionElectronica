@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nodes><RespuestaRecepcionComprobante><estado>DEVUELTA</estado><comprobantes><comprobante><claveAcceso>2811201901099265673500110010010000173621234567815</claveAcceso><mensajes><mensaje><identificador>65</identificador><mensaje>FECHA EMISIÓN EXTEMPORANEA</mensaje><informacionAdicional>La fecha de emisión está fuera del rango de tolerancia [43201 minutos], o es mayor a la fecha del servidor</informacionAdicional><tipo>ERROR</tipo></mensaje></mensajes></comprobante></comprobantes></RespuestaRecepcionComprobante></nodes>

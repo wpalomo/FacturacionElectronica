@@ -32,8 +32,8 @@ class ClaseFirmarFE {
         $rutaGeneradosCompleta = $rutaGenerados . $claveAcceso . '.xml';
         $rutaFirmadosCompleta = $rutaFirmados . $claveAcceso . '.xml';
 
-        echo 'FIRMANDO XML ' . $cci_tipocmpr . ': ' . $cci_empresa . ' - ' . $nci_documento . '<br>';
-        echo $rutaGeneradosCompleta;
+        //echo 'FIRMANDO XML ' . $cci_tipocmpr . ': ' . $cci_empresa . ' - ' . $nci_documento . '<br>';
+        //echo $rutaGeneradosCompleta;
 
         if (file_exists($rutaGeneradosCompleta)) {
             $output = array();
@@ -44,16 +44,20 @@ class ClaseFirmarFE {
                 print_r($output);
 
                 $this->setDataLog($cci_empresa, $cci_sucursal, $cci_cliente, $cci_tipocmpr, $nci_documento, $claveAcceso, 'FIRMAR', 'F');
+                return 'ok';
             } else {
                 $mensajeWS = 'ERROR EN GENERACION DE FIRMA(ERROR-LOCAL)';
                 $informacionAdicionalWS = $output[4];
                 $this->setDataLog($cci_empresa, $cci_sucursal, $cci_cliente, $cci_tipocmpr, $nci_documento, $claveAcceso, 'FIRMAR', 'R', '', '', '', '', '', $mensajeWS, $informacionAdicionalWS, '');
-                echo '<br>' . $mensajeWS . ' - ' . $informacionAdicionalWS;
+                //echo '<br>' . $mensajeWS . ' - ' . $informacionAdicionalWS;
+                //return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $mensajeWS);
+                return $mensajeWS;
             }
         } else {
-            echo 'archivo no existe';
+            //echo 'archivo no existe';
+            return 'El archivo xml para firmar no existe. ';
         }
-        echo '<hr>';
+        //echo '<hr>';
     }
 
     function getDataLog() {

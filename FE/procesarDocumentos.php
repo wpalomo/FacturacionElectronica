@@ -55,25 +55,13 @@ function getMailsDocumento() {
 }
 
 function generarProcesoFE() {
-    //echo 'generarProcesoFE';
-    //$json = '[{"cci_empresa": "008", "nci_documento": "10010015467", "ambiente": "1", "opcion": "P"}]';
     $json = $_POST['json'];
 
-
-    //var_dump(json_decode($json));
-    //if (isset($_POST['json'])) {
     if (isset($json)) {
         $objetoProcesoFE = new ClaseProcesarDocumentos();
 
         $documentos = json_decode($json, true);
 
-        //print_r($documentos);
-        //$mail = $documentos[0]['mail'];
-        //echo '<hr>';
-        //print_r($mail);
-        //die();
-        //$mail =
-        //print_r($documentos);
         $result = '';
 
         foreach ($documentos as $key => $value) {
@@ -178,11 +166,9 @@ function generarProcesoFE() {
                 }
             }
 
-
-
-
             if (is_array($result)) {
-                echo $result['DESCRIPCION_ERROR'];
+                //echo $result['DESCRIPCION_ERROR'];
+                echo ClaseJson::getMessageJson(false, $result['DESCRIPCION_ERROR']);
             } else {
                 echo $result;
             }
@@ -191,5 +177,6 @@ function generarProcesoFE() {
         $data = ClaseJson::getMessageJson(false, 'Error en el envio de información');
     }
 
-    echo $data;
+    //echo $data;
+    //echo ClaseJson::getMessageJson(false, $data);
 }

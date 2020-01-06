@@ -48,6 +48,8 @@ class ClaseEnviarFE {
                 $xml = file_get_contents($rutaFirmadosCompleta);
                 $response = $client->validarComprobante(["xml" => $xml]);
 
+
+
                 $estadoWS = isset($response->RespuestaRecepcionComprobante->estado) ? $response->RespuestaRecepcionComprobante->estado : '';
                 $identificadorWS = isset($response->RespuestaRecepcionComprobante->comprobantes->comprobante->mensajes->mensaje->identificador) ? $response->RespuestaRecepcionComprobante->comprobantes->comprobante->mensajes->mensaje->identificador : '';
                 $mensajeWS = isset($response->RespuestaRecepcionComprobante->comprobantes->comprobante->mensajes->mensaje->mensaje) ? $response->RespuestaRecepcionComprobante->comprobantes->comprobante->mensajes->mensaje->mensaje : '';
@@ -110,7 +112,10 @@ class ClaseEnviarFE {
                     $this->setDataLog($cci_empresa, $cci_sucursal, $cci_cliente, $cci_tipocmpr, $nci_documento, $claveAcceso, 'ENVIAR', 'R', $estadoWS, $identificadorWS, $numeroAutorizacionWS, $fechaAutorizacionWS, $ambienteWS, $mensajeWS, $informacionAdicionalWS, $tipoWS); //                  
                 }
             } catch (Exception $e) {
-                var_dump($e);
+                //echo 'vardump';
+                //var_dump($e);
+                //print_r($e);
+                echo $e->faultstring;
             }
         } else {
             echo 'archivo no existe';

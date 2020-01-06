@@ -225,7 +225,8 @@ class ClaseProcesarDocumentos {
          */
 
         if ($parametros['ambiente'] == 2 && $this->entorno !== "PRODUCCION") {
-            echo ClaseJson::getMessageJson(false, "ESTA EN AMBIENTE DE DESARROLLO Y LA EMPRESA " . $parametros['cci_empresa'] . " TIENE SETEADO EL AMBIENTE DE PRODUCCION, EN AMBIENTE DE DESARROLLO NO SE DEBERIAN PROCESAR LOS DOCUMENTOS DEL SRI, PUEDEN POR ERROR ENVIARSE DOCUMENTOS DE PRUEBA ACCIDENTALMENTE Y SER AUTORIZADOS, REVISE");
+            //echo ClaseJson::getMessageJson(false, "ESTA EN AMBIENTE DE DESARROLLO Y LA EMPRESA " . $parametros['cci_empresa'] . " TIENE SETEADO EL AMBIENTE DE PRODUCCION, EN AMBIENTE DE DESARROLLO NO SE DEBERIAN PROCESAR LOS DOCUMENTOS DEL SRI, PUEDEN POR ERROR ENVIARSE DOCUMENTOS DE PRUEBA ACCIDENTALMENTE Y SER AUTORIZADOS, REVISE");
+            return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => "ESTA EN AMBIENTE DE DESARROLLO Y LA EMPRESA " . $parametros['cci_empresa'] . " TIENE SETEADO EL AMBIENTE DE PRODUCCION, EN AMBIENTE DE DESARROLLO NO SE DEBERIAN PROCESAR LOS DOCUMENTOS DEL SRI, PUEDEN POR ERROR ENVIARSE DOCUMENTOS DE PRUEBA ACCIDENTALMENTE Y SER AUTORIZADOS, REVISE");
         } else {
             if (($error = $this->getEmpresas($parametros['cci_empresa'], 'QG')) == 'S') {
                 return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarXml()');
@@ -348,11 +349,15 @@ class ClaseProcesarDocumentos {
                 return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - firmarFE()');
             } else {
                 if (count($this->dataDocumentos) > 0) {
-                    $objetoFirmarFE->firmar($this->dataEmpresas, $this->dataDocumentos, $parametros['cci_tipocmpr']);
+                    $verificarFirma = $objetoFirmarFE->firmar($this->dataEmpresas, $this->dataDocumentos, $parametros['cci_tipocmpr']);
 
                     $resultActualizar = $this->actualizarEstadoDocumento($objetoFirmarFE->getDataLog());
                     if ($resultActualizar == 'S') {
                         return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - firmarFE()');
+                    }
+
+                    if ($verificarFirma != 'ok') {
+                        return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $verificarFirma . ' - ClaseProcesoFE - firmarFE()');
                     }
                 }
             }

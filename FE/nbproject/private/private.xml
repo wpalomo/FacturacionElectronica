@@ -5,13 +5,11 @@
         <group>
             <file>file:/C:/xampp/htdocs/FE/librerias/config.inc.php</file>
             <file>file:/C:/xampp/htdocs/FE/librerias/ClaseProcesarDocumentos.php</file>
-            <file>file:/C:/xampp/htdocs/FE/perfiles.php</file>
+            <file>file:/C:/xampp/htdocs/FE/librerias/ClaseEnviarFE.php</file>
+            <file>file:/C:/xampp/htdocs/FE/procesarDocumentos.php</file>
             <file>file:/C:/xampp/htdocs/FE/librerias/ClaseFirmarFE.php</file>
-            <file>file:/C:/xampp/htdocs/FE/login.php</file>
-            <file>file:/C:/xampp/htdocs/FE/librerias/ClasePerfil.php</file>
-            <file>file:/C:/xampp/htdocs/FE/librerias/ClaseMenu.php</file>
-            <file>file:/C:/xampp/htdocs/FE/librerias/ClaseBaseDatos.php</file>
-            <file>file:/C:/xampp/htdocs/FE/librerias/ClaseLogin.php</file>
+            <file>file:/C:/xampp/htdocs/FE/librerias/ClaseGenerarXml.php</file>
+            <file>file:/C:/xampp/htdocs/FE/librerias/ClaseProcesoFE.php</file>
         </group>
     </open-files>
 </project-private>
