@@ -1,0 +1,93 @@
+USE [BIZ_FAC]
+GO
+/****** Object:  StoredProcedure [dbo].[SP_FE_AMBIENTE]    Script Date: 05/01/2020 21:03:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- ============================================================================
+-- AUTHOR......: JUAN PABLO SANCHEZ
+-- CREATE DATE.: 29-AGO-2018
+-- VERSION.....: 1.0.01
+-- DESCRIPTION.: PROCEDIMIENTO QUE MANEJA LAS OPERACIONES QUE SE REALIZAN EN LA 
+--               TABLA "TB_FAC_FE_AMBIENTE"
+-- MODIFICACION: 29-AGO-2018
+-- COMENTARIOS.: 
+-- ============================================================================
+-- PARAMETROS
+-- @IN_OPERACION.: OPERACION A SER EJECUTADA
+-- ============================================================================
+ALTER PROCEDURE [dbo].[SP_FE_AMBIENTE]
+(
+	@IN_COD_AMBIENTE TINYINT = NULL,
+	@IN_CWS_RECEPCION VARCHAR(150) = NULL,
+	@IN_CWS_AUTORIZACION VARCHAR(150) = NULL,
+	@IN_OPERACION VARCHAR(3)
+)
+AS
+
+-- ============================================================================
+-- QE: QUERY ENVIAR, TRAER LA INFORMACION DEL AMBIENTE SELECCIONADO PARA ENVIAR
+--     LOS DOCUMENTOS AL WEB SERVICE DEL SRI
+-- ============================================================================ 
+IF @IN_OPERACION = 'QE'
+BEGIN
+	SELECT COD_AMBIENTE,
+	CTX_DESCRIPCION,
+	CWS_RECEPCION
+	FROM BIZ_FAC..TB_FAC_FE_AMBIENTE
+	WHERE COD_AMBIENTE = @IN_COD_AMBIENTE 
+END
+
+-- ============================================================================
+-- QA: QUERY AUTORIZAR, TRAER LA INFORMACION DEL AMBIENTE SELECCIONADO PARA 
+--     ENVIAR LOS DOCUMENTOS AL WEB SERVICE DEL SRI
+-- ============================================================================ 
+IF @IN_OPERACION = 'QA'
+BEGIN
+	SELECT COD_AMBIENTE,
+	CTX_DESCRIPCION,
+	CWS_AUTORIZACION
+	FROM BIZ_FAC..TB_FAC_FE_AMBIENTE
+	WHERE COD_AMBIENTE = @IN_COD_AMBIENTE 
+END
+
+-- ============================================================================
+-- Q: QUERY , TRAER LA INFORMACION DE LOS AMBIENTES 
+-- ============================================================================ 
+IF @IN_OPERACION = 'Q'
+BEGIN
+	SELECT COD_AMBIENTE,
+	CTX_DESCRIPCION,
+	CWS_RECEPCION,
+	CWS_AUTORIZACION
+	FROM BIZ_FAC..TB_FAC_FE_AMBIENTE
+	ORDER BY COD_AMBIENTE
+END
+
+-- ============================================================================
+-- QX: QUERY X, TRAER LA INFORMACION DE UN AMBIENTE
+-- ============================================================================ 
+IF @IN_OPERACION = 'QX'
+BEGIN
+	SELECT cod_ambiente,
+	ctx_descripcion,
+	cws_recepcion,
+	cws_autorizacion
+	FROM BIZ_FAC..TB_FAC_FE_AMBIENTE
+	WHERE COD_AMBIENTE = @IN_COD_AMBIENTE
+	ORDER BY COD_AMBIENTE
+END
+
+-- ============================================================================
+-- U: UPDATE, ACTUALIZAR INFORMACION DE UN AMBIENTE
+-- ============================================================================
+IF @IN_OPERACION = 'U'
+BEGIN
+	UPDATE BIZ_FAC..TB_FAC_FE_AMBIENTE
+	SET CWS_RECEPCION = @IN_CWS_RECEPCION,
+		CWS_AUTORIZACION = @IN_CWS_AUTORIZACION
+	WHERE COD_AMBIENTE = @IN_COD_AMBIENTE
+
+	SELECT 'S' AS ok, 'El registro se actualizo correctamente' AS mensaje
+END
