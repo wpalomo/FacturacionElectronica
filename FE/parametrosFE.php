@@ -32,7 +32,7 @@ function update() {
         );
 
         $objetoParametro = new ClaseParametrosFE();
-        print_r($parametros);
+        //print_r($parametros);
         $result = $objetoParametro->update($parametros);
 
         $data = ClaseJson::getJson($result);

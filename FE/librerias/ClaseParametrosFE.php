@@ -28,12 +28,12 @@ class ClaseParametrosFE {
     }
     
     public function update($parametros) {
-        print_r($parametros);
+        //print_r($parametros);
         $parametrosFE = json_decode(stripslashes($parametros['parametrosFE']));
         
-        print_r($parametrosFE);
+        //print_r($parametrosFE);
         
-        echo $parametrosFE;
+        //echo $parametrosFE;
 
         $cci_empresa = mssql_real_escape_string($parametrosFE['cci_empresa']);
         $dfm_fecha_inicio = mssql_real_escape_string($parametrosFE['dfm_fecha_inicio']);
@@ -70,7 +70,7 @@ class ClaseParametrosFE {
             @in_ambiente = '$ambiente', 
             @in_operacion = 'U'
         ";
-        echo $query;
+        //echo $query;
         $parametros = array(
             'query' => $query
         );

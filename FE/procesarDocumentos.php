@@ -170,7 +170,13 @@ function generarProcesoFE() {
                 //echo $result['DESCRIPCION_ERROR'];
                 echo ClaseJson::getMessageJson(false, $result['DESCRIPCION_ERROR']);
             } else {
-                echo $result;
+                //echo $result;
+                //echo 'todo ok';
+                if ($value['opcion'] != 'P') {
+                    if ($value['opcion'] != 'M') {
+                        echo ClaseJson::getMessageJson(true, 'Proceso Generado');
+                    }
+                }
             }
         }
     } else {

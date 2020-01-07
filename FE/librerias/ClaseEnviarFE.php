@@ -40,15 +40,13 @@ class ClaseEnviarFE {
         $rutaEnviadosCompleta = $rutaEnviados . $claveAcceso . '.xml';
         $rutaEnviadosRechazadosCompleta = $rutaEnviadosRechazados . $claveAcceso . '.xml';
 
-        echo 'ENVIANDO XML ' . $cci_tipocmpr . ': ' . $cci_empresa . ' - ' . $nci_documento . ' ';
+        //echo 'ENVIANDO XML ' . $cci_tipocmpr . ': ' . $cci_empresa . ' - ' . $nci_documento . ' ';
 
         if (file_exists($rutaFirmadosCompleta)) {
             try {
                 $client = new SoapClient($direccionWSEnvio);
                 $xml = file_get_contents($rutaFirmadosCompleta);
                 $response = $client->validarComprobante(["xml" => $xml]);
-
-
 
                 $estadoWS = isset($response->RespuestaRecepcionComprobante->estado) ? $response->RespuestaRecepcionComprobante->estado : '';
                 $identificadorWS = isset($response->RespuestaRecepcionComprobante->comprobantes->comprobante->mensajes->mensaje->identificador) ? $response->RespuestaRecepcionComprobante->comprobantes->comprobante->mensajes->mensaje->identificador : '';
@@ -60,7 +58,7 @@ class ClaseEnviarFE {
                 $fechaAutorizacionWS = '';
                 $ambienteWS = '';
 
-                echo $estadoWS . ' ' . $identificadorWS . ' ' . $mensaje . ' ' . $informacionAdicional . $tipo . '<br>';
+                //echo $estadoWS . ' ' . $identificadorWS . ' ' . $mensaje . ' ' . $informacionAdicional . $tipo . '<br>';
 
                 if ($estadoWS == 'RECIBIDA') {
                     copy($rutaFirmadosCompleta, $rutaEnviadosCompleta);
@@ -84,7 +82,7 @@ class ClaseEnviarFE {
 
                     $str = '<ns2:respuestaSolicitud xmlns:ns2="http://ec.gob.sri.ws.recepcion">' . $str . '</ns2:respuestaSolicitud>';
 
-                    echo $mensajeWS . '-' . utf8_decode($informacionAdicionalWS) . '<br>';
+                    //echo $mensajeWS . '-' . utf8_decode($informacionAdicionalWS) . '<br>';
                     copy($rutaFirmadosCompleta, $rutaEnviadosRechazadosCompleta);
 
                     $xml = file_get_contents($rutaEnviadosRechazadosCompleta);
@@ -121,7 +119,7 @@ class ClaseEnviarFE {
             echo 'archivo no existe';
         }
 
-        echo '<hr>';
+        //echo '<hr>';
     }
 
     private function getDataAmbiente() {
