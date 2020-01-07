@@ -91,3 +91,252 @@ BEGIN
 
 	SELECT 'S' AS ok, 'El registro se actualizo correctamente' AS mensaje
 END
+
+
+USE [BIZ_FAC]
+GO
+/****** Object:  StoredProcedure [dbo].[SP_FE_PARAMETROS]    Script Date: 06/01/2020 22:49:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- ============================================================================
+-- AUTHOR......: JUAN PABLO SANCHEZ
+-- CREATE DATE.: 24-AGO-2018
+-- VERSION.....: 1.0.01
+-- DESCRIPTION.: PROCEDIMIENTO QUE MANEJA LAS OPERACIONES QUE SE REALIZAN EN LA 
+--               TABLA "TB_FAC_FE_PARAMETROS"
+-- MODIFICACION: 24-AGO-2018
+-- COMENTARIOS.: 
+-- ============================================================================
+-- PARAMETROS
+-- @IN_CCI_EMPRESA..: CODIGO DE LA EMPRESA
+-- @IN_CCI_SUCURSAL.: CODIGO DE LA SUCURSAL
+-- @IN_NCI_DOCUMENTO: NUMERO DEL DOCUMENTO
+-- @IN_CES_FE.......: ESTADO DEL DOCUMENTO ELECTRONICO
+-- @IN_OPERACION....: OPERACION A SER EJECUTADA
+-- ============================================================================
+ALTER PROCEDURE [dbo].[SP_FE_PARAMETROS]
+(
+	@IN_CCI_EMPRESA VARCHAR(3) = NULL,
+	@IN_CCI_SUCURSAL VARCHAR(6) = NULL,
+	@IN_NCI_DOCUMENTO NUMERIC = NULL,
+	@IN_CES_FE CHAR(1) = NULL,
+	@in_dfm_fecha_inicio datetime = NULL,
+	@in_cci_ruta_generados varchar(100)= NULL,
+	@in_cci_ruta_firmados varchar(100)= NULL,
+	@in_cci_ruta_enviados varchar(100)= NULL,
+	@in_cci_ruta_enviados_rechazados varchar(100)= NULL,
+	@in_cci_ruta_autorizados varchar(100)= NULL,
+	@in_cci_ruta_no_autorizados varchar(100)= NULL,
+	@in_cci_ruta_pdf varchar(100)= NULL,
+	@in_cci_ruta_certificado varchar(100)= NULL,
+	@in_ctx_clave_certificado varchar(50)= NULL,
+	@in_cci_ruta_programa_fe varchar(100)= NULL,
+	@in_cci_mail_default varchar(100)= NULL,
+	@in_cci_ruta_logo varchar(100)= NULL,
+	@in_ambiente  char(1)= NULL,
+	@IN_OPERACION VARCHAR(3)
+)
+AS
+
+DECLARE @W_DFM_FECHA_INICIO DATETIME
+
+SELECT @W_DFM_FECHA_INICIO = DFM_FECHA_INICIO 
+FROM BIZ_FAC..TB_FAC_FE_PARAMETROS
+WHERE CCI_EMPRESA = @IN_CCI_EMPRESA
+
+-- ============================================================================
+-- QG: QUERY GENERADOS, VER TODAS LAS EMPRESAS QUE REALIZAN EL PROCESO DE 
+--     FACTURACION ELECTRONICA PARA EL PROCESO DE GENERAR EL DOCUMENTO XML
+-- ============================================================================ 
+IF @IN_OPERACION = 'QG'
+BEGIN
+	SELECT E.CCI_EMPRESA, 
+	E.CNO_EMPRESA,
+	PE.CCI_RUC, 
+	PE.CTX_DIRECCION,
+	PFE.DFM_FECHA_INICIO,
+	PFE.CCI_RUTA_GENERADOS,
+	--PFE.CCI_RUTA_CERTIFICADO,
+    --PFE.CTX_CLAVE_CERTIFICADO,
+	PFE.CCI_MAIL_DEFAULT,
+	PFE.CTX_OBLIGADO_CONTABILIDAD,
+	PFE.AMBIENTE,
+	PFE.TIPO_EMISION,	
+	PFE.CODIGO_NUMERICO,
+	PFE.MONEDA
+	FROM BIZ_GEN..TB_SEG_EMPRESA E INNER JOIN BIZ_CNT..TB_CNT_PARAMETROS_EMPRESA PE ON
+	E.CCI_EMPRESA = PE.CCI_EMPRESA INNER JOIN BIZ_FAC..TB_FAC_FE_PARAMETROS PFE ON
+	PE.CCI_EMPRESA = PFE.CCI_EMPRESA
+	WHERE E.CCI_EMPRESA = ISNULL(@IN_CCI_EMPRESA, E.CCI_EMPRESA)
+	AND PFE.CES_PARAMETROS = 'A'
+END
+
+-- ============================================================================
+-- QF: QUERY GENERADOS, VER TODAS LAS EMPRESAS QUE REALIZAN EL PROCESO DE 
+--     FACTURACION ELECTRONICA PARA EL PROCESO DE FIRMAR EL DOCUMENTO XML
+-- ============================================================================ 
+IF @IN_OPERACION = 'QF'
+BEGIN
+	SELECT E.CCI_EMPRESA, 
+	--E.CNO_EMPRESA,
+	--PE.CCI_RUC, 
+	--PE.CTX_DIRECCION,
+	PFE.DFM_FECHA_INICIO,
+	PFE.CCI_RUTA_GENERADOS,
+	PFE.CCI_RUTA_FIRMADOS,
+	PFE.CCI_RUTA_CERTIFICADO,
+    PFE.CTX_CLAVE_CERTIFICADO,
+    PFE.CCI_RUTA_PROGRAMA_FE    	
+	FROM BIZ_GEN..TB_SEG_EMPRESA E INNER JOIN BIZ_CNT..TB_CNT_PARAMETROS_EMPRESA PE ON
+	E.CCI_EMPRESA = PE.CCI_EMPRESA INNER JOIN BIZ_FAC..TB_FAC_FE_PARAMETROS PFE ON
+	PE.CCI_EMPRESA = PFE.CCI_EMPRESA
+	WHERE E.CCI_EMPRESA = ISNULL(@IN_CCI_EMPRESA, E.CCI_EMPRESA)
+	AND PFE.CES_PARAMETROS = 'A'
+END
+
+-- ============================================================================
+-- QE: QUERY ENVIADOS, VER TODAS LAS EMPRESAS QUE REALIZAN EL PROCESO DE 
+--     FACTURACION ELECTRONICA PARA EL PROCESO DE ENVIAR EL DOCUMENTO XML
+-- ============================================================================ 
+IF @IN_OPERACION = 'QE'
+BEGIN
+	SELECT E.CCI_EMPRESA, 	
+	PFE.DFM_FECHA_INICIO,	
+	PFE.CCI_RUTA_FIRMADOS,
+	PFE.CCI_RUTA_ENVIADOS,
+	PFE.CCI_RUTA_ENVIADOS_RECHAZADOS,
+	PFE.AMBIENTE
+	FROM BIZ_GEN..TB_SEG_EMPRESA E INNER JOIN BIZ_CNT..TB_CNT_PARAMETROS_EMPRESA PE ON
+	E.CCI_EMPRESA = PE.CCI_EMPRESA INNER JOIN BIZ_FAC..TB_FAC_FE_PARAMETROS PFE ON
+	PE.CCI_EMPRESA = PFE.CCI_EMPRESA
+	WHERE E.CCI_EMPRESA = ISNULL(@IN_CCI_EMPRESA, E.CCI_EMPRESA)
+	AND PFE.CES_PARAMETROS = 'A'
+END
+
+-- ============================================================================
+-- QA: QUERY AUTORIZACION, VER TODAS LAS EMPRESAS QUE REALIZAN EL PROCESO DE 
+--     FACTURACION ELECTRONICA PARA EL PROCESO DE ENVIAR EL DOCUMENTO XML
+-- ============================================================================ 
+IF @IN_OPERACION = 'QA'
+BEGIN
+	SELECT E.CCI_EMPRESA, 	
+	PFE.DFM_FECHA_INICIO,		
+	PFE.CCI_RUTA_ENVIADOS,
+	PFE.CCI_RUTA_AUTORIZADOS,
+	PFE.CCI_RUTA_NO_AUTORIZADOS,
+	PFE.AMBIENTE	
+	FROM BIZ_GEN..TB_SEG_EMPRESA E INNER JOIN BIZ_CNT..TB_CNT_PARAMETROS_EMPRESA PE ON
+	E.CCI_EMPRESA = PE.CCI_EMPRESA INNER JOIN BIZ_FAC..TB_FAC_FE_PARAMETROS PFE ON
+	PE.CCI_EMPRESA = PFE.CCI_EMPRESA
+	WHERE E.CCI_EMPRESA = ISNULL(@IN_CCI_EMPRESA, E.CCI_EMPRESA)
+	AND PFE.CES_PARAMETROS = 'A'
+END
+
+-- ============================================================================
+-- QGR: QUERY GENERA REPORTE, VER TODAS LAS EMPRESAS QUE REALIZAN EL PROCESO DE 
+--     FACTURACION ELECTRONICA PARA EL PROCESO DE GENERAR EL ARCHIVO PDF
+-- ============================================================================ 
+IF @IN_OPERACION = 'QGR'
+BEGIN
+	SELECT E.CCI_EMPRESA,
+	PFE.CCI_RUTA_AUTORIZADOS, 	
+	PFE.CCI_RUTA_PDF
+	FROM BIZ_GEN..TB_SEG_EMPRESA E INNER JOIN BIZ_CNT..TB_CNT_PARAMETROS_EMPRESA PE ON
+	E.CCI_EMPRESA = PE.CCI_EMPRESA INNER JOIN BIZ_FAC..TB_FAC_FE_PARAMETROS PFE ON
+	PE.CCI_EMPRESA = PFE.CCI_EMPRESA
+	WHERE E.CCI_EMPRESA = ISNULL(@IN_CCI_EMPRESA, E.CCI_EMPRESA)
+	AND PFE.CES_PARAMETROS = 'A'
+END
+
+-- ============================================================================
+-- QGR: QUERY RUTAS, CONSULTA QUE TRAE LOS CAMPOS EN DONDE ESTEN DEFINIDOS
+--      DIRECTORIOS EN DONDE SE ALMACENARA INFORMACION PARA CREARLOS.
+-- ============================================================================ 
+IF @IN_OPERACION = 'QRT'
+BEGIN
+	SELECT PFE.CCI_EMPRESA,
+	PFE.CCI_RUTA_GENERADOS,
+	PFE.CCI_RUTA_FIRMADOS,
+	PFE.CCI_RUTA_ENVIADOS,
+	PFE.CCI_RUTA_ENVIADOS_RECHAZADOS,
+	PFE.CCI_RUTA_AUTORIZADOS,
+	PFE.CCI_RUTA_NO_AUTORIZADOS,
+	PFE.CCI_RUTA_PDF
+	FROM BIZ_GEN..TB_SEG_EMPRESA E INNER JOIN BIZ_CNT..TB_CNT_PARAMETROS_EMPRESA PE ON
+	E.CCI_EMPRESA = PE.CCI_EMPRESA INNER JOIN BIZ_FAC..TB_FAC_FE_PARAMETROS PFE ON
+	PE.CCI_EMPRESA = PFE.CCI_EMPRESA
+END
+
+-- ============================================================================
+-- QX: QUERY, TRAER LA INFORMACION DE PARAMETROS DE UNA EMPRESA
+-- ============================================================================ 
+IF @IN_OPERACION = 'QX'
+BEGIN
+	select cci_empresa,
+	convert(char(10), dfm_fecha_inicio, 103) as dfm_fecha_inicio,
+	cci_ruta_generados,
+	cci_ruta_firmados,
+	cci_ruta_enviados,
+	cci_ruta_enviados_rechazados,
+	cci_ruta_autorizados,
+	cci_ruta_no_autorizados,
+	cci_ruta_pdf,
+	cci_ruta_certificado,
+	ctx_clave_certificado,
+	cci_ruta_programa_fe,
+	cci_mail_default,
+	cci_ruta_logo,
+	ambiente,
+	(select ctx_descripcion from BIZ_FAC..TB_FAC_FE_AMBIENTE where COD_AMBIENTE = p.AMBIENTE) as descripcion_ambiente
+	from BIZ_FAC..TB_FAC_FE_PARAMETROS p
+	where CCI_EMPRESA = @IN_CCI_EMPRESA
+END
+
+-- ============================================================================
+-- U: UPDATE, ACTUALIZAR INFORMACION DE UN PARAMETRO
+-- ============================================================================
+IF @IN_OPERACION = 'U'
+BEGIN
+	update BIZ_FAC..TB_FAC_FE_PARAMETROS
+	set 
+	--dfm_fecha_inicio = @in_dfm_fecha_inicio,
+	cci_ruta_generados = @in_cci_ruta_generados,
+	cci_ruta_firmados = @in_cci_ruta_firmados,
+	cci_ruta_enviados = @in_cci_ruta_enviados,
+	cci_ruta_enviados_rechazados = @in_cci_ruta_enviados_rechazados,
+	cci_ruta_autorizados = @in_cci_ruta_autorizados,
+	cci_ruta_no_autorizados = @in_cci_ruta_no_autorizados,
+	cci_ruta_pdf = @in_cci_ruta_pdf,
+	cci_ruta_certificado = @in_cci_ruta_certificado,
+	ctx_clave_certificado = @in_ctx_clave_certificado,
+	cci_ruta_programa_fe = @in_cci_ruta_programa_fe,
+	cci_mail_default = @in_cci_mail_default,
+	cci_ruta_logo = @in_cci_ruta_logo,
+	ambiente = @in_ambiente
+	where CCI_EMPRESA = @IN_CCI_EMPRESA
+
+	SELECT 'S' AS ok, 'El registro se actualizo correctamente' AS mensaje
+END
+
+
+
+
+1	0	SISTEMA	P	00000000			N	S	A	NULL	NULL	NULL	NULL	NULL	NULL
+2	1	Modulo General	P	00000100		fa fa-home	N	S	A	NULL	NULL	NULL	NULL	NULL	NULL
+3	2	Usuarios	P	00000200			N	S	A	NULL	NULL	NULL	NULL	NULL	NULL
+4	3	Mantenimiento de Usuarios	O	00000300	/mantenimiento-usuarios	fa fa-user	N	N	A	NULL	NULL	NULL	NULL	NULL	NULL
+5	3	Cambio de Clave	O	00000400	/cambio-clave	fa fa-unlock-alt	N	S	A	NULL	NULL	NULL	NULL	NULL	NULL
+6	3	Favoritos	O	00000500	/favoritos	fa fa-star	N	S	A	NULL	NULL	NULL	NULL	NULL	NULL
+7	2	Seguridades	P	00000600			N	N	A	NULL	NULL	NULL	NULL	NULL	NULL
+8	7	Mantenimiento de Perfil	O	00000700	/mantenimiento-perfil	fa fa-id-card	N	N	A	NULL	NULL	NULL	NULL	NULL	NULL
+9	7	Permisos	O	00000800	/permisos	fa fa-shield	N	N	A	NULL	NULL	NULL	NULL	NULL	NULL
+10	1	Facturacion Electronica	P	00000900			N	N	A	2020-01-04 11:04:53.070	NULL	NULL	NULL	NULL	NULL
+11	10	Parametros Generales	P	00001000			N	N	A	2020-01-04 11:06:59.863	NULL	NULL	NULL	NULL	NULL
+12	11	Ambiente	O	00001100	/ambiente	fa fa-file-text-o	N	N	A	2020-01-04 11:07:47.000	NULL	NULL	NULL	NULL	NULL
+13	11	Formas de Pago	O	00001200	/formas-pago	fa fa-money	N	N	A	2020-01-04 11:07:56.030	NULL	NULL	NULL	NULL	NULL
+14	11	Parametros	O	00001300	/parametros-fe	fa fa-newspaper-o	N	N	A	2020-01-04 11:09:10.450	NULL	NULL	NULL	NULL	NULL
+15	10	Transacciones	P	00001400			N	N	A	2020-01-04 11:09:29.400	NULL	NULL	NULL	NULL	NULL
+16	15	Procesar Dcts Electronicos	O	00001500	/procesar-documentos-electronicos	fa fa-file-text	N	N	A	2020-01-04 11:10:36.947	NULL	NULL	NULL	NULL	NULL
+NULL	NULL	NULL	NULL	NULL	NULL	NULL	NULL	NULL	NULL	NULL	NULL	NULL	NULL	NULL	NULL
