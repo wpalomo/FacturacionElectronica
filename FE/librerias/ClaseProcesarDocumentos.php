@@ -495,7 +495,7 @@ class ClaseProcesarDocumentos {
                             if (file_exists('descargas/' . $this->dataDocumentos['CCI_CLAVE_ACCESO'] . '_RESUMIDO.pdf')) {
                                 $resumido = $this->dataDocumentos['CCI_CLAVE_ACCESO'] . '_RESUMIDO.pdf';
                             }
-                            //echo ClaseJson::getMessageJson(true, $this->dataDocumentos['CCI_CLAVE_ACCESO'] . '.pdf', $resumido);
+                            return ClaseJson::getMessageJson(true, $this->dataDocumentos['CCI_CLAVE_ACCESO'] . '.pdf', $resumido);
                         }
                     } else {
                         echo ' - error al grabar el archivo' . '<br>';
@@ -615,7 +615,6 @@ class ClaseProcesarDocumentos {
             }
 
             //echo 'ENVIANDO EMAIL: ' . $valueDoc['CCI_TIPOCMPR'] . ': ' . $valueDoc['CCI_EMPRESA'] . ' - ' . $valueDoc['NCI_DOCUMENTO'] . ' ';
-
             //$asunto = utf8_decode('Comprobante Electrónico ' . $valueDoc['CCI_TIPOCMPR'] . ' ' . $valueDoc['NCI_DOCUMENTO_COMPLETO'] . ' ' . $valueDoc['CNO_CLIPROV']);
             $asunto = utf8_decode('Comprobante Electrónico ' . $valueDoc['CCI_SUCURSAL'] . '-' . $valueDoc['CCI_TIPOCMPR'] . ' ' . $valueDoc['NCI_DOCUMENTO_COMPLETO'] . ' ' . $valueDoc['CNO_CLIPROV']);
 
@@ -735,8 +734,8 @@ class ClaseProcesarDocumentos {
                 array_push($adjuntos, $adj);
             }
             //print_r($destinatarios);
-            
-            $resp = $objetoMail->send($destinatarios, $asunto, $mensaje, $adjuntos, $rutaImagen, $path_parts['filename']);
+
+            //$resp = $objetoMail->send($destinatarios, $asunto, $mensaje, $adjuntos, $rutaImagen, $path_parts['filename']);
 
             //echo $resp['error'] . ' - ' . $resp['mensaje'];
 
@@ -783,9 +782,8 @@ class ClaseProcesarDocumentos {
                 unset($destinatarios[0]);
 
                 //$resp = $objetoMail->send($destinatarios, $asunto, $mensaje, $adjuntos, $rutaImagen, $path_parts['filename']);
-
                 //echo $resp['error'] . ' - ' . $resp['mensaje'];
-                
+
                 return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $resp['error'] . ' - ' . $resp['mensaje'] . ' - ClaseProcesoFE - generarPDF()');
 
                 /*

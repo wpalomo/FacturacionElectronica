@@ -195,3 +195,6 @@ where PFE.CCI_EMPRESA != ''
 and R.DFM_EMISION >= PFE.DFM_FECHA_INICIO
 ) F
 GO
+
+sql compare mas tiem evaluacion
+http://codeskaters.blogspot.com/2015/02/red-gate-sql-prompt-extend-trial-period.html
