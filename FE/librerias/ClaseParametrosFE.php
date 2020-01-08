@@ -28,12 +28,7 @@ class ClaseParametrosFE {
     }
     
     public function update($parametros) {
-        //print_r($parametros);
-        $parametrosFE = json_decode(stripslashes($parametros['parametrosFE']));
-        
-        //print_r($parametrosFE);
-        
-        //echo $parametrosFE;
+        $parametrosFE = json_decode($parametros['parametrosFE'], true);
 
         $cci_empresa = mssql_real_escape_string($parametrosFE['cci_empresa']);
         $dfm_fecha_inicio = mssql_real_escape_string($parametrosFE['dfm_fecha_inicio']);
@@ -49,7 +44,7 @@ class ClaseParametrosFE {
         $cci_ruta_programa_fe = mssql_real_escape_string($parametrosFE['cci_ruta_programa_fe']);
         $cci_mail_default = mssql_real_escape_string($parametrosFE['cci_mail_default']);
         $cci_ruta_logo = mssql_real_escape_string($parametrosFE['cci_ruta_logo']);
-        $ambiente = mssql_real_escape_string($parametros['ambiente']);
+        $ambiente = mssql_real_escape_string($parametrosFE['ambiente']);
 
         $query = "
             EXEC BIZ_FAC..SP_FE_PARAMETROS
@@ -70,7 +65,7 @@ class ClaseParametrosFE {
             @in_ambiente = '$ambiente', 
             @in_operacion = 'U'
         ";
-        //echo $query;
+        
         $parametros = array(
             'query' => $query
         );
