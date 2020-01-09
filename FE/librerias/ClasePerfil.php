@@ -63,17 +63,21 @@ class ClasePerfil {
                             break;
                         case 'equals':
                             if (is_array($tmp)) {
+                                $condicion = true;
                                 foreach ($tmp as $k2 => $v2) {
                                     if ($k2 == 'value') {
                                         $valor = $v2;
                                     }
 
                                     if ($k == 'estado_perfil' && $valor == 'T') {
+                                        $condicion = false;
                                         continue;
                                     }
                                 }
 
-                                $where = $where . " AND " . $k . " = '$valor' ";
+                                if ($condicion) {
+                                    $where = $where . " AND " . $k . " = '$valor' ";
+                                }
                             } else {
                                 $where = $where . " AND " . $k . " = '$valor' ";
                             }
@@ -258,7 +262,6 @@ class ClasePerfil {
         $offset = 'OFFSET ' . ($start) . ' ROWS ';
         $fetch = 'FETCH NEXT ' . $parametros['limit'] . ' ROWS ONLY';
 
-
         $queryTotalRegistros = $selectTotalRegistros . $where;
         $query = $select . $where . $order . $offset . $fetch;
 
@@ -306,7 +309,7 @@ class ClasePerfil {
             @in_estado_perfil = '$estado_perfil',
             @in_operacion = 'QE'
         ";
-        
+
         $parametros = array(
             'query' => $query
         );
