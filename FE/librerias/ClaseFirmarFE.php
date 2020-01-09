@@ -41,7 +41,7 @@ class ClaseFirmarFE {
             exec('java -jar ' . $rutaProgramaFE . ' ' . $rutaCertificado . ' ' . $claveCertificado . ' ' . $rutaGeneradosCompleta . ' ' . $rutaFirmados . ' ' . $claveAcceso . '.xml', $output);
 
             if (file_exists($rutaFirmadosCompleta)) {
-                print_r($output);
+                //print_r($output);
 
                 $this->setDataLog($cci_empresa, $cci_sucursal, $cci_cliente, $cci_tipocmpr, $nci_documento, $claveAcceso, 'FIRMAR', 'F');
                 return 'ok';

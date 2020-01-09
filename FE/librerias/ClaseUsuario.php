@@ -1,4 +1,5 @@
 <?php
+
 // TODO: poner validaciones para los datos que llegan, no olvidar codificar la clave.
 include_once 'config.inc.php';
 include_once 'ClaseBaseDatos.php';
@@ -53,17 +54,21 @@ class ClaseUsuario {
                             break;
                         case 'equals':
                             if (is_array($tmp)) {
+                                $condicion = true;
                                 foreach ($tmp as $k2 => $v2) {
                                     if ($k2 == 'value') {
                                         $valor = $v2;
                                     }
 
                                     if ($k == 'estado_usuario' && $valor == 'T') {
+                                        $condicion = false;
                                         continue;
                                     }
                                 }
 
-                                $where = $where . " AND " . $k . " = '$valor' ";
+                                if ($condicion) {
+                                    $where = $where . " AND " . $k . " = '$valor' ";
+                                }
                             } else {
                                 $where = $where . " AND " . $k . " = '$valor' ";
                             }

@@ -42,7 +42,7 @@ class ClaseAutorizarFE {
         $rutaNoAutorizadosCompleta = $rutaNoAutorizados . $claveAcceso . '.xml';
         $rutaNoAutorizadosCompletaAux = $rutaNoAutorizados . $claveAcceso . '_a.xml';
 
-        echo 'AUTORIZANDO XML ' . $cci_tipocmpr . ': ' . $cci_empresa . ' - ' . $nci_documento . ' ';
+        //echo 'AUTORIZANDO XML ' . $cci_tipocmpr . ': ' . $cci_empresa . ' - ' . $nci_documento . ' ';
 
         if (file_exists($rutaEnviadosCompleta)) {
             $objetoXml = new XMLSerializer();
@@ -75,7 +75,7 @@ class ClaseAutorizarFE {
                 $dom->loadXML($xml);
 
                 if ($estadoWS == 'AUTORIZADO') {
-                    echo 'AUTORIZADO ';
+                    //echo 'AUTORIZADO ';
                     //echo $estadoWS . '<br>';
                     //echo $numeroAutorizacionWS . '<br>';
                     //echo $fechaAutorizacionWS . '<br>';
@@ -155,13 +155,13 @@ class ClaseAutorizarFE {
                     $this->setDataLog($cci_empresa, $cci_sucursal, $cci_cliente, $cci_tipocmpr, $nci_documento, $claveAcceso, 'AUTORIZAR', 'R', $estadoWS, $identificadorWS, $numeroAutorizacionWS, $fechaAutorizacionWS, $ambienteWS, $mensajeWS, $informacionAdicionalWS, $tipoWS);
                 }
 
-                echo $estadoWS . ' ' . $numeroAutorizacionWS . ' ' . $fechaAutorizacionWS . ' ' . $identificadorWS . ' ' . $mensajeWS . ' ' . $informacionAdicionalWS . ' ' . $tipoWS . '<br>';
+                //echo $estadoWS . ' ' . $numeroAutorizacionWS . ' ' . $fechaAutorizacionWS . ' ' . $identificadorWS . ' ' . $mensajeWS . ' ' . $informacionAdicionalWS . ' ' . $tipoWS;
             } catch (Exception $e) {
                 var_dump($e);
             }
         }
 
-        echo '<hr>';
+        //echo '<hr>';
     }
 
     private function getDataAmbiente() {

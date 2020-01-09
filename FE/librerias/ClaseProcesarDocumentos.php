@@ -94,17 +94,21 @@ class ClaseProcesarDocumentos {
                             break;
                         case 'equals':
                             if (is_array($tmp)) {
+                                $condicion = true;
                                 foreach ($tmp as $k2 => $v2) {
                                     if ($k2 == 'value') {
                                         $valor = $v2;
                                     }
 
-                                    if ($k == 'estado_usuario' && $valor == 'T') {
+                                    if ($k == 'ces_fe' && $valor == 'T') {
+                                        $condicion = false;
                                         continue;
                                     }
                                 }
 
-                                $where = $where . " AND " . $k . " = '$valor' ";
+                                if ($condicion) {
+                                    $where = $where . " AND " . $k . " = '$valor' ";
+                                }
                             } else {
                                 $where = $where . " AND " . $k . " = '$valor' ";
                             }
@@ -734,9 +738,11 @@ class ClaseProcesarDocumentos {
                 array_push($adjuntos, $adj);
             }
             //print_r($destinatarios);
-
+            /////////////////////////////
+            //por el momento hasta que se envie el mail desde mi pc//
             //$resp = $objetoMail->send($destinatarios, $asunto, $mensaje, $adjuntos, $rutaImagen, $path_parts['filename']);
-
+            $resp =  array(error => 'N', enviado => 'S', mensaje => 'Mensaje enviado');
+            /////////////////////////////
             //echo $resp['error'] . ' - ' . $resp['mensaje'];
 
             $resultIngresarMailLog = $this->ingresarMailLog($valueDoc['CCI_EMPRESA'], $valueDoc['CCI_TIPOCMPR'], $valueDoc['NCI_DOCUMENTO'], $valueDoc['CTX_MAIL'], $resp['enviado'], strip_tags($resp['mensaje']));
