@@ -16,7 +16,7 @@
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-rowData let-columns="columns">
-        <tr [pSelectableRow]="rowData">
+        <tr [pSelectableRow]="rowData" [style.background]="White">
           <td>
             <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
           </td>

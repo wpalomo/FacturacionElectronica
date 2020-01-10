@@ -13,6 +13,9 @@ switch ($action) {
     case 'getMenuFavoritos':
         getMenuFavoritos();
         break;
+    case 'getMenuFavoritosUsuario':
+        getMenuFavoritosUsuario();
+        break;
     case 'updateMenuFavoritos':
         updateMenuFavoritos();
         break;
@@ -22,11 +25,22 @@ function getMenuFavoritos() {
 
     $id_usuario = $_POST['id_usuario'];
 
-
-
     $objetoMenuFavoritos = new ClaseMenuFavoritos();
 
     $result = $objetoMenuFavoritos->getMenuFavoritos($id_usuario);
+
+    $data = ClaseJson::getJson($result);
+
+    echo $data;
+}
+
+function getMenuFavoritosUsuario() {
+
+    $id_usuario = $_POST['id_usuario'];
+
+    $objetoMenuFavoritos = new ClaseMenuFavoritos();
+
+    $result = $objetoMenuFavoritos->getMenuFavoritosUsuario($id_usuario);
 
     $data = ClaseJson::getJson($result);
 

@@ -29,6 +29,25 @@ class ClaseMenuFavoritos {
 
         return $result;
     }
+    
+    public function getMenuFavoritosUsuario($id_usuario) {
+        $id_usuario = mssql_real_escape_string($id_usuario);
+
+        $query = "
+            EXEC SP_GEN_MENU_FAVORITOS
+            @in_id_usuario = '$id_usuario',             
+            @in_operacion = 'QF2'
+        ";
+
+        $parametros = array(
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        return $result;
+    }
+    
 
     public function updateMenuFavoritos($json) {
         $ob = json_decode($json);
