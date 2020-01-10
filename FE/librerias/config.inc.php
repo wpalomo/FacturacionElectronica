@@ -6,7 +6,7 @@ define("_SERVIDOR", "localhost");
 define("_ODBC", "SISOEMP");
 define("_BASE", "FacturacionElectronica");
 define("_USUARIO", "sa");
-define("_CLAVE", "solsa");
+define("_CLAVE", "webpedidos*2013");
 //define("_AMBIENTE_FE", "1");
 define("_ENTORNO", "PRUEBAS");
 //---------------------------------------
@@ -16,7 +16,7 @@ define("_SERVIDORI", "localhost");
 //define("_ODBC", "SISOEMP");
 define("_BASEI", "BIZ_FAC");
 define("_USUARIOI", "sa");
-define("_CLAVEI", "solsa");
+define("_CLAVEI", "webpedidos*2013");
 //define("_AMBIENTE_FE", "1");
 //---------------------------------------
 //

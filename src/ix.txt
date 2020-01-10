@@ -198,3 +198,6 @@ GO
 
 sql compare mas tiem evaluacion
 http://codeskaters.blogspot.com/2015/02/red-gate-sql-prompt-extend-trial-period.html
+
+correos php
+https://stackoverflow.com/questions/47634630/smtp-error-could-not-connect-to-smtp-host-phpmailer-php/51064325

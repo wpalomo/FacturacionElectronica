@@ -3,16 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/FE/librerias/ClaseParametrosFE.php</file>
-            <file>file:/C:/xampp/htdocs/FE/librerias/ClaseEnviarFE.php</file>
             <file>file:/C:/xampp/htdocs/FE/librerias/ClaseProcesarDocumentos.php</file>
-            <file>file:/C:/xampp/htdocs/FE/librerias/config.inc.php</file>
-            <file>file:/C:/xampp/htdocs/FE/librerias/ClaseEmpresa.php</file>
             <file>file:/C:/xampp/htdocs/FE/procesarDocumentos.php</file>
-            <file>file:/C:/xampp/htdocs/FE/empresa.php</file>
             <file>file:/C:/xampp/htdocs/FE/librerias/ClaseMail.php</file>
-            <file>file:/C:/xampp/htdocs/FE/parametrosFE.php</file>
-            <file>file:/C:/xampp/htdocs/FE/librerias/ClaseJson.php</file>
+            <file>file:/C:/xampp/htdocs/FE/menu.php</file>
+            <file>file:/C:/xampp/htdocs/FE/permisos.php</file>
+            <file>file:/C:/xampp/htdocs/FE/perfiles.php</file>
+            <file>file:/C:/xampp/htdocs/FE/librerias/ClasePermisos.php</file>
+            <file>file:/C:/xampp/htdocs/FE/librerias/ClasePerfil.php</file>
+            <file>file:/C:/xampp/htdocs/FE/librerias/ClaseMenu.php</file>
         </group>
     </open-files>
 </project-private>
