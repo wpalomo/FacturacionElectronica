@@ -16,9 +16,9 @@ and open the template in the editor.
 
     </head>
     <body>        
-<?php
-    echo 'hola'
-?>
+        <?php
+        echo 'hola'
+        ?>
         <script>
             //$(function () {
             //    let url = 'http://localhost/FE/procesarDocumentos.php'
@@ -43,29 +43,46 @@ and open the template in the editor.
 
             //});
 
+            //$(function () {
+            //    let url = 'http://localhost/FE/procesarDocumentos.php';
+            //    let action = 'getMailsDocumento';
+            //    let cci_empresa = '009';
+            //    let cci_sucursal = 'TEX';
+            //    let cci_tipocmpr = 'RET';
+            //    let nci_documento = 10010005146;
+
+            //    $.post(url, {
+            //        action: action,
+            //        cci_empresa: cci_empresa,
+            //        cci_sucursal: cci_sucursal,
+            //        cci_tipocmpr: cci_tipocmpr,
+            //        nci_documento: nci_documento
+            //    }, function (result) {
+            //alert('successfully posted key1=value1&key2=value2 to foo.php');
+            //alert(result);
+            //        document.write(result);
+            //window.open('descargas/2811201901099265673500110010010000173621234567815_G.pdf');
+            //    });
+            //});
+
             $(function () {
-                let url = 'http://localhost/FE/procesarDocumentos.php';
-                let action = 'getMailsDocumento';
-                let cci_empresa = '009';
-                let cci_sucursal = 'TEX';
-                let cci_tipocmpr = 'RET';
-                let nci_documento = 10010005146;
+                let url = 'http://localhost/FE/login.php';
+                let action = 'vsp';
+                let id_sesion = '918';
+                let id_usuario = '1';
+                let id_menu = '5';
 
                 $.post(url, {
                     action: action,
-                    cci_empresa: cci_empresa,
-                    cci_sucursal: cci_sucursal,
-                    cci_tipocmpr: cci_tipocmpr,
-                    nci_documento: nci_documento
+                    id_sesion: id_sesion,
+                    id_usuario: id_usuario,
+                    id_menu: id_menu
                 }, function (result) {
                     //alert('successfully posted key1=value1&key2=value2 to foo.php');
                     //alert(result);
                     document.write(result);
                     //window.open('descargas/2811201901099265673500110010010000173621234567815_G.pdf');
                 });
-
-
-
             });
 
         </script>

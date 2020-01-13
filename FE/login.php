@@ -5,6 +5,7 @@ header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token, X-EXAMPLE-HEADER, authorization');
 
 include_once 'librerias/ClaseLogin.php';
+include_once 'librerias/ClaseSesion.php';
 
 $action = isset($_GET['action']) ? $_GET['action'] : (isset($_POST['action']) ? $_POST['action'] : null);
 
@@ -15,11 +16,16 @@ switch ($action) {
     case 'cerrarSesiones':
         cerrarSesiones();
         break;
+    case 'vsp':
+        vsp();
+        break;
 }
 
 function login() {
     if (isset($_POST['login']) && isset($_POST['clave'])) {
         $clave = substr(crypt($_POST['clave'], strtoupper($_POST['login'])), 3);
+
+        //echo $clave;
 
         $objetoLogin = new ClaseLogin($_POST['login'], $clave);
         $result = $objetoLogin->login();
@@ -29,6 +35,15 @@ function login() {
         $data = ClaseJson::getMessageJson(false, 'Los campos Login o Clave estan vacios');
     }
 
+    echo $data;
+}
+
+function vsp() {
+    $objetoSesion = new ClaseSesion();
+    $result = $objetoSesion->verificaSesionPermiso($_POST['id_sesion'], $_POST['id_usuario'], $_POST['id_menu']);
+    
+    $data = ClaseJson::getJson($result);
+    
     echo $data;
 }
 

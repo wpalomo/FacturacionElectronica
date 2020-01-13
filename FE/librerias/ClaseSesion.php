@@ -45,6 +45,31 @@ class ClaseSesion {
     }
 
     /**
+     * Verifica si la sesion y los permisos que tiene un usuario en una opcion 
+     * del menu son validos
+     * @param string $id_sesion codigo de la sesion a verificar
+     * @param string $id_usuario codigo del usuario
+     * @param string $id_menu codigo de la opcion
+     */
+    function verificaSesionPermiso($id_sesion, $id_usuario, $id_menu) {
+        $query = "
+            EXEC dbo.SP_GEN_SESION
+            @in_id_sesion = '$id_sesion',  
+            @in_id_usuario = '$id_usuario',
+            @in_id_menu = '$id_menu',
+            @in_operacion = 'VSP'               
+        ";
+
+        $parametros = array(
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        return $result;
+    }
+
+    /**
      * Retorna una direccion IP
      * @return string
      */

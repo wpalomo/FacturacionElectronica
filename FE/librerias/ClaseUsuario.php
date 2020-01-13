@@ -146,6 +146,8 @@ class ClaseUsuario {
         $email = mssql_real_escape_string($usuario['email']);
         $estado_usuario = mssql_real_escape_string($usuario['estado_usuario']);
         $cambio_clave = mssql_real_escape_string($usuario['cambio_clave']);
+        
+        $clave = substr(crypt($clave, strtoupper($login)), 3);
 
         $query = "
             EXEC SP_GEN_USUARIOS
@@ -173,12 +175,15 @@ class ClaseUsuario {
 
         $id_usuario = mssql_real_escape_string($usuario['id_usuario']);
         $id_perfil = mssql_real_escape_string($usuario['id_perfil']);
+        $login = mssql_real_escape_string($usuario['login']);
         $clave = mssql_real_escape_string($usuario['clave']);
         $nombre = mssql_real_escape_string($usuario['nombre']);
         $apellido = mssql_real_escape_string($usuario['apellido']);
         $email = mssql_real_escape_string($usuario['email']);
         $estado_usuario = mssql_real_escape_string($usuario['estado_usuario']);
         $cambiar_clave = mssql_real_escape_string($usuario['cambiar_clave']);
+        
+        $clave = substr(crypt($clave, strtoupper($login)), 3);
 
         $query = "
             EXEC SP_GEN_USUARIOS
