@@ -201,3 +201,24 @@ http://codeskaters.blogspot.com/2015/02/red-gate-sql-prompt-extend-trial-period.
 
 correos php
 https://stackoverflow.com/questions/47634630/smtp-error-could-not-connect-to-smtp-host-phpmailer-php/51064325
+
+fa fa-home
+fa fa-users
+fa fa-user
+fa fa-unlock-alt
+fa fa-star
+fa fa-key
+fa fa-id-card
+fa fa-shield
+fa fa-money
+fa fa-indent
+fa fa-file-text-o
+fa fa-money
+fa fa-newspaper-o
+fa fa-cog
+fa fa-file-text
+
+https://stackoverflow.com/questions/38425461/angular2-canactivate-calling-async-function
+https://stackoverflow.com/questions/47759807/angular-4-guard-with-subscription
+https://stackoverflow.com/questions/47210919/wait-for-http-inside-guard-on-angular-5
+https://stackoverflow.com/questions/47759807/angular-4-guard-with-subscription
