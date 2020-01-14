@@ -112,7 +112,7 @@ function generarProcesoFE() {
                     $result = $objetoProcesoFE->generarPDFResumido($value);
                 }
 
-                if (!is_array($result)) {                    
+                if (!is_array($result)) {
                     $result = $objetoProcesoFE->generarPDF($value);
                 }
             }
@@ -175,6 +175,10 @@ function generarProcesoFE() {
                 if ($value['opcion'] != 'P') {
                     if ($value['opcion'] != 'M') {
                         echo ClaseJson::getMessageJson(true, 'Proceso Generado');
+                    }
+
+                    if ($value['opcion'] == 'M') {
+                        echo ClaseJson::getMessageJson(true, 'Correo enviado.');
                     }
                 } else {
                     echo $result;

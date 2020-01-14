@@ -740,8 +740,8 @@ class ClaseProcesarDocumentos {
             //print_r($destinatarios);
             /////////////////////////////
             //por el momento hasta que se envie el mail desde mi pc//
-            //$resp = $objetoMail->send($destinatarios, $asunto, $mensaje, $adjuntos, $rutaImagen, $path_parts['filename']);
-            $resp =  array(error => 'N', enviado => 'S', mensaje => 'Mensaje enviado');
+            $resp = $objetoMail->send($destinatarios, $asunto, $mensaje, $adjuntos, $rutaImagen, $path_parts['filename']);
+            //$resp =  array(error => 'N', enviado => 'S', mensaje => 'Mensaje enviado');
             /////////////////////////////
             //echo $resp['error'] . ' - ' . $resp['mensaje'];
 
@@ -819,6 +819,8 @@ class ClaseProcesarDocumentos {
                   echo 'no existe';
                   }
                  */
+            } else {
+                //echo 'enviado';
             }
 
             //echo '<hr>';

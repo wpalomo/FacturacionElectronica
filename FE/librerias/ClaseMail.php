@@ -37,6 +37,14 @@ class ClaseMail {
         $this->mail->isHTML(true);             // Set email format to HTML
         //Recipients
         $this->mail->setFrom(_FROM, _FROMNAME);
+
+        $this->mail->SMTPOptions = array(
+            'ssl' => array(
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+            )
+        );
     }
 
     public function send($destinatarios, $asunto, $mensaje, $adjuntos, $rutaImagen = '', $nombreImagen = '') {
