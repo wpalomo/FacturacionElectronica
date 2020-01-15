@@ -68,6 +68,30 @@ class ClaseSesion {
 
         return $result;
     }
+    
+    /**
+     * Registra una sesion en la base de datos para posteriormente con esta
+     * sesion validar si el usuario puede realizar transacciones en el sistema
+     * @param string $se_codigo codigo de la sesion a cerrar
+     * @param string $us_codigo usuario que cierra la sesion
+     * @return json
+     */
+    public function cerrarSesionActual($id_sesion, $id_usuario) {
+        $query = "
+            EXEC dbo.SP_GEN_SESION
+            @in_id_sesion = '$id_sesion',                
+            @in_usuario_ing_act = '$id_usuario',
+            @in_operacion = 'CSA'               
+        ";
+
+        $parametros = array(
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        return $result;
+    }
 
     /**
      * Retorna una direccion IP

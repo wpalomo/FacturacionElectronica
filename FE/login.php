@@ -16,6 +16,9 @@ switch ($action) {
     case 'cerrarSesiones':
         cerrarSesiones();
         break;
+    case 'cerrarSesionActual':
+        cerrarSesionActual();
+        break;
     case 'vsp':
         vsp();
         break;
@@ -41,9 +44,19 @@ function login() {
 function vsp() {
     $objetoSesion = new ClaseSesion();
     $result = $objetoSesion->verificaSesionPermiso($_POST['id_sesion'], $_POST['id_usuario'], $_POST['id_menu']);
-    
+
     $data = ClaseJson::getJson($result);
-    
+
+    echo $data;
+}
+
+function cerrarSesionActual() {
+    $objetoSesion = new ClaseSesion();
+
+    $result = $objetoSesion->cerrarSesionActual($_POST['id_sesion'], $_POST['id_usuario']);
+
+    $data = ClaseJson::getJson($result);
+
     echo $data;
 }
 

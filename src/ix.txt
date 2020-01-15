@@ -222,3 +222,185 @@ https://stackoverflow.com/questions/38425461/angular2-canactivate-calling-async-
 https://stackoverflow.com/questions/47759807/angular-4-guard-with-subscription
 https://stackoverflow.com/questions/47210919/wait-for-http-inside-guard-on-angular-5
 https://stackoverflow.com/questions/47759807/angular-4-guard-with-subscription
+
+USE [FacturacionElectronica]
+GO
+/****** Object:  StoredProcedure [dbo].[SP_GEN_SESION]    Script Date: 15/01/2020 6:56:27 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- ============================================================================
+-- AUTHOR......: JUAN PABLO SANCHEZ
+-- CREATE DATE.: 22-MAY-2019
+-- VERSION.....: 1.0.01
+-- DESCRIPTION.: PROCEDIMIENTO QUE SE ENCARGA DE MANEJAR TODO LO RELACIONADO
+--               CON LA TABLA TB_GEN_SESIONES
+-- MODIFICACION: 22-MAY-2019
+-- COMENTARIOS.: COMENTARIOS ACERCA DE LA MODIFICACION DEL PROCEDIMIENTO
+-- ============================================================================
+-- PARAMETROS
+-- @in_id_usuario.: CODIGO DEL USUARIO
+-- @in_id_sesion.: CODIGO DE LA SESION
+-- @in_ip.....: DIRECCION DE LA IP CON LA QUE SE GENERA LA SESION
+-- @id_menu.: CODIGO DEL MENU
+-- @in_usuario_ing_act: CODIGO DEL USUARIO QUE REALIZA EL INGRESO/ACTUALIZACION
+-- @in_operacion.: OPERACION A SER EJECUTADA
+-- ============================================================================
+
+ALTER PROCEDURE [dbo].[SP_GEN_SESION]
+(
+	@in_id_usuario INT = NULL,
+	@in_id_sesion INT = NULL,
+	@in_ip VARCHAR(45) = NULL, 
+	--@se_dispositivo	VARCHAR(50) = NULL,	
+	@in_id_menu INT = NULL,
+	@in_usuario_ing_act INT = NULL,
+	@in_operacion VARCHAR(3)
+)
+AS
+
+-- ============================================================================
+-- VSI: VERIFICAR SESION INICIADA, VERIFICA SI EL USUARIO TIENE UNA SESION
+--      INICIADA
+-- ============================================================================
+IF @in_operacion = 'VSI'
+BEGIN
+	SELECT COUNT(*) AS contador, 
+	CASE COUNT(*) WHEN 0 THEN 'N' ELSE 'S' END AS sesion_iniciada
+	FROM TB_GEN_SESIONES
+	WHERE id_usuario = @in_id_usuario
+	AND estado_sesion = 'A'
+END
+
+-- ============================================================================
+-- VSV: VERIFICAR SESION VALIDA, VERIFICA SI LA SESION DEL USUARIO ES VALIDA
+-- ============================================================================
+IF @in_operacion = 'VSV'
+BEGIN
+	SELECT COUNT(*) AS contador, 
+	CASE COUNT(*) WHEN 0 THEN 'N' ELSE 'S' END AS sesion_valida
+	FROM TB_GEN_SESIONES s INNER JOIN dbo.VW_USUARIOS_PERFILES u ON 
+	s.id_usuario = u.id_usuario
+	WHERE s.id_sesion = @in_id_sesion
+	AND s.estado_sesion = 'A'
+	AND u.estado_usuario = 'A'
+END
+
+-- ============================================================================
+-- VSP: VERIFICAR SESION PERMISO, VERIFICA SI LA SESION DEL USUARIO ES VALIDA,
+--      SI ES VALIDA, SE VERIFICA SI EL USUARIO TIENE LOS PERMISOS VALIDOS PARA
+--      INGRESAR EN LA OPCION.
+-- ============================================================================
+IF @in_operacion = 'VSP'
+BEGIN
+	CREATE TABLE #tmp
+	(
+		contador INT,
+		sesion_valida CHAR(1)
+	)
+
+	INSERT INTO #tmp(contador, sesion_valida)
+	EXEC SP_GEN_SESION
+	@in_id_sesion = @in_id_sesion,
+	@in_operacion = 'VSV' 
+
+	IF (SELECT sesion_valida
+		FROM #tmp) = 'S'
+	BEGIN	
+		SELECT *,
+		CASE contador WHEN 0 THEN 'N' ELSE 'S' END AS ok,
+		CASE contador WHEN 0 THEN 'Atención no tiene los permisos necesarios para acceder a esta opción' ELSE 'Acceso concedido' END AS mensaje
+		FROM (
+				SELECT COUNT(*) AS contador
+				FROM dbo.VW_PERMISOS p INNER JOIN dbo.VW_USUARIOS_PERFILES u ON
+				p.id_perfil = u.id_perfil
+				WHERE u.id_usuario = @in_id_usuario
+				AND p.id_menu = @in_id_menu				
+				AND p.acceso = 'S'
+				AND p.estado_permiso = 'A'
+				AND p.estado_perfil = 'A'				
+				AND p.estado_menu = 'A'	
+				AND u.estado_usuario = 'A'			
+			) c			
+	END	
+	ELSE
+	BEGIN
+		SELECT 'N' AS ok, 'Atención la sesión fue cerrada y no es válida, por favor salga del sistema y vuelva a ingresar...' AS mensaje
+	END	
+	
+	DROP TABLE #tmp
+END
+
+-- ============================================================================
+-- I: INGRESAR SESION, SE INGRESA UNA NUEVA SESION PARA EL USUARIO, SE CIERRAN
+--    TODAS LAS SESIONES QUE EL USUARIO HAYA TENIDO ABIERTAS
+-- ============================================================================
+IF @in_operacion = 'I'
+BEGIN
+-- SE CIERRAN TODAS LAS SESIONES QUE EL USUARIO TENGA ABIERTAS
+	EXEC SP_GEN_SESION
+	@in_id_usuario = @in_id_usuario,
+	@in_operacion = 'CS'
+	
+-- SE INGRESA LA NUEVA SESION
+	INSERT INTO TB_GEN_SESIONES(
+		id_usuario, 
+		fecha_registro, 
+		ip, 
+		estado_sesion, 
+		fecha_ingreso, 
+		id_usuario_ingreso
+	)	        
+	VALUES(
+		@in_id_usuario, 
+		getdate(), 
+		@in_ip, 
+		'A', 
+		getdate(), 
+		@in_usuario_ing_act
+	)	
+		
+	SET @in_id_sesion = @@IDENTITY
+	
+	SELECT @in_id_sesion AS id_sesion, 
+	id_usuario, 
+	login, 
+	nombre_apellido, 
+	apellido_nombre, 
+	id_perfil, 
+	descripcion_perfil,
+	'S' AS ok, 'INGRESO DE SESION EXITOSO' AS mensaje
+	FROM VW_USUARIOS_PERFILES
+	WHERE id_usuario = (SELECT id_usuario
+					   FROM TB_GEN_SESIONES
+					   WHERE id_sesion = @in_id_sesion)
+END
+
+-- ============================================================================
+-- CS: CIERRE DE SESIONES, CIERRAN TODAS LAS SESIONES QUE EL USUARIO TENGA 
+--     ABIERTAS
+-- ============================================================================
+IF @in_operacion = 'CS'
+BEGIN
+	UPDATE TB_GEN_SESIONES
+	SET estado_sesion = 'C',
+		fecha_actualizacion = GETDATE(),
+		id_usuario_actualizacion = @in_usuario_ing_act
+	WHERE id_usuario = @in_id_usuario
+	AND estado_sesion = 'A'		
+END
+
+-- ============================================================================
+-- CSA: CIERRE DE SESION ACTUAL, CIERRA LA SESION ACTUAL DEL USUARIO 
+-- ============================================================================
+IF @in_operacion = 'CSA'
+BEGIN
+	UPDATE TB_GEN_SESIONES
+	SET estado_sesion = 'C',
+		fecha_actualizacion = GETDATE(),
+		id_usuario_actualizacion = @in_usuario_ing_act
+	WHERE id_sesion = @in_id_sesion
+	
+	SELECT 'S' AS ok
+END
