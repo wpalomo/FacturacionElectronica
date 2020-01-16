@@ -14,6 +14,9 @@ switch ($action) {
     case 'getMailsDocumento':
         getMailsDocumento();
         break;
+    case 'getDocumentosRechazados':
+        getDocumentosRechazados();
+        break;
     case 'generarProcesoFE':
         generarProcesoFE();
         break;
@@ -191,4 +194,15 @@ function generarProcesoFE() {
 
     //echo $data;
     //echo ClaseJson::getMessageJson(false, $data);
+}
+
+function getDocumentosRechazados() {
+
+    $objetoProcesarDocumentos = new ClaseProcesarDocumentos();
+
+    $result = $objetoProcesarDocumentos->getDocumentosRechazados();
+
+    $data = ClaseJson::getJson($result);
+
+    echo $data;
 }

@@ -216,6 +216,21 @@ class ClaseProcesarDocumentos {
 //        return $result;
     }
 
+    public function getDocumentosRechazados() {
+        $query = "
+            EXEC BIZ_FAC..SP_FE_CONSULTA_DOCUMENTOS_RECHAZADOS
+            @in_operacion = 'DE'
+        ";
+
+        $parametros = array(
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        return $result;
+    }
+
     public function generarXml($parametros) {
         $this->entorno = _ENTORNO;
         $objetoGenerarXml = new ClaseGenerarXml();
