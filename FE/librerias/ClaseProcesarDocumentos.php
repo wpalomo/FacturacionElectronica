@@ -447,7 +447,7 @@ class ClaseProcesarDocumentos {
                         $dataDetalle = $resultDetalle;
                     }
 
-                    if ($valueTipos == 'FAC') {
+                    if ($parametros['cci_tipocmpr'] == 'FAC') {
                         $resultPagos = $this->consultaDocumentosFE($this->dataDocumentos['CCI_EMPRESA'], $this->dataDocumentos['CCI_SUCURSAL'], $this->dataDocumentos['CCI_CLAVE_ACCESO'], $parametros['cci_tipocmpr'], 'P');
 
                         if ($resultPagos == 'S') {
@@ -604,6 +604,8 @@ class ClaseProcesarDocumentos {
     }
 
     public function enviarMail($parametros) {
+        //echo 'enviarMail';
+        //print_r($parametros);
         $objetoMail = new ClaseMail();
 
         $idListaCorreo = 1;
@@ -694,13 +696,15 @@ class ClaseProcesarDocumentos {
 
                 //por el momento solo se envia el correo del usuario que genero el documento en guias de remision
                 if ($valueDoc['CCI_TIPOCMPR'] == 'GUI') {
-                    $usuariosArray = array(
-                        'a' => 1,
-                        'mail' => $valueDoc['CTX_MAIL_USUARIO'],
-                        'nombre' => utf8_decode($valueDoc['NOMBRE_USUARIO_MAIL'])
-                    );
+                    if ($valueDoc['CTX_MAIL_USUARIO'] != '') {
+                        $usuariosArray = array(
+                            'a' => 1,
+                            'mail' => $valueDoc['CTX_MAIL_USUARIO'],
+                            'nombre' => utf8_decode($valueDoc['NOMBRE_USUARIO_MAIL'])
+                        );
 
-                    array_push($destinatarios, $usuariosArray);
+                        array_push($destinatarios, $usuariosArray);
+                    }
                 }
 
                 foreach ($dataListaCorreo as $key => $value) {
@@ -754,7 +758,7 @@ class ClaseProcesarDocumentos {
             }
             //print_r($destinatarios);
             /////////////////////////////
-            //por el momento hasta que se envie el mail desde mi pc//
+            //por el momento hasta que se envie el mail desde mi pc//            
             $resp = $objetoMail->send($destinatarios, $asunto, $mensaje, $adjuntos, $rutaImagen, $path_parts['filename']);
             //$resp =  array(error => 'N', enviado => 'S', mensaje => 'Mensaje enviado');
             /////////////////////////////
@@ -763,12 +767,12 @@ class ClaseProcesarDocumentos {
             $resultIngresarMailLog = $this->ingresarMailLog($valueDoc['CCI_EMPRESA'], $valueDoc['CCI_TIPOCMPR'], $valueDoc['NCI_DOCUMENTO'], $valueDoc['CTX_MAIL'], $resp['enviado'], strip_tags($resp['mensaje']));
 
             if ($resultIngresarMailLog == 'S') {
-                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - enviarMail()');
+                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - enviarMail(10)');
             }
 
             $resultActualizarEnviarMail = $this->actualizarEnviarMail($valueDoc['CCI_EMPRESA'], $valueDoc['CCI_TIPOCMPR'], $valueDoc['NCI_DOCUMENTO'], $valueDoc['CES_FE'], 'N');
             if ($resultActualizarEnviarMail == 'S') {
-                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - generarPDF()');
+                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $this->errorDB . ' - ClaseProcesoFE - enviarMail(11)');
             }
 
             //si hubo un error en el envio del mail (generalmente se da porque)
@@ -805,7 +809,7 @@ class ClaseProcesarDocumentos {
                 //$resp = $objetoMail->send($destinatarios, $asunto, $mensaje, $adjuntos, $rutaImagen, $path_parts['filename']);
                 //echo $resp['error'] . ' - ' . $resp['mensaje'];
 
-                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $resp['error'] . ' - ' . $resp['mensaje'] . ' - ClaseProcesoFE - generarPDF()');
+                return array('ERROR' => 'S', 'DESCRIPCION_ERROR' => $resp['error'] . ' - ' . $resp['mensaje'] . ' - ClaseProcesoFE - enviarMail(12)');
 
                 /*
                   $objetoGenerarExcel = new ClaseGenerarExcel();
@@ -1377,6 +1381,8 @@ class ClaseProcesarDocumentos {
             @IN_OPERACION = '$operacion'
         ";
 
+        //echo $query;
+
         $parametros = array(
             'query' => $query
         );
@@ -1480,7 +1486,7 @@ class ClaseProcesarDocumentos {
             @IN_ENVIAR_MAIL = '$enviar',    
             @IN_OPERACION = 'UE2'                	
         ";
-
+        //echo $query;
         $parametros = array(
             'query' => $query
         );
@@ -1508,7 +1514,7 @@ class ClaseProcesarDocumentos {
             @IN_NCI_DOCUMENTO = '$nci_documento',
             @IN_OPERACION = 'DCE'                	
         ";
-
+        //echo $query;
         $parametros = array(
             'query' => $query
         );

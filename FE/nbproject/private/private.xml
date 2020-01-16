@@ -6,6 +6,7 @@
             <file>file:/C:/xampp/htdocs/FE/librerias/config.inc.php</file>
             <file>file:/C:/xampp/htdocs/FE/librerias/ClaseProcesarDocumentos.php</file>
             <file>file:/C:/xampp/htdocs/FE/procesarDocumentos.php</file>
+            <file>file:/C:/xampp/htdocs/FE/librerias/ClaseGenerarXml.php</file>
         </group>
     </open-files>
 </project-private>

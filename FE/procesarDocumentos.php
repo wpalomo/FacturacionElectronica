@@ -69,7 +69,7 @@ function generarProcesoFE() {
 
         foreach ($documentos as $key => $value) {
             if ($value['opcion'] == 'T') {
-                if (!is_array($result)) {
+                if (!is_array($result)) {                    
                     $result = $objetoProcesoFE->generarXml($value);
                 }
             }

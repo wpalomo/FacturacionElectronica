@@ -324,7 +324,7 @@ class ClaseGenerarXml {
 
         $rutaGenerados = $dataEmpresa['CCI_RUTA_GENERADOS'] . 'NC\\';
 
-        echo '<span>GENERANDO XML NC: ' . $cci_empresa . ' - ' . $nci_documento . '</span><br>';
+        //echo '<span>GENERANDO XML NC: ' . $cci_empresa . ' - ' . $nci_documento . '</span><br>';
 
         $nombreArchivo = 'xml_' . $secuencial;
 
@@ -531,7 +531,7 @@ class ClaseGenerarXml {
             echo 'error al grabar el archivo';
         }
 
-        echo '<hr>';
+        //echo '<hr>';
     }
 
     public function generaXmlRetencion($dataEmpresa, $dataDocumento, $dataDetalle) {
@@ -557,7 +557,7 @@ class ClaseGenerarXml {
 
         $rutaGenerados = $dataEmpresa['CCI_RUTA_GENERADOS'] . 'RET\\';
 
-        echo '<span>GENERANDO XML RET: ' . $cci_empresa . ' - ' . $nci_documento . '</span><br>';
+        //echo '<span>GENERANDO XML RET: ' . $cci_empresa . ' - ' . $nci_documento . '</span><br>';
 
         $numero = $dfiFechaAux . $this->codDoc . $dataEmpresa['CCI_RUC'] . $dataEmpresa['AMBIENTE'] . $estab . $ptoEmi . $secuencial . $dataEmpresa['CODIGO_NUMERICO'] . $dataEmpresa['TIPO_EMISION'];
 
@@ -701,13 +701,14 @@ class ClaseGenerarXml {
             echo 'error al grabar el archivo';
         }
 
-        echo '<hr>';
+        //echo '<hr>';
     }
 
     public function generarXmlGuia($dataEmpresa, $dataDocumento, $dataDetalle) {
         $this->codDoc = '06';
         $cci_empresa = $dataDocumento['CCI_EMPRESA'];
         $cci_sucursal = $dataDocumento['CCI_SUCURSAL'];
+        $cci_cliente = $dataDocumento['CCI_CLIENTE'];
         $estab = $dataDocumento['ESTAB'];
         $ptoEmi = $dataDocumento['PTOEMI'];
         $secuencial = $dataDocumento['SECUENCIAL'];
@@ -729,7 +730,7 @@ class ClaseGenerarXml {
 
         $rutaGenerados = $dataEmpresa['CCI_RUTA_GENERADOS'] . 'GUI\\';
 
-        echo 'GENERANDO XML GUIA REMISION: ' . $cci_empresa . ' - ' . $nci_documento . '<br>';
+        //echo 'GENERANDO XML GUIA REMISION: ' . $cci_empresa . ' - ' . $nci_documento . '<br>';
 
         $numero = $dfiFechaAux . $this->codDoc . $dataEmpresa['CCI_RUC'] . $dataEmpresa['AMBIENTE'] . $estab . $ptoEmi . $secuencial . $dataEmpresa['CODIGO_NUMERICO'] . $dataEmpresa['TIPO_EMISION'];
 
@@ -857,7 +858,7 @@ class ClaseGenerarXml {
             echo '<br>' . $mensajeWS . ' - ' . $informacionAdicionalWS;
         }
 
-        echo '<hr>';
+        //echo '<hr>';
     }
 
     public function getErrorDB() {
