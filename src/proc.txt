@@ -474,3 +474,20 @@ where PFE.CCI_EMPRESA != ''
 and R.DFM_EMISION >= PFE.DFM_FECHA_INICIO
 ) F
 GO
+
+
+https://stackoverflow.com/questions/49662341/how-to-pass-observable-value-to-input-angular-4
+https://www.competa.com/blog/angular-6-create-a-module-that-can-be-installed-with-npm/
+https://blog.ng-classroom.com/blog/angular/Angular-Templating/
+https://stackoverflow.com/questions/51171350/angular-pass-a-component-as-ng-template-of-another-component/51171754
+
+https://stackoverflow.com/questions/50951779/angular-2-wait-for-subscribe-to-finish-to-update-access-variable
+https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
+https://stackoverflow.com/questions/43055706/how-do-i-return-the-response-from-an-observable-http-async-call-in-angular
+https://stackoverflow.com/questions/54888671/angular-6-wait-for-subscribe-to-finish
+https://stackoverflow.com/questions/42126153/wait-on-rxjs-subscriptions-to-finish-before-resuming
+
+https://stackoverflow.com/questions/48209945/how-to-capture-and-display-data-from-observable
+https://dev.to/isamrish/how-to-display-observable-of-an-object-in-angular-22em
+https://ultimatecourses.com/blog/angular-ngif-async-pipe
+https://github.com/angular-redux/store/issues/375

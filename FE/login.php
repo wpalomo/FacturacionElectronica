@@ -22,6 +22,9 @@ switch ($action) {
     case 'vsp':
         vsp();
         break;
+    case 'pruebas':
+        pruebas();
+        break;
 }
 
 function login() {
@@ -58,6 +61,11 @@ function cerrarSesionActual() {
     $data = ClaseJson::getJson($result);
 
     echo $data;
+}
+
+function pruebas() {
+    sleep(5);
+    echo (ClaseJson::getMessageJson(true, 'Todo Ok'));
 }
 
 //$data = $result['data'];
