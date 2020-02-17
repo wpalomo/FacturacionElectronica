@@ -46,4 +46,20 @@ class ClaseEmpresa {
         return $result;
     }
 
+        public function getEmpresasLocal() {
+
+        $query = "
+            EXEC dbo.SP_GEN_EMPRESAS            
+            @in_operacion = 'QE'
+        ";
+
+        $parametros = array(
+            'interfaz' => 'I',
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        return $result;
+    }
 }

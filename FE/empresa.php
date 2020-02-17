@@ -14,6 +14,9 @@ switch ($action) {
     case 'getEmpresasNoRegistradas':
         getEmpresasNoRegistradas();
         break;
+    case 'getEmpresasLocal':
+        getEmpresasLocal();
+        break;
 }
 
 function getEmpresas() {
@@ -30,6 +33,16 @@ function getEmpresasNoRegistradas() {
     $objetoEmpresa = new ClaseEmpresa();
 
     $result = $objetoEmpresa->getEmpresasNoRegistradas();
+
+    $data = ClaseJson::getJson($result);
+
+    echo $data;
+}
+
+function getEmpresasLocal() {
+    $objetoEmpresa = new ClaseEmpresa();
+
+    $result = $objetoEmpresa->getEmpresasLocal();
 
     $data = ClaseJson::getJson($result);
 
