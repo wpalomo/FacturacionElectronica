@@ -26,6 +26,8 @@ function getDocumentos() {
     $parametros = array(
         'start' => $_POST['start'],
         'limit' => $_POST['limit'],
+        'fechaInicio' => $_POST['fechaInicio'],
+        'fechaFin' => $_POST['fechaFin'],
         'sortField' => isset($_POST['sortField']) ? $_POST['sortField'] : 'cci_empresa',
         'sortOrder' => isset($_POST['sortOrder']) ? $_POST['sortOrder'] : '1',
         'filters' => $_POST['filters'],
@@ -69,7 +71,7 @@ function generarProcesoFE() {
 
         foreach ($documentos as $key => $value) {
             if ($value['opcion'] == 'T') {
-                if (!is_array($result)) {                    
+                if (!is_array($result)) {
                     $result = $objetoProcesoFE->generarXml($value);
                 }
             }

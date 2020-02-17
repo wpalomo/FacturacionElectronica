@@ -146,7 +146,7 @@ class ClaseUsuario {
         $email = mssql_real_escape_string($usuario['email']);
         $estado_usuario = mssql_real_escape_string($usuario['estado_usuario']);
         $cambio_clave = mssql_real_escape_string($usuario['cambio_clave']);
-        
+
         $clave = substr(crypt($clave, strtoupper($login)), 3);
 
         $query = "
@@ -182,7 +182,7 @@ class ClaseUsuario {
         $email = mssql_real_escape_string($usuario['email']);
         $estado_usuario = mssql_real_escape_string($usuario['estado_usuario']);
         $cambiar_clave = mssql_real_escape_string($usuario['cambiar_clave']);
-        
+
         $clave = substr(crypt($clave, strtoupper($login)), 3);
 
         $query = "
@@ -225,6 +225,48 @@ class ClaseUsuario {
         $result = ClaseBaseDatos::query($parametros);
 
         return $result;
+    }
+
+    public function uploadImagen($files, $login) {
+        $usuariosDir = 'imagenes/usuarios/';
+
+        $fileName = $files['picture']['name'];
+        $tmpName = $files['picture']['tmp_name'];
+        $fileSize = $files['picture']['size'];
+        $fileType = $files['picture']['type'];
+
+        $trozos = explode(".", $fileName);
+        $extension = end($trozos);
+
+        $imagen = $login . '.' . $extension;
+
+        if (file_exists($usuariosDir . $imagen)) {
+            unlink($usuariosDir . $imagen) or die("Problemas al borrar el archivo");
+        }
+
+        if (move_uploaded_file($files["picture"]["tmp_name"], $usuariosDir . $imagen)) {
+
+            $login = mssql_real_escape_string($login);
+
+            $query = "
+            EXEC SP_GEN_USUARIOS
+            @in_login = '$login',
+            @in_imagen_aux = '$imagen',      
+            @in_operacion = 'UPI'
+        ";
+
+            echo $query;
+            
+            $parametros = array(
+                'query' => $query
+            );
+
+            $result = ClaseBaseDatos::query($parametros);
+
+            return $result;
+        } else {
+            //return ClaseBaseDatos:;
+        }
     }
 
 }

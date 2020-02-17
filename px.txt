@@ -1,0 +1,876 @@
+tb_gen_usuarios
+imagen	varchar(100)	Checked
+imagen_aux	varchar(100)	Checked
+
+--------------------------------------
+USE [FacturacionElectronica]
+GO
+
+/****** Object:  View [dbo].[VW_USUARIOS_PERFILES]    Script Date: 17/02/2020 0:46:57 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+ALTER VIEW [dbo].[VW_USUARIOS_PERFILES]
+AS 
+SELECT u.id_usuario,
+u.id_perfil,
+p.descripcion_perfil,
+u.login,
+u.clave,
+u.nombre,
+u.apellido,
+u.nombre + ' ' + u.apellido AS nombre_apellido,
+u.apellido + ' ' + u.nombre AS apellido_nombre,
+u.email,
+u.imagen,
+u.estado_usuario,
+CASE u.estado_usuario WHEN 'A' THEN 'ACTIVO' WHEN 'I' THEN 'INACTIVO' WHEN 'X' THEN 'ELIMINADO' END AS descripcion_estado_usuario,
+p.estado_perfil,
+CASE p.estado_perfil WHEN 'A' THEN 'ACTIVO' WHEN 'I' THEN 'INACTIVO' WHEN 'X' THEN 'ELIMINADO' END AS descripcion_estado_perfil
+FROM dbo.TB_GEN_USUARIOS u INNER JOIN dbo.TB_GEN_PERFILES p ON
+u.id_perfil = p.id_perfil
+GO
+
+-----------------------------------------
+
+USE [FacturacionElectronica]
+GO
+/****** Object:  StoredProcedure [dbo].[SP_GEN_USUARIOS]    Script Date: 16/02/2020 23:43:37 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[SP_GEN_USUARIOS]
+(
+	@in_id_usuario INT = NULL,
+	@in_id_perfil INT = NULL,
+	@in_login VARCHAR(50) = NULL,
+	@in_clave VARCHAR(50) = NULL,
+	@in_nombre VARCHAR(100) = NULL,
+	@in_apellido VARCHAR(100) = NULL,
+	@in_email VARCHAR(50) = NULL,
+	@in_imagen_aux VARCHAR(100) = NULL,
+	@in_estado_usuario CHAR(1) = NULL,
+	@in_cambiar_clave BIT = NULL,
+	@in_usuario_ing_act INT = NULL,
+	@in_operacion VARCHAR(3)
+)
+AS
+
+-- ============================================================================
+-- I: INGRESAR NUEVO USUARIO, INGRESAR UN NUEVO USUARIO EN EL SISTEMA
+-- ============================================================================ 
+IF @in_operacion = 'I'
+BEGIN
+	IF NOT EXISTS(SELECT 1
+			      FROM dbo.VW_USUARIOS_PERFILES
+			      WHERE [login] = @in_login)
+	BEGIN
+		INSERT INTO dbo.TB_GEN_USUARIOS(			
+			id_perfil,
+			[login],
+			clave,
+			nombre,
+			apellido,
+			email,
+			imagen,
+			imagen_aux,
+			estado_usuario,
+			fecha_ingreso,
+			id_usuario_ingreso
+		)
+		VALUES(
+			@in_id_perfil,
+			@in_login,
+			@in_clave,
+			@in_nombre,
+			@in_apellido,
+			@in_email,
+			'usuario.jpg',
+			'',
+			@in_estado_usuario,
+			GETDATE(),
+			@in_usuario_ing_act
+		)
+
+		SELECT @in_id_usuario = @@IDENTITY
+
+		INSERT INTO dbo.TB_GEN_MENU_FAVORITOS(
+			id_menu,
+			id_usuario,
+			estado_menu_favoritos,
+			fecha_ingreso,
+			id_usuario_ingreso
+		)
+		SELECT id_menu, 
+		@in_id_usuario,
+		'A',
+		GETDATE(),
+		@in_usuario_ing_act
+		FROM dbo.VW_PERMISOS
+		WHERE id_perfil = @in_id_perfil
+		AND tipo = 'O'
+		AND acceso = 'S'
+		AND estado_permiso = 'A'
+		AND estado_perfil = 'A'
+		AND estado_menu = 'A'
+
+		SELECT 'S' AS ok, 'El registro se ingreso correctamente' AS mensaje;
+	END
+	ELSE
+	BEGIN
+		SELECT 'N' AS ok, 'Ya se encuentra ingresado un usuario con ese login...' AS mensaje
+	END	
+END
+
+-- ============================================================================
+-- U: UPDATE, ACTUALIZAR LA INFORMACION DE UN USUARIO
+-- ============================================================================ 
+IF @in_operacion = 'U'
+BEGIN
+	UPDATE dbo.TB_GEN_USUARIOS
+	SET id_perfil = @in_id_perfil,		
+		nombre = @in_nombre,
+		apellido = @in_apellido,
+		email = @in_email,
+		estado_usuario = @in_estado_usuario,
+		fecha_actualizacion = GETDATE(),
+		id_usuario_actualizacion = @in_usuario_ing_act
+	WHERE id_usuario = @in_id_usuario
+
+	IF (@in_cambiar_clave = 1)
+	BEGIN
+		UPDATE dbo.TB_GEN_USUARIOS
+		SET clave = @in_clave,
+			fecha_actualizacion = GETDATE(),
+			id_usuario_actualizacion = @in_usuario_ing_act
+		WHERE id_usuario = @in_id_usuario	 
+	END
+
+	IF (SELECT isnull(imagen_aux, '')
+		FROM dbo.TB_GEN_USUARIOS
+		WHERE id_usuario = @in_id_usuario) != ''
+	BEGIN
+		UPDATE dbo.TB_GEN_USUARIOS
+		SET imagen = imagen_aux,
+			fecha_actualizacion = GETDATE(),
+			id_usuario_actualizacion = @in_usuario_ing_act
+		WHERE id_usuario = @in_id_usuario
+		
+		UPDATE dbo.TB_GEN_USUARIOS
+		SET imagen_aux = ''
+		WHERE id_usuario = @in_id_usuario
+	END
+
+	SELECT 'S' AS ok, 'El registro se actualizo correctamente' AS mensaje
+END
+
+-- ============================================================================
+-- D: DELETE, ELIMINAR UN USUARIO (BORRADO LOGICO)
+-- ============================================================================ 
+IF @in_operacion = 'D'
+BEGIN
+	UPDATE dbo.TB_GEN_USUARIOS
+	SET estado_usuario = 'X',
+		fecha_anulacion = GETDATE(),
+		id_usuario_anulacion = @in_usuario_ing_act
+	WHERE id_usuario = @in_id_usuario
+
+	SELECT 'S' AS ok, 'El registro se elimino correctamente' AS mensaje
+END
+
+-- ============================================================================
+-- UPI: UPDATE IMAGEN, ACTUALIZA LA IMAGEN EN UN CAMPO AUXILIAR
+-- ============================================================================ 
+IF @in_operacion = 'UPI'
+BEGIN
+	UPDATE dbo.TB_GEN_USUARIOS
+	SET imagen_aux = @in_imagen_aux
+	WHERE [login] = @in_login
+
+	SELECT 'S' AS ok, 'El registro se elimino correctamente' AS mensaje
+END
+
+------------------------------------------------------
+
+use BIZ_FAC
+go 
+
+if object_id('dbo.VI_FAC_FE_DOCUMENTOS') is not null
+	drop view dbo.VI_FAC_FE_DOCUMENTOS
+go 	
+
+CREATE view [dbo].[VI_FAC_FE_DOCUMENTOS]
+AS
+SELECT f.cci_empresa, 
+(select cno_empresa from BIZ_GEN..tb_seg_empresa where CCI_EMPRESA = f.CCI_EMPRESA) as cno_empresa,
+f.cci_sucursal, 
+f.cci_cliente, 
+f.cno_cliprov,
+f.cci_cliente + ' - ' + f.cno_cliprov as cno_cliprov_aux,
+f.dfm_fecha,
+convert(char(10), f.dfm_fecha, 103) as dfm_fecha_aux,
+f.cci_tipocmpr, 
+case f.cci_tipocmpr when 'FAC' then 'FACTURA' when 'NC' then 'NOTA DE CREDITO' when 'RET' then 'RETENCION' when 'GUI' then 'GUIA' end as descripcion_cci_tipocmpr,
+f.nci_documento,
+f.id_log_fe,
+f.cci_usuario,
+--f.dfx_reg_fecha,
+f.ces_fe,
+case f.ces_fe when 'P' then 'PENDIENTE' when 'G' then 'GENERADO' when 'F' then 'FIRMADO' when 'E' then 'ENVIADO' when 'A' then 'AUTORIZADO' when 'R' then 'RECHAZADO' end as descripcion_ces_fe,
+f.cci_clave_acceso,
+f.ambiente
+FROM (  
+	SELECT F.CCI_EMPRESA, 
+			F.CCI_SUCURSAL, 
+			F.CCI_CLIENTE, 
+			c.cno_cliprov,
+			F.DFM_FECHA,
+			F.CCI_TIPOCMPR, 
+			F.NCI_FACTURA AS NCI_DOCUMENTO,
+			F.ID_LOG_FE,
+			F.CCI_USUARIO,
+			--F.DFX_REG_FECHA,
+			F.CES_FE,
+			F.CCI_CLAVE_ACCESO,
+			PFE.AMBIENTE
+	FROM BIZ_FAC..TB_FAC_FACTURA F INNER JOIN BIZ_FAC..TB_FAC_FE_PARAMETROS PFE ON
+	F.CCI_EMPRESA = PFE.CCI_EMPRESA	 INNER JOIN BIZ_GEN..TB_GEN_CLIPROV C with(forceseek) ON 
+	F.CCI_EMPRESA = C.CCI_EMPRESA
+	AND F.CCI_CLIENTE = C.CCI_CLIPROV
+	WHERE f.CCI_EMPRESA != ''
+	and F.CCI_TIPOCMPR = 'FAC'
+	AND F.CES_FACTURA IS NULL
+	AND F.CES_FE != 'N'
+	and F.DFM_FECHA >= PFE.DFM_FECHA_INICIO	
+	and PFE.CCI_EMPRESA != ''
+
+union
+
+	SELECT F.CCI_EMPRESA, 
+			F.CCI_SUCURSAL, 
+			F.CCI_CLIENTE, 
+			c.cno_cliprov,
+			F.DFM_FECHA,
+			F.CCI_TIPOCMPR, 
+			F.NCI_FACTURA AS NCI_DOCUMENTO,
+			F.ID_LOG_FE,
+			F.CCI_USUARIO,
+			--F.DFX_REG_FECHA,
+			F.CES_FE,
+			F.CCI_CLAVE_ACCESO,
+			PFE.AMBIENTE
+	FROM BIZ_FAC..TB_FAC_FACTURA F INNER JOIN BIZ_FAC..TB_FAC_FE_PARAMETROS PFE ON
+	F.CCI_EMPRESA = PFE.CCI_EMPRESA	 INNER JOIN BIZ_GEN..TB_GEN_CLIPROV C with(forceseek) ON 
+	F.CCI_EMPRESA = C.CCI_EMPRESA
+	AND F.CCI_CLIENTE = C.CCI_CLIPROV
+	WHERE f.CCI_EMPRESA != ''
+	and F.CCI_TIPOCMPR = 'NC'
+	AND F.CES_FACTURA IS NULL
+	AND F.CES_FE != 'N'
+	and F.DFM_FECHA >= PFE.DFM_FECHA_INICIO
+	and PFE.CCI_EMPRESA != ''
+
+union
+
+SELECT DISTINCT R.CCI_EMPRESA,
+        R.CCI_SUCURSAL,
+        CMPR.COD_PROV AS CCI_CLIENTE,
+		c.cno_cliprov,
+        R.DFM_RETENCION,
+        'RET' AS CCI_TIPOCMPR,
+        R.NCI_RETENCION AS NCI_DOCUMENTO,
+        R.ID_LOG_FE,
+        R.CCI_USUARIO,
+        --R.DFM_PROCESO,
+        R.CES_FE,
+        R.CCI_CLAVE_ACCESO,
+		PFE.AMBIENTE
+FROM BIZ_CNT..TB_BAN_PRO_CMPR CMPR WITH(NOLOCK) INNER JOIN BIZ_CNT..TB_BAN_PRO_CMPR_RETENCION R WITH(NOLOCK) ON
+CMPR.CCI_EMPRESA = R.CCI_EMPRESA
+AND CMPR.CCI_SUCURSAL = R.CCI_SUCURSAL
+AND CMPR.CMP_CODIGO = R.CMP_CODIGO INNER JOIN BIZ_FAC..TB_FAC_FE_PARAMETROS PFE ON
+		R.CCI_EMPRESA = PFE.CCI_EMPRESA INNER JOIN BIZ_GEN..TB_GEN_CLIPROV C with(forceseek) ON 
+CMPR.CCI_EMPRESA = C.CCI_EMPRESA
+AND CMPR.COD_PROV = C.CCI_CLIPROV
+where r.CCI_EMPRESA != ''
+AND R.CES_FE != 'N'
+and R.DFM_RETENCION >= PFE.DFM_FECHA_INICIO
+and PFE.CCI_EMPRESA != ''
+
+union
+
+ SELECT R.CCI_EMPRESA,
+        R.CCI_SUCURSAL,	
+        R.CCI_CLIENTE,
+		c.cno_cliprov,
+        R.DFM_EMISION,
+        'GUI' AS CCI_TIPOCMPR,
+        R.NCI_GUIA AS NCI_DOCUMENTO,
+        R.ID_LOG_FE,
+        R.CCI_USUARIO,
+        --R.DFM_REGISTRO,
+        R.CES_FE,
+        R.CCI_CLAVE_ACCESO,
+		PFE.AMBIENTE
+FROM BIZ_INV_REP..TB_INV_GUIA_REMISION R INNER JOIN BIZ_FAC..TB_FAC_FE_PARAMETROS PFE ON
+R.CCI_EMPRESA = PFE.CCI_EMPRESA INNER JOIN BIZ_GEN..TB_GEN_CLIPROV C with(forceseek) ON 
+R.CCI_EMPRESA = C.CCI_EMPRESA
+AND R.CCI_CLIENTE = C.CCI_CLIPROV
+where PFE.CCI_EMPRESA != ''
+AND R.CES_FE != 'N'
+and R.DFM_EMISION >= PFE.DFM_FECHA_INICIO
+) F
+GO
+
+-------------------------------------------------------
+
+USE [BIZ_FAC]
+GO
+
+IF OBJECT_ID('DBO.SP_FE_EMPRESA') IS NOT NULL
+	DROP PROCEDURE DBO.SP_FE_EMPRESA
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- ============================================================================
+-- AUTHOR......: JUAN PABLO SANCHEZ
+-- CREATE DATE.: 27-NOV-2019
+-- VERSION.....: 1.0.01
+-- DESCRIPTION.: PROCEDIMIENTO 
+--              
+-- MODIFICACION: 27-NOV-2019
+-- COMENTARIOS.: 
+-- ============================================================================
+-- PARAMETROS
+-- @IN_OPERACION.: OPERACION A SER EJECUTADA
+-- ============================================================================
+CREATE PROCEDURE [dbo].[SP_FE_EMPRESA]
+(
+	@IN_CCI_EMPRESA VARCHAR(3) = NULL,
+	@IN_CCI_SUCURSAL VARCHAR(6) = NULL,
+	@IN_CCI_TIPOCMPR VARCHAR(5) = NULL,
+	@IN_NCI_DOCUMENTO NUMERIC = NULL,
+	@IN_CES_FE CHAR(1) = NULL,
+	@IN_ENVIAR_MAIL CHAR(1) = NULL,
+	@IN_GENERAR_PDF CHAR(1) = NULL,
+	@IN_OPERACION VARCHAR(3)
+)	
+AS
+
+-- ============================================================================
+-- QE: QUERY EMPRESAS, VER LAS EMPRESAS QUE ESTAN EN EL PROCESO DE FACTURACION
+--     ELECTRONICA
+-- ============================================================================
+IF @IN_OPERACION = 'QE'
+BEGIN
+	SELECT P.CCI_EMPRESA AS [value], 
+	E.CNO_EMPRESA AS label 
+	FROM BIZ_FAC..TB_FAC_FE_PARAMETROS P INNER JOIN BIZ_GEN..TB_SEG_EMPRESA E ON
+	P.CCI_EMPRESA = E.CCI_EMPRESA
+	WHERE E.CES_EMPRESA = 'A'
+	AND P.CES_PARAMETROS = 'A'
+	ORDER BY P.CCI_EMPRESA
+END
+
+-- ============================================================================
+-- QNR: QUERY EMPRESAS NO REGISTRADAS, VER LAS EMPRESAS QUE NO ESTAN EN EL 
+--     PROCESO DE FACTURACION ELECTRONICA
+-- ============================================================================
+IF @IN_OPERACION = 'QNR'
+BEGIN
+	SELECT E.CCI_EMPRESA AS [value], 
+	E.CNO_EMPRESA AS label 
+	FROM  BIZ_GEN..TB_SEG_EMPRESA E 
+	WHERE E.CES_EMPRESA = 'A'
+	and TIPO_EMPRESA != 'X'
+	and not exists(select 1
+				   from BIZ_FAC..TB_FAC_FE_PARAMETROS
+				   where CCI_EMPRESA = e.CCI_EMPRESA)
+END
+
+GO
+
+---------------------------------------------------------
+
+USE [BIZ_FAC]
+GO
+
+IF OBJECT_ID('DBO.SP_FE_PARAMETROS') IS NOT NULL
+	DROP PROCEDURE DBO.SP_FE_PARAMETROS
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- ============================================================================
+-- AUTHOR......: JUAN PABLO SANCHEZ
+-- CREATE DATE.: 24-AGO-2018
+-- VERSION.....: 1.0.01
+-- DESCRIPTION.: PROCEDIMIENTO QUE MANEJA LAS OPERACIONES QUE SE REALIZAN EN LA 
+--               TABLA "TB_FAC_FE_PARAMETROS"
+-- MODIFICACION: 24-AGO-2018
+-- COMENTARIOS.: 
+-- ============================================================================
+-- PARAMETROS
+-- @IN_CCI_EMPRESA..: CODIGO DE LA EMPRESA
+-- @IN_CCI_SUCURSAL.: CODIGO DE LA SUCURSAL
+-- @IN_NCI_DOCUMENTO: NUMERO DEL DOCUMENTO
+-- @IN_CES_FE.......: ESTADO DEL DOCUMENTO ELECTRONICO
+-- @IN_OPERACION....: OPERACION A SER EJECUTADA
+-- ============================================================================
+CREATE PROCEDURE [dbo].[SP_FE_PARAMETROS]
+(
+	@IN_CCI_EMPRESA VARCHAR(3) = NULL,
+	@IN_CCI_SUCURSAL VARCHAR(6) = NULL,
+	@IN_NCI_DOCUMENTO NUMERIC = NULL,
+	@IN_CES_FE CHAR(1) = NULL,
+	@in_dfm_fecha_inicio datetime = NULL,
+	@in_cci_ruta_generados varchar(100)= NULL,
+	@in_cci_ruta_firmados varchar(100)= NULL,
+	@in_cci_ruta_enviados varchar(100)= NULL,
+	@in_cci_ruta_enviados_rechazados varchar(100)= NULL,
+	@in_cci_ruta_autorizados varchar(100)= NULL,
+	@in_cci_ruta_no_autorizados varchar(100)= NULL,
+	@in_cci_ruta_pdf varchar(100)= NULL,
+	@in_cci_ruta_certificado varchar(100)= NULL,
+	@in_ctx_clave_certificado varchar(50)= NULL,
+	@in_cci_ruta_programa_fe varchar(100)= NULL,
+	@in_cci_mail_default varchar(100)= NULL,
+	@in_cci_ruta_logo varchar(100)= NULL,
+	@in_ambiente  char(1)= NULL,
+	@IN_OPERACION VARCHAR(3)
+)
+AS
+
+DECLARE @W_DFM_FECHA_INICIO DATETIME
+
+SELECT @W_DFM_FECHA_INICIO = DFM_FECHA_INICIO 
+FROM BIZ_FAC..TB_FAC_FE_PARAMETROS
+WHERE CCI_EMPRESA = @IN_CCI_EMPRESA
+
+-- ============================================================================
+-- QG: QUERY GENERADOS, VER TODAS LAS EMPRESAS QUE REALIZAN EL PROCESO DE 
+--     FACTURACION ELECTRONICA PARA EL PROCESO DE GENERAR EL DOCUMENTO XML
+-- ============================================================================ 
+IF @IN_OPERACION = 'QG'
+BEGIN
+	SELECT E.CCI_EMPRESA, 
+	E.CNO_EMPRESA,
+	PE.CCI_RUC, 
+	PE.CTX_DIRECCION,
+	PFE.DFM_FECHA_INICIO,
+	PFE.CCI_RUTA_GENERADOS,
+	--PFE.CCI_RUTA_CERTIFICADO,
+    --PFE.CTX_CLAVE_CERTIFICADO,
+	PFE.CCI_MAIL_DEFAULT,
+	PFE.CTX_OBLIGADO_CONTABILIDAD,
+	PFE.AMBIENTE,
+	PFE.TIPO_EMISION,	
+	PFE.CODIGO_NUMERICO,
+	PFE.MONEDA
+	FROM BIZ_GEN..TB_SEG_EMPRESA E INNER JOIN BIZ_CNT..TB_CNT_PARAMETROS_EMPRESA PE ON
+	E.CCI_EMPRESA = PE.CCI_EMPRESA INNER JOIN BIZ_FAC..TB_FAC_FE_PARAMETROS PFE ON
+	PE.CCI_EMPRESA = PFE.CCI_EMPRESA
+	WHERE E.CCI_EMPRESA = ISNULL(@IN_CCI_EMPRESA, E.CCI_EMPRESA)
+	AND PFE.CES_PARAMETROS = 'A'
+END
+
+-- ============================================================================
+-- QF: QUERY GENERADOS, VER TODAS LAS EMPRESAS QUE REALIZAN EL PROCESO DE 
+--     FACTURACION ELECTRONICA PARA EL PROCESO DE FIRMAR EL DOCUMENTO XML
+-- ============================================================================ 
+IF @IN_OPERACION = 'QF'
+BEGIN
+	SELECT E.CCI_EMPRESA, 
+	--E.CNO_EMPRESA,
+	--PE.CCI_RUC, 
+	--PE.CTX_DIRECCION,
+	PFE.DFM_FECHA_INICIO,
+	PFE.CCI_RUTA_GENERADOS,
+	PFE.CCI_RUTA_FIRMADOS,
+	PFE.CCI_RUTA_CERTIFICADO,
+    PFE.CTX_CLAVE_CERTIFICADO,
+    PFE.CCI_RUTA_PROGRAMA_FE    	
+	FROM BIZ_GEN..TB_SEG_EMPRESA E INNER JOIN BIZ_CNT..TB_CNT_PARAMETROS_EMPRESA PE ON
+	E.CCI_EMPRESA = PE.CCI_EMPRESA INNER JOIN BIZ_FAC..TB_FAC_FE_PARAMETROS PFE ON
+	PE.CCI_EMPRESA = PFE.CCI_EMPRESA
+	WHERE E.CCI_EMPRESA = ISNULL(@IN_CCI_EMPRESA, E.CCI_EMPRESA)
+	AND PFE.CES_PARAMETROS = 'A'
+END
+
+-- ============================================================================
+-- QE: QUERY ENVIADOS, VER TODAS LAS EMPRESAS QUE REALIZAN EL PROCESO DE 
+--     FACTURACION ELECTRONICA PARA EL PROCESO DE ENVIAR EL DOCUMENTO XML
+-- ============================================================================ 
+IF @IN_OPERACION = 'QE'
+BEGIN
+	SELECT E.CCI_EMPRESA, 	
+	PFE.DFM_FECHA_INICIO,	
+	PFE.CCI_RUTA_FIRMADOS,
+	PFE.CCI_RUTA_ENVIADOS,
+	PFE.CCI_RUTA_ENVIADOS_RECHAZADOS,
+	PFE.AMBIENTE
+	FROM BIZ_GEN..TB_SEG_EMPRESA E INNER JOIN BIZ_CNT..TB_CNT_PARAMETROS_EMPRESA PE ON
+	E.CCI_EMPRESA = PE.CCI_EMPRESA INNER JOIN BIZ_FAC..TB_FAC_FE_PARAMETROS PFE ON
+	PE.CCI_EMPRESA = PFE.CCI_EMPRESA
+	WHERE E.CCI_EMPRESA = ISNULL(@IN_CCI_EMPRESA, E.CCI_EMPRESA)
+	AND PFE.CES_PARAMETROS = 'A'
+END
+
+-- ============================================================================
+-- QA: QUERY AUTORIZACION, VER TODAS LAS EMPRESAS QUE REALIZAN EL PROCESO DE 
+--     FACTURACION ELECTRONICA PARA EL PROCESO DE ENVIAR EL DOCUMENTO XML
+-- ============================================================================ 
+IF @IN_OPERACION = 'QA'
+BEGIN
+	SELECT E.CCI_EMPRESA, 	
+	PFE.DFM_FECHA_INICIO,		
+	PFE.CCI_RUTA_ENVIADOS,
+	PFE.CCI_RUTA_AUTORIZADOS,
+	PFE.CCI_RUTA_NO_AUTORIZADOS,
+	PFE.AMBIENTE	
+	FROM BIZ_GEN..TB_SEG_EMPRESA E INNER JOIN BIZ_CNT..TB_CNT_PARAMETROS_EMPRESA PE ON
+	E.CCI_EMPRESA = PE.CCI_EMPRESA INNER JOIN BIZ_FAC..TB_FAC_FE_PARAMETROS PFE ON
+	PE.CCI_EMPRESA = PFE.CCI_EMPRESA
+	WHERE E.CCI_EMPRESA = ISNULL(@IN_CCI_EMPRESA, E.CCI_EMPRESA)
+	AND PFE.CES_PARAMETROS = 'A'
+END
+
+-- ============================================================================
+-- QGR: QUERY GENERA REPORTE, VER TODAS LAS EMPRESAS QUE REALIZAN EL PROCESO DE 
+--     FACTURACION ELECTRONICA PARA EL PROCESO DE GENERAR EL ARCHIVO PDF
+-- ============================================================================ 
+IF @IN_OPERACION = 'QGR'
+BEGIN
+	SELECT E.CCI_EMPRESA,
+	PFE.CCI_RUTA_AUTORIZADOS, 	
+	PFE.CCI_RUTA_PDF
+	FROM BIZ_GEN..TB_SEG_EMPRESA E INNER JOIN BIZ_CNT..TB_CNT_PARAMETROS_EMPRESA PE ON
+	E.CCI_EMPRESA = PE.CCI_EMPRESA INNER JOIN BIZ_FAC..TB_FAC_FE_PARAMETROS PFE ON
+	PE.CCI_EMPRESA = PFE.CCI_EMPRESA
+	WHERE E.CCI_EMPRESA = ISNULL(@IN_CCI_EMPRESA, E.CCI_EMPRESA)
+	AND PFE.CES_PARAMETROS = 'A'
+END
+
+-- ============================================================================
+-- QGR: QUERY RUTAS, CONSULTA QUE TRAE LOS CAMPOS EN DONDE ESTEN DEFINIDOS
+--      DIRECTORIOS EN DONDE SE ALMACENARA INFORMACION PARA CREARLOS.
+-- ============================================================================ 
+IF @IN_OPERACION = 'QRT'
+BEGIN
+	SELECT PFE.CCI_EMPRESA,
+	PFE.CCI_RUTA_GENERADOS,
+	PFE.CCI_RUTA_FIRMADOS,
+	PFE.CCI_RUTA_ENVIADOS,
+	PFE.CCI_RUTA_ENVIADOS_RECHAZADOS,
+	PFE.CCI_RUTA_AUTORIZADOS,
+	PFE.CCI_RUTA_NO_AUTORIZADOS,
+	PFE.CCI_RUTA_PDF
+	FROM BIZ_GEN..TB_SEG_EMPRESA E INNER JOIN BIZ_CNT..TB_CNT_PARAMETROS_EMPRESA PE ON
+	E.CCI_EMPRESA = PE.CCI_EMPRESA INNER JOIN BIZ_FAC..TB_FAC_FE_PARAMETROS PFE ON
+	PE.CCI_EMPRESA = PFE.CCI_EMPRESA
+END
+
+-- ============================================================================
+-- QX: QUERY, TRAER LA INFORMACION DE PARAMETROS DE UNA EMPRESA
+-- ============================================================================ 
+IF @IN_OPERACION = 'QX'
+BEGIN
+	select cci_empresa,
+	convert(char(10), dfm_fecha_inicio, 103) as dfm_fecha_inicio,
+	cci_ruta_generados,
+	cci_ruta_firmados,
+	cci_ruta_enviados,
+	cci_ruta_enviados_rechazados,
+	cci_ruta_autorizados,
+	cci_ruta_no_autorizados,
+	cci_ruta_pdf,
+	cci_ruta_certificado,
+	ctx_clave_certificado,
+	cci_ruta_programa_fe,
+	cci_mail_default,
+	cci_ruta_logo,
+	ambiente,
+	(select ctx_descripcion from BIZ_FAC..TB_FAC_FE_AMBIENTE where COD_AMBIENTE = p.AMBIENTE) as descripcion_ambiente
+	from BIZ_FAC..TB_FAC_FE_PARAMETROS p
+	where CCI_EMPRESA = @IN_CCI_EMPRESA
+END
+
+-- ============================================================================
+-- U: UPDATE, ACTUALIZAR INFORMACION DE UN PARAMETRO
+-- ============================================================================
+IF @IN_OPERACION = 'U'
+BEGIN
+	if not exists(select 1
+				  from BIZ_FAC..TB_FAC_FE_PARAMETROS
+				  where CCI_EMPRESA = @IN_CCI_EMPRESA)
+	begin
+		insert into BIZ_FAC..TB_FAC_FE_PARAMETROS(
+			CCI_EMPRESA,
+			DFM_FECHA_INICIO,
+			CCI_RUTA_GENERADOS,
+			CCI_RUTA_FIRMADOS,
+			CCI_RUTA_ENVIADOS,
+			CCI_RUTA_ENVIADOS_RECHAZADOS,
+			CCI_RUTA_AUTORIZADOS,
+			CCI_RUTA_NO_AUTORIZADOS,
+			CCI_RUTA_PDF,
+			CCI_RUTA_CERTIFICADO,
+			CTX_CLAVE_CERTIFICADO,
+			CCI_RUTA_PROGRAMA_FE,
+			CCI_MAIL_DEFAULT,
+			CCI_RUTA_LOGO,
+			CTX_OBLIGADO_CONTABILIDAD,
+			AMBIENTE,
+			TIPO_EMISION,
+			CODIGO_NUMERICO,
+			MONEDA,
+			CES_PARAMETROS
+		)
+		values(
+			@IN_CCI_EMPRESA, 
+			@in_dfm_fecha_inicio,
+			@in_cci_ruta_generados,
+			@in_cci_ruta_firmados,
+			@in_cci_ruta_enviados,
+			@in_cci_ruta_enviados_rechazados,
+			@in_cci_ruta_autorizados,
+			@in_cci_ruta_no_autorizados,
+			@in_cci_ruta_pdf,
+			@in_cci_ruta_certificado,
+			@in_ctx_clave_certificado,
+			@in_cci_ruta_programa_fe,
+			@in_cci_mail_default,
+			@in_cci_ruta_logo,
+			'SI', 
+			@in_ambiente,
+			'1', 
+			'12345678', 
+			'DOLAR',
+			'A'
+		)
+
+		SELECT 'S' AS ok, 'El registro se ingreso correctamente' AS mensaje
+	end
+	else
+	begin
+		update BIZ_FAC..TB_FAC_FE_PARAMETROS
+		set dfm_fecha_inicio = @in_dfm_fecha_inicio,
+			cci_ruta_generados = @in_cci_ruta_generados,
+			cci_ruta_firmados = @in_cci_ruta_firmados,
+			cci_ruta_enviados = @in_cci_ruta_enviados,
+			cci_ruta_enviados_rechazados = @in_cci_ruta_enviados_rechazados,
+			cci_ruta_autorizados = @in_cci_ruta_autorizados,
+			cci_ruta_no_autorizados = @in_cci_ruta_no_autorizados,
+			cci_ruta_pdf = @in_cci_ruta_pdf,
+			cci_ruta_certificado = @in_cci_ruta_certificado,
+			ctx_clave_certificado = @in_ctx_clave_certificado,
+			cci_ruta_programa_fe = @in_cci_ruta_programa_fe,
+			cci_mail_default = @in_cci_mail_default,
+			cci_ruta_logo = @in_cci_ruta_logo,
+			ambiente = @in_ambiente
+			where CCI_EMPRESA = @IN_CCI_EMPRESA
+
+		SELECT 'S' AS ok, 'El registro se actualizo correctamente' AS mensaje
+	end
+	
+
+END
+GO
+
+--------------------------------------------------------------------------------
+
+USE [FacturacionElectronica]
+GO
+/****** Object:  StoredProcedure [dbo].[SP_GEN_SESION]    Script Date: 17/02/2020 0:45:07 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- ============================================================================
+-- AUTHOR......: JUAN PABLO SANCHEZ
+-- CREATE DATE.: 22-MAY-2019
+-- VERSION.....: 1.0.01
+-- DESCRIPTION.: PROCEDIMIENTO QUE SE ENCARGA DE MANEJAR TODO LO RELACIONADO
+--               CON LA TABLA TB_GEN_SESIONES
+-- MODIFICACION: 22-MAY-2019
+-- COMENTARIOS.: COMENTARIOS ACERCA DE LA MODIFICACION DEL PROCEDIMIENTO
+-- ============================================================================
+-- PARAMETROS
+-- @in_id_usuario.: CODIGO DEL USUARIO
+-- @in_id_sesion.: CODIGO DE LA SESION
+-- @in_ip.....: DIRECCION DE LA IP CON LA QUE SE GENERA LA SESION
+-- @id_menu.: CODIGO DEL MENU
+-- @in_usuario_ing_act: CODIGO DEL USUARIO QUE REALIZA EL INGRESO/ACTUALIZACION
+-- @in_operacion.: OPERACION A SER EJECUTADA
+-- ============================================================================
+
+ALTER PROCEDURE [dbo].[SP_GEN_SESION]
+(
+	@in_id_usuario INT = NULL,
+	@in_id_sesion INT = NULL,
+	@in_ip VARCHAR(45) = NULL, 
+	--@se_dispositivo	VARCHAR(50) = NULL,	
+	@in_id_menu INT = NULL,
+	@in_usuario_ing_act INT = NULL,
+	@in_operacion VARCHAR(3)
+)
+AS
+
+-- ============================================================================
+-- VSI: VERIFICAR SESION INICIADA, VERIFICA SI EL USUARIO TIENE UNA SESION
+--      INICIADA
+-- ============================================================================
+IF @in_operacion = 'VSI'
+BEGIN
+	SELECT COUNT(*) AS contador, 
+	CASE COUNT(*) WHEN 0 THEN 'N' ELSE 'S' END AS sesion_iniciada
+	FROM TB_GEN_SESIONES
+	WHERE id_usuario = @in_id_usuario
+	AND estado_sesion = 'A'
+END
+
+-- ============================================================================
+-- VSV: VERIFICAR SESION VALIDA, VERIFICA SI LA SESION DEL USUARIO ES VALIDA
+-- ============================================================================
+IF @in_operacion = 'VSV'
+BEGIN
+	SELECT COUNT(*) AS contador, 
+	CASE COUNT(*) WHEN 0 THEN 'N' ELSE 'S' END AS sesion_valida
+	FROM TB_GEN_SESIONES s INNER JOIN dbo.VW_USUARIOS_PERFILES u ON 
+	s.id_usuario = u.id_usuario
+	WHERE s.id_sesion = @in_id_sesion
+	AND s.estado_sesion = 'A'
+	AND u.estado_usuario = 'A'
+END
+
+-- ============================================================================
+-- VSP: VERIFICAR SESION PERMISO, VERIFICA SI LA SESION DEL USUARIO ES VALIDA,
+--      SI ES VALIDA, SE VERIFICA SI EL USUARIO TIENE LOS PERMISOS VALIDOS PARA
+--      INGRESAR EN LA OPCION.
+-- ============================================================================
+IF @in_operacion = 'VSP'
+BEGIN
+	CREATE TABLE #tmp
+	(
+		contador INT,
+		sesion_valida CHAR(1)
+	)
+
+	INSERT INTO #tmp(contador, sesion_valida)
+	EXEC SP_GEN_SESION
+	@in_id_sesion = @in_id_sesion,
+	@in_operacion = 'VSV' 
+
+	IF (SELECT sesion_valida
+		FROM #tmp) = 'S'
+	BEGIN	
+		SELECT *,
+		CASE contador WHEN 0 THEN 'N' ELSE 'S' END AS ok,
+		CASE contador WHEN 0 THEN 'Atención no tiene los permisos necesarios para acceder a esta opción' ELSE 'Acceso concedido' END AS mensaje
+		FROM (
+				SELECT COUNT(*) AS contador
+				FROM dbo.VW_PERMISOS p INNER JOIN dbo.VW_USUARIOS_PERFILES u ON
+				p.id_perfil = u.id_perfil
+				WHERE u.id_usuario = @in_id_usuario
+				AND p.id_menu = @in_id_menu				
+				AND p.acceso = 'S'
+				AND p.estado_permiso = 'A'
+				AND p.estado_perfil = 'A'				
+				AND p.estado_menu = 'A'	
+				AND u.estado_usuario = 'A'			
+			) c			
+	END	
+	ELSE
+	BEGIN
+		SELECT 'N' AS ok, 'Atención la sesión fue cerrada y no es válida, por favor salga del sistema y vuelva a ingresar...' AS mensaje
+	END	
+	
+	DROP TABLE #tmp
+END
+
+-- ============================================================================
+-- I: INGRESAR SESION, SE INGRESA UNA NUEVA SESION PARA EL USUARIO, SE CIERRAN
+--    TODAS LAS SESIONES QUE EL USUARIO HAYA TENIDO ABIERTAS
+-- ============================================================================
+IF @in_operacion = 'I'
+BEGIN
+-- SE CIERRAN TODAS LAS SESIONES QUE EL USUARIO TENGA ABIERTAS
+	EXEC SP_GEN_SESION
+	@in_id_usuario = @in_id_usuario,
+	@in_operacion = 'CS'
+	
+-- SE INGRESA LA NUEVA SESION
+	INSERT INTO TB_GEN_SESIONES(
+		id_usuario, 
+		fecha_registro, 
+		ip, 
+		estado_sesion, 
+		fecha_ingreso, 
+		id_usuario_ingreso
+	)	        
+	VALUES(
+		@in_id_usuario, 
+		getdate(), 
+		@in_ip, 
+		'A', 
+		getdate(), 
+		@in_usuario_ing_act
+	)	
+		
+	SET @in_id_sesion = @@IDENTITY
+	
+	SELECT @in_id_sesion AS id_sesion, 
+	id_usuario, 
+	login, 
+	nombre_apellido, 
+	apellido_nombre, 
+	id_perfil, 
+	descripcion_perfil,
+	imagen,
+	'S' AS ok, 'INGRESO DE SESION EXITOSO' AS mensaje
+	FROM VW_USUARIOS_PERFILES
+	WHERE id_usuario = (SELECT id_usuario
+					   FROM TB_GEN_SESIONES
+					   WHERE id_sesion = @in_id_sesion)
+END
+
+-- ============================================================================
+-- CS: CIERRE DE SESIONES, CIERRAN TODAS LAS SESIONES QUE EL USUARIO TENGA 
+--     ABIERTAS
+-- ============================================================================
+IF @in_operacion = 'CS'
+BEGIN
+	UPDATE TB_GEN_SESIONES
+	SET estado_sesion = 'C',
+		fecha_actualizacion = GETDATE(),
+		id_usuario_actualizacion = @in_usuario_ing_act
+	WHERE id_usuario = @in_id_usuario
+	AND estado_sesion = 'A'		
+END
+
+-- ============================================================================
+-- CSA: CIERRE DE SESION ACTUAL, CIERRA LA SESION ACTUAL DEL USUARIO 
+-- ============================================================================
+IF @in_operacion = 'CSA'
+BEGIN
+	UPDATE TB_GEN_SESIONES
+	SET estado_sesion = 'C',
+		fecha_actualizacion = GETDATE(),
+		id_usuario_actualizacion = @in_usuario_ing_act
+	WHERE id_sesion = @in_id_sesion
+	
+	SELECT 'S' AS ok
+END
+
+----------------------------------------------------------------------------------

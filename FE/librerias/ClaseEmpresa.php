@@ -28,5 +28,22 @@ class ClaseEmpresa {
 
         return $result;
     }
+    
+    public function getEmpresasNoRegistradas() {
+
+        $query = "
+            EXEC BIZ_FAC..SP_FE_EMPRESA            
+            @in_operacion = 'QNR'
+        ";
+
+        $parametros = array(
+            'interfaz' => 'I',
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        return $result;
+    }
 
 }

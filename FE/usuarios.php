@@ -22,7 +22,15 @@ switch ($action) {
         $tipo = 'D';
         delete();
         break;
+    case 'uploadImagen':
+        uploadImagen();
+        break;
 }
+
+//print_r($_POST['myfile']);
+//echo $_POST['myfile'];
+//print_r($_FILES);
+//echo $_FILES;
 
 function getUsuarios() {
 
@@ -98,4 +106,18 @@ function delete() {
     }
 
     echo $data;
+}
+
+function uploadImagen() {
+    if (isset($_FILES)) {
+        print_r($_FILES);
+
+        $objetoUsuario = new ClaseUsuario();
+
+        $result = $objetoUsuario->uploadImagen($_FILES, $_POST['login']);
+
+        $data = ClaseJson::getJson($result);
+
+        echo $data;
+    }
 }

@@ -39,6 +39,7 @@ class ClaseProcesarDocumentos {
         f.cno_cliprov,
         f.cno_cliprov_aux,
         f.dfm_fecha,
+        f.dfm_fecha_aux,
         f.cci_tipocmpr, 
         f.descripcion_cci_tipocmpr,
         f.nci_documento,
@@ -145,6 +146,14 @@ class ClaseProcesarDocumentos {
 
                 $order = $order . ', cci_tipocmpr, nci_documento ';
                 break;
+            case 'cno_cliprov_aux':
+                $order = 'ORDER BY cno_cliprov ';
+                if ($parametros['sortOrder'] == '-1') {
+                    $order = $order . ' DESC ';
+                }
+
+                $order = $order . ', cci_empresa, cci_tipocmpr, nci_documento ';
+                break;
             case 'cci_tipocmpr':
                 $order = 'ORDER BY ' . $parametros['sortField'] . ' ';
                 if ($parametros['sortOrder'] == '-1') {
@@ -153,7 +162,23 @@ class ClaseProcesarDocumentos {
 
                 $order = $order . ', cci_empresa, nci_documento ';
                 break;
+            case 'dfm_fecha_aux':
+                $order = 'ORDER BY dfm_fecha ';
+                if ($parametros['sortOrder'] == '-1') {
+                    $order = $order . ' DESC ';
+                }
+
+                $order = $order . ', cci_empresa, cci_tipocmpr, nci_documento ';
+                break;
             case 'nci_documento':
+                $order = 'ORDER BY ' . $parametros['sortField'] . ' ';
+                if ($parametros['sortOrder'] == '-1') {
+                    $order = $order . ' DESC ';
+                }
+
+                $order = $order . ', cci_empresa, cci_tipocmpr ';
+                break;
+            case 'ces_fe':
                 $order = 'ORDER BY ' . $parametros['sortField'] . ' ';
                 if ($parametros['sortOrder'] == '-1') {
                     $order = $order . ' DESC ';
@@ -169,6 +194,11 @@ class ClaseProcesarDocumentos {
           $order = $order . ' DESC ';
           }
          */
+
+        $fechaInicio = $parametros['fechaInicio'];
+        $fechaFin = $parametros['fechaFin'];
+
+        $where = $where . " and dfm_fecha between '$fechaInicio' and  '$fechaFin' ";
 
         $offset = 'OFFSET ' . ($start) . ' ROWS ';
         $fetch = 'FETCH NEXT ' . $parametros['limit'] . ' ROWS ONLY';
