@@ -65,17 +65,35 @@ and open the template in the editor.
             //    });
             //});
 
+            //$(function () {
+            //    let url = 'http://localhost/FE/login.php';
+            //    let action = 'vsp';
+            //    let id_sesion = '918';
+            //    let id_usuario = '1';
+            //    let id_menu = '5';
+
+            //    $.post(url, {
+            //        action: action,
+            //        id_sesion: id_sesion,
+            //        id_usuario: id_usuario,
+            //        id_menu: id_menu
+            //    }, function (result) {
+                    //alert('successfully posted key1=value1&key2=value2 to foo.php');
+                    //alert(result);
+            //        document.write(result);
+                    //window.open('descargas/2811201901099265673500110010010000173621234567815_G.pdf');
+            //    });
+            //});
+
             $(function () {
-                let url = 'http://localhost/FE/login.php';
-                let action = 'vsp';
-                let id_sesion = '918';
-                let id_usuario = '1';
-                let id_menu = '5';
+                let url = 'http://localhost/FE/empresa.php';
+                let action = 'getEmpresas';
+                let id_perfil = '1';
+                let id_menu = '14';
 
                 $.post(url, {
                     action: action,
-                    id_sesion: id_sesion,
-                    id_usuario: id_usuario,
+                    id_perfil: id_perfil,
                     id_menu: id_menu
                 }, function (result) {
                     //alert('successfully posted key1=value1&key2=value2 to foo.php');
@@ -84,6 +102,7 @@ and open the template in the editor.
                     //window.open('descargas/2811201901099265673500110010010000173621234567815_G.pdf');
                 });
             });
+
 
         </script>
 

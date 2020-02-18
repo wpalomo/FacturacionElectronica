@@ -18,6 +18,9 @@ switch ($action) {
     case 'getOpcionesManejanEmpresa':
         getOpcionesManejanEmpresa();
         break;
+    case 'updatePermisosOME':
+        updatePermisosOME();
+        break;
 }
 
 function getMenuPerfil() {
@@ -60,11 +63,29 @@ function getOpcionesManejanEmpresa() {
     $id_empresa = $_POST['id_empresa'];
     $id_perfil = $_POST['id_perfil'];
 
-    $objetoMenuFavoritos = new ClaseMenuFavoritos();
+    $objetoPermiso = new ClasePermisos();
 
-    $result = $objetoMenuFavoritos->getMenuFavoritos($id_empresa, $id_perfil);
+    $result = $objetoPermiso->getOpcionesManejanEmpresa($id_empresa, $id_perfil);
 
     $data = ClaseJson::getJson($result);
+
+    echo $data;
+}
+
+// updatePermisosOpcionesManejanEmpresa
+function updatePermisosOME() {
+    if (isset($_POST['json'])) {
+        //$id_empresa = $_POST['id_empresa'];
+        //$id_perfil = $_POST['id_perfil'];
+
+        $objetoPermiso = new ClasePermisos();
+
+        $result = $objetoPermiso->updatePermisosOME($_POST['id_empresa'], $_POST['id_perfil'], $_POST['json']);
+
+        $data = ClaseJson::getJson($result);
+    } else {
+        $data = ClaseJson::getMessageJson(false, 'Error en el envio de información');
+    }
 
     echo $data;
 }

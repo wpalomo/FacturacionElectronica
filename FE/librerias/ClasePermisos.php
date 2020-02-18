@@ -130,15 +130,59 @@ class ClasePermisos {
         }
     }
 
-    public function getOpcionesManejanEmpresa() {
+    public function updatePermisosOME($id_empresa, $id_perfil, $json) {
+        $ob = json_decode($json);
+
+        if ($ob != null) {
+            $query = "
+                EXEC dbo.SP_GEN_PERMISOS
+                @in_id_empresa = '$id_empresa',
+                @in_id_perfil = '$id_perfil',
+                @in_json = '$json',
+                @in_operacion = 'UME'
+            ";
+
+            $parametros = array(
+                'query' => $query
+            );
+
+            $result = ClaseBaseDatos::query($parametros);
+
+            return $result;
+        } else {
+            return ClaseJson::getMessageJson(false, 'Error en el envio de información en el archivo JSON');
+        }
+    }
+
+    public function getOpcionesManejanEmpresa($id_empresa, $id_perfil) {
         $id_empresa = mssql_real_escape_string($id_empresa);
         $id_perfil = mssql_real_escape_string($id_perfil);
 
         $query = "
             EXEC dbo.SP_GEN_PERMISOS
             @in_id_empresa = '$id_empresa',
-            @in_id_perfil = '$id_usuario',             
+            @in_id_perfil = '$id_perfil',             
             @in_operacion = 'QME'
+        ";
+
+        $parametros = array(
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        return $result;
+    }
+
+    public function getEmpresasOpcion($id_perfil, $id_menu) {
+        $id_perfil = mssql_real_escape_string($id_perfil);
+        $id_menu = mssql_real_escape_string($id_menu);
+
+        $query = "
+            EXEC dbo.SP_GEN_PERMISOS
+            @in_id_perfil = '$id_perfil',
+            @in_id_menu = '$id_menu',             
+            @in_operacion = 'QEO'
         ";
 
         $parametros = array(

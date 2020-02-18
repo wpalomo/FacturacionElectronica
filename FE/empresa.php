@@ -2,6 +2,7 @@
 
 include_once 'librerias/header.php';
 include_once 'librerias/ClaseEmpresa.php';
+include_once 'librerias/ClasePermisos.php';
 
 $action = isset($_GET['action']) ? $_GET['action'] : (isset($_POST['action']) ? $_POST['action'] : null);
 
@@ -20,13 +21,40 @@ switch ($action) {
 }
 
 function getEmpresas() {
-    $objetoEmpresa = new ClaseEmpresa();
+    $id_perfil = $_POST['id_perfil'];
+    $id_menu = $_POST['id_menu'];
 
-    $result = $objetoEmpresa->getEmpresas();
+    $objetoPermiso = new ClasePermisos();
 
-    $data = ClaseJson::getJson($result);
+    $resultPermisos = $objetoPermiso->getEmpresasOpcion($id_perfil, $id_menu);
 
-    echo $data;
+    //print_r($resultPermisos);
+
+    if ($resultPermisos['error'] == 'N') {
+        $dataPermisos = $resultPermisos['data'];
+        //print_r($dataPermisos);
+
+        $cadenaEmpresas = '';
+        foreach ($dataPermisos as $key => $value) {
+            //echo 'value: ' . $value['codigo_auxiliar'];
+            $codigo_auxiliar = $value['codigo_auxiliar'];
+            $cadenaEmpresas = $cadenaEmpresas . "*$codigo_auxiliar*";
+
+            if ($key !== array_key_last($dataPermisos)) {
+                $cadenaEmpresas = $cadenaEmpresas . ',';
+            }
+        }
+
+        //echo $cadena;
+
+        $objetoEmpresa = new ClaseEmpresa();
+
+        $result = $objetoEmpresa->getEmpresas($cadenaEmpresas);
+
+        $data = ClaseJson::getJson($result);
+
+        echo $data;
+    }
 }
 
 function getEmpresasNoRegistradas() {

@@ -12,13 +12,16 @@ include_once 'funciones.php';
  */
 class ClaseEmpresa {
 
-    public function getEmpresas() {
+    public function getEmpresas($cadenaEmpresas) {
 
         $query = "
-            EXEC BIZ_FAC..SP_FE_EMPRESA            
+            EXEC BIZ_FAC..SP_FE_EMPRESA
+            @in_cadena_empresas = '$cadenaEmpresas',
             @in_operacion = 'QE'
         ";
 
+        echo $query;
+        
         $parametros = array(
             'interfaz' => 'I',
             'query' => $query
