@@ -15,6 +15,9 @@ switch ($action) {
     case 'updateMenuPerfil':
         updateMenuPerfil();
         break;
+    case 'getOpcionesManejanEmpresa':
+        getOpcionesManejanEmpresa();
+        break;
 }
 
 function getMenuPerfil() {
@@ -49,6 +52,19 @@ function updateMenuPerfil() {
     } else {
         $data = ClaseJson::getMessageJson(false, 'Error en el envio de información');
     }
+
+    echo $data;
+}
+
+function getOpcionesManejanEmpresa() {
+    $id_empresa = $_POST['id_empresa'];
+    $id_perfil = $_POST['id_perfil'];
+
+    $objetoMenuFavoritos = new ClaseMenuFavoritos();
+
+    $result = $objetoMenuFavoritos->getMenuFavoritos($id_empresa, $id_perfil);
+
+    $data = ClaseJson::getJson($result);
 
     echo $data;
 }

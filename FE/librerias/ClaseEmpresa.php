@@ -54,7 +54,6 @@ class ClaseEmpresa {
         ";
 
         $parametros = array(
-            'interfaz' => 'I',
             'query' => $query
         );
 

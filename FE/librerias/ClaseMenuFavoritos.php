@@ -16,7 +16,7 @@ class ClaseMenuFavoritos {
         $id_usuario = mssql_real_escape_string($id_usuario);
 
         $query = "
-            EXEC SP_GEN_MENU_FAVORITOS
+            EXEC dbo.SP_GEN_MENU_FAVORITOS
             @in_id_usuario = '$id_usuario',             
             @in_operacion = 'QMF'
         ";
@@ -34,7 +34,7 @@ class ClaseMenuFavoritos {
         $id_usuario = mssql_real_escape_string($id_usuario);
 
         $query = "
-            EXEC SP_GEN_MENU_FAVORITOS
+            EXEC dbo.SP_GEN_MENU_FAVORITOS
             @in_id_usuario = '$id_usuario',             
             @in_operacion = 'QF2'
         ";

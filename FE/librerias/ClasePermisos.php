@@ -130,6 +130,26 @@ class ClasePermisos {
         }
     }
 
+    public function getOpcionesManejanEmpresa() {
+        $id_empresa = mssql_real_escape_string($id_empresa);
+        $id_perfil = mssql_real_escape_string($id_perfil);
+
+        $query = "
+            EXEC dbo.SP_GEN_PERMISOS
+            @in_id_empresa = '$id_empresa',
+            @in_id_perfil = '$id_usuario',             
+            @in_operacion = 'QME'
+        ";
+
+        $parametros = array(
+            'query' => $query
+        );
+
+        $result = ClaseBaseDatos::query($parametros);
+
+        return $result;
+    }
+
     private function adj_tree(&$tree, $item) {
         $i = $item['id_menu'];
         $p = $item['id_menu_padre'];
