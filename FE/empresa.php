@@ -35,12 +35,14 @@ function getEmpresas() {
         //print_r($dataPermisos);
 
         $cadenaEmpresas = '';
+        $last_key = end(array_keys($dataPermisos));
         foreach ($dataPermisos as $key => $value) {
             //echo 'value: ' . $value['codigo_auxiliar'];
             $codigo_auxiliar = $value['codigo_auxiliar'];
             $cadenaEmpresas = $cadenaEmpresas . "*$codigo_auxiliar*";
 
-            if ($key !== array_key_last($dataPermisos)) {
+            //if ($key !== array_key_last($dataPermisos)) {
+            if ($key !== $last_key) {
                 $cadenaEmpresas = $cadenaEmpresas . ',';
             }
         }

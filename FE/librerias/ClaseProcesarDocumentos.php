@@ -30,7 +30,7 @@ class ClaseProcesarDocumentos {
         ClaseValidaciones::crearDirectorios();
     }
 
-    public function getDocumentos($parametros) {
+    public function getDocumentos($parametros, $cadenaEmpresas) {
         $select = "
         SELECT f.cci_empresa, 
         f.cno_empresa,
@@ -54,6 +54,10 @@ class ClaseProcesarDocumentos {
         FROM BIZ_FAC..VI_FAC_FE_DOCUMENTOS f ";
 
         $where = " WHERE cci_empresa != '' ";
+
+        if ($cadenaEmpresas != '') {
+            $where = $where . " and cci_empresa in(" . $cadenaEmpresas . ")";
+        }
 
         $selectTotalRegistros = "
             select count(*) as total_registros

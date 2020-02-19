@@ -20,7 +20,7 @@ class ClaseEmpresa {
             @in_operacion = 'QE'
         ";
 
-        echo $query;
+        //echo $query;
         
         $parametros = array(
             'interfaz' => 'I',

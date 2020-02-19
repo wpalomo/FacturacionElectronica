@@ -3,6 +3,7 @@
 include_once 'librerias/header.php';
 include_once 'librerias/ClaseProcesarDocumentos.php';
 include_once 'librerias/ClaseValidaciones.php';
+include_once 'librerias/ClasePermisos.php';
 
 
 $action = isset($_GET['action']) ? $_GET['action'] : (isset($_POST['action']) ? $_POST['action'] : null);
@@ -23,23 +24,47 @@ switch ($action) {
 }
 
 function getDocumentos() {
-    $parametros = array(
-        'start' => $_POST['start'],
-        'limit' => $_POST['limit'],
-        'fechaInicio' => $_POST['fechaInicio'],
-        'fechaFin' => $_POST['fechaFin'],
-        'sortField' => isset($_POST['sortField']) ? $_POST['sortField'] : 'cci_empresa',
-        'sortOrder' => isset($_POST['sortOrder']) ? $_POST['sortOrder'] : '1',
-        'filters' => $_POST['filters'],
-    );
+    $id_perfil = $_POST['id_perfil'];
+    $id_menu = $_POST['id_menu'];
 
-    $objetoProcesarDocumentos = new ClaseProcesarDocumentos();
+    $objetoPermiso = new ClasePermisos();
 
-    $result = $objetoProcesarDocumentos->getDocumentos($parametros);
+    $resultPermisos = $objetoPermiso->getEmpresasOpcion($id_perfil, $id_menu);
 
-    $data = ClaseJson::getJson($result);
+    if ($resultPermisos['error'] == 'N') {
+        $dataPermisos = $resultPermisos['data'];
 
-    echo $data;
+        $cadenaEmpresas = '';
+        $last_key = end(array_keys($dataPermisos));
+        foreach ($dataPermisos as $key => $value) {
+            //echo 'value: ' . $value['codigo_auxiliar'];
+            $codigo_auxiliar = $value['codigo_auxiliar'];
+            $cadenaEmpresas = $cadenaEmpresas . "'$codigo_auxiliar'";
+
+            //if ($key !== array_key_last($dataPermisos)) {
+            if ($key !== $last_key) {
+                $cadenaEmpresas = $cadenaEmpresas . ',';
+            }
+        }
+
+        $parametros = array(
+            'start' => $_POST['start'],
+            'limit' => $_POST['limit'],
+            'fechaInicio' => $_POST['fechaInicio'],
+            'fechaFin' => $_POST['fechaFin'],
+            'sortField' => isset($_POST['sortField']) ? $_POST['sortField'] : 'cci_empresa',
+            'sortOrder' => isset($_POST['sortOrder']) ? $_POST['sortOrder'] : '1',
+            'filters' => $_POST['filters'],
+        );
+
+        $objetoProcesarDocumentos = new ClaseProcesarDocumentos();
+
+        $result = $objetoProcesarDocumentos->getDocumentos($parametros, $cadenaEmpresas);
+
+        $data = ClaseJson::getJson($result);
+
+        echo $data;
+    }
 }
 
 function getMailsDocumento() {
